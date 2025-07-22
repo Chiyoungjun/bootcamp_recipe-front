@@ -44,6 +44,9 @@ const MainPresenter = ({
                     <button
                         onClick={() => navigate('/recommend')}
                     >추천</button>
+                    <button
+                        onClick={() => navigate('/mypage')}
+                    >마이페이지</button>
                 </div>
 
             </div>
