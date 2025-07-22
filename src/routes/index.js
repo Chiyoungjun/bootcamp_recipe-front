@@ -8,7 +8,7 @@
 import { Route, Routes } from "react-router-dom"
 
 // pages
-import { Main, SignIn, SignUp } from './pages';
+import { Main, SignIn, SignUp, Rank, Recommend } from './pages';
 
 const Router = () => {
     return (
@@ -34,6 +34,18 @@ const Router = () => {
                 <Route
                     path='/signup'
                     element={<SignUp />}
+                />
+
+                {/*랭킹 화면*/}
+                <Route
+                    path='/rank'
+                    element={<Rank />}
+                />
+
+                {/* 추천 화면 */}
+                <Route
+                    path='/recommend'
+                    element={<Recommend />}
                 />
 
             </Routes>

@@ -38,6 +38,12 @@ const MainPresenter = ({
                     <button
                         onClick={() => navigate('/signin')}
                     >로그인</button>
+                    <button
+                        onClick={() => navigate('/rank')}
+                    >랭킹</button>
+                    <button
+                        onClick={() => navigate('/recommend')}
+                    >추천</button>
                 </div>
 
             </div>
