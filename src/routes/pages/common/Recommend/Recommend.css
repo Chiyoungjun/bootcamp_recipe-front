@@ -1,0 +1,98 @@
+.recommend-root {
+  width: 100%;
+  padding: 32px 0 64px 0;
+  background: #faefec;
+}
+
+.recommend-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 24px 0 16px 8vw;
+}
+
+/* 상단: 3개씩 2줄 */
+.recommend-preference-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* 3개씩 2줄 */
+  gap: 18px;
+  width: 80vw;
+  max-width: 1100px;
+  margin: 0 auto 20px auto;
+}
+
+.recommend-preference-card {
+  background: #f8f8f8;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+}
+
+.recommend-preference-img {
+  width: 100%;
+  aspect-ratio: 2/1;        /* 가로가 세로의 2배 */
+  object-fit: cover;
+  border-radius: 18px 18px 0 0;
+}
+
+/* 하단: 건강추천 그리드 (좌: 큰카드, 우: 더 넓은 이미지 2개 세로) */
+.recommend-health-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.4fr;  /* 오른쪽을 더 넓게 */
+  gap: 28px;
+  width: 80vw;
+  max-width: 1100px;
+  margin: 0 auto 20px auto;
+  min-height: 430px;
+}
+
+.health-big-card {
+  background: #f8f8f8;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.health-big-img {
+  width: 100%;
+  aspect-ratio: 1.25/1;    /* 정사각형보다 가로로 조금 넓음 */
+  object-fit: cover;
+  border-radius: 18px 18px 0 0;
+}
+
+.health-small-col {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 100%;
+}
+.health-small-card {
+  background: #f8f8f8;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+}
+.health-small-img {
+  width: 100%;
+  aspect-ratio: 3.5/1;   /* 확실히 넓게 */
+  object-fit: cover;
+  border-radius: 18px 18px 0 0;
+}
+
+.recommend-card-title {
+  font-weight: 600;
+  margin: 12px 8px 4px 8px;
+  font-size: 16px;
+}
+.recommend-card-desc {
+  color: #888;
+  margin-left: 8px;
+  font-size: 13px;
+}

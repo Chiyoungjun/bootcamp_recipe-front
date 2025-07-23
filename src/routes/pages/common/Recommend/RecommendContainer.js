@@ -1,29 +1,35 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import RecommendPresenter from "./RecommendPresenter";
 
-const RecommendContainer = () => {
-  // 예시 데이터 (API 대신 하드코딩)
-  const [recommendations, setRecommendations] = useState([]);
+// 더미 데이터
+const DUMMY_DATA = {
+  preference: [
+    { title: "비빔밥", desc: "한식의 맛!", img: "https://via.placeholder.com/400x180?text=비빔밥" },
+    { title: "불고기", desc: "달콤한 한국식 불고기", img: "https://via.placeholder.com/400x180?text=불고기" },
+    { title: "김치찌개", desc: "밥도둑 김치찌개 레시피", img: "https://via.placeholder.com/400x180?text=김치찌개" },
+    { title: "떡볶이", desc: "초간단 떡볶이 만들기", img: "https://via.placeholder.com/400x180?text=떡볶이" },
+    { title: "김밥", desc: "집에서 굴려보자~", img: "https://via.placeholder.com/400x180?text=김밥" },
+    { title: "제육볶음", desc: "기숙사생을 그리다", img: "https://via.placeholder.com/400x180?text=제육볶음" },
+  ],
+  health: [
+    { title: "닭가슴살 스테이크", desc: "단백질 보충", img: "https://via.placeholder.com/400x300?text=닭가슴살" },
+    { title: "전복죽", desc: "맛과 영양을 한번에!", img: "https://via.placeholder.com/400x180?text=전복죽" },
+    { title: "미역국", desc: "생일에는, 피로회복에는 미역국", img: "https://via.placeholder.com/400x180?text=미역국" },
+  ],
+};
+
+function RecommendContainer() {
+  const [preferenceList, setPreferenceList] = useState([]);
+  const [healthList, setHealthList] = useState([]);
 
   useEffect(() => {
-    // 실제 환경에서는 여기서 fetch()나 axios로 데이터를 불러오세요
-    const dummyData = [
-      { id: 1, dish: "비빔밥", rating: 4.8 },
-      { id: 2, dish: "짜장면", rating: 4.5 },
-      { id: 3, dish: "스테이크", rating: 4.9 },
-      { id: 4, dish: "초밥", rating: 4.7 },
-      { id: 5, dish: "불고기", rating: 4.6 },
-    ];
-
-    setRecommendations(dummyData);
+    setPreferenceList(DUMMY_DATA.preference);
+    setHealthList(DUMMY_DATA.health);
   }, []);
 
-  // 평점 높은 Top 3 요리만 추출 (내림차순 정렬 후 slice)
-  const topThree = recommendations
-    .sort((a, b) => b.rating - a.rating)
-    .slice(0, 3);
-
-  return <RecommendPresenter topThree={topThree} />;
-};
+  return (
+    <RecommendPresenter preferenceList={preferenceList} healthList={healthList} />
+  );
+}
 
 export default RecommendContainer;
