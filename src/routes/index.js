@@ -5,10 +5,10 @@
  */
 
 // react-router-dom 라이브러리의 Route와 Routes 컴포넌트를 사용하여 경로 설정
-import { Route, Routes } from "react-router-dom"
+import { Route, Routes } from "react-router-dom";
 
 // pages
-import { Main, SignIn, SignUp } from './pages';
+import { Main, SignIn, SignUp, Rank, Recommend, MyPage } from './pages';
 
 const Router = () => {
     return (
@@ -34,6 +34,24 @@ const Router = () => {
                 <Route
                     path='/signup'
                     element={<SignUp />}
+                />
+
+                {/* 랭킹 화면 */}
+                <Route
+                    path='/rank'
+                    element={<Rank />}
+                />
+
+                {/* 추천 화면 */}
+                <Route
+                    path='/recommend'
+                    element={<Recommend />}
+                />
+
+                {/* 마이페이지 화면 */}
+                <Route
+                    path='/mypage'
+                    element={<MyPage />}
                 />
 
             </Routes>
