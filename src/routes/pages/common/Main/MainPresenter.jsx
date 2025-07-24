@@ -1,58 +1,35 @@
-import { MainLayout } from '../../../../layouts';
+import { MainLayout } from '../../../../layouts'; // export 방식 확인
+import mainLogo from './main_logo.png';
+import NavPresenter from '../../../compoents/navbar';
 import './Main.css';
 
-/**
- * Presenter
- * - UI를 담당하는 역할을 수행
- * - Container에서 전달받은 데이터를 기반으로 화면을 렌더링
- * - 비즈니스 로직은 처리하지 않으며, 순수하게 UI만 다룸
- */
-
-const MainPresenter = ({
-    navigate,
-
-    // Container에서 넘긴 데이터를 props로 받음
-    handleTest,
-
-    handleGetAllUsers,
-
-}) => {
-
-    return (
-        <MainLayout>
-            <div className='main-container'>
-                <div className='main-test-container'>
-                    <button
-                        onClick={handleTest}
-                    >테스트 버튼</button>
-
-                    <button
-                        onClick={handleGetAllUsers}
-                    >고객 조회</button>
-                </div>
-
-                <div className='main-btn-wrap'>
-                    <button
-                        onClick={() => navigate('/signup')}
-                    >회원가입</button>
-                    <button
-                        onClick={() => navigate('/signin')}
-                    >로그인</button>
-                    <button
-                        onClick={() => navigate('/rank')}
-                    >랭킹</button>
-                    <button
-                        onClick={() => navigate('/recommend')}
-                    >추천</button>
-                    <button
-                        onClick={() => navigate('/mypage')}
-                    >마이페이지</button>
-                </div>
-
-            </div>
-
-        </MainLayout>
-    );
+const MainPresenter = ({ onLogin, onSignUp }) => {
+  return (
+    <MainLayout>
+      <header className="main-header">
+        <div className="main-header__logo-wrap">
+          <img src={mainLogo} alt="SNAP COOK 로고" className="main-header__logo-img" />
+          <div className="main-header__logo-title">SNAP COOK</div>
+        </div>
+        <div className="main-header__auth">
+          <button onClick={onLogin} className="main-header__login-btn">로그인</button>
+          <button onClick={onSignUp} className="main-header__signup-btn">회원가입</button>
+        </div>
+      </header>
+      <NavPresenter />
+      <section className="main-search-section">
+        <div className="main-search-box">
+          <span className="main-search__icon">🔍</span>
+          <input
+            type="text"
+            className="main-search__input"
+            placeholder="레시피 검색"
+          />
+          <button className="main-search__plus-btn">+</button>
+        </div>
+      </section>
+    </MainLayout>
+  );
 };
 
 export default MainPresenter;
