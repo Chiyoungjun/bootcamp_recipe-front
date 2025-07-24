@@ -1,0 +1,102 @@
+.main-header {
+  width: 100%;
+  background: #f7ecec;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px 16px 32px;
+  box-sizing: border-box;
+  border-bottom: 2px solid #369afe;
+}
+
+.main-header__logo-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.main-header__logo-img {
+  width: 52px;
+  height: 52px;
+  margin-right: 12px;
+}
+
+.main-header__logo-title {
+  font-size: 50px;
+  font-weight: 500;
+  letter-spacing: 2px;
+}
+
+.main-header__auth {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.main-header__login-btn {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+.main-header__signup-btn {
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-size: 16px;
+  padding: 8px 20px;
+  cursor: pointer;
+}
+
+/* 네비게이션(nav) 관련 스타일 제거함 */
+
+.main-search-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 70px;
+}
+
+.main-search-box {
+  display: flex;
+  align-items: center;
+  background: #f5eef8;
+  border-radius: 12px;
+  padding: 18px 23px 18px 22px;
+  width: 620px;
+  box-shadow: 0 2px 6px #eddbeb;
+}
+
+.main-search__icon {
+  font-size: 18px;
+  margin-right: 12px;
+  color: #6e6e6e;
+}
+
+.main-search__input {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  outline: none;
+  width: 100%;
+}
+
+.main-search__plus-btn {
+  background: #e3d0f7;
+  border: none;
+  border-radius: 7px;
+  width: 31px;
+  height: 36px;
+  font-size: 25px;
+  color: #fff;
+  margin-left: 11px;
+  cursor: pointer;
+}
+
+/* 전체 페이지 배경 색 */
+.main-layout {
+  background: #f7ecec;
+  min-height: 100vh;
+}

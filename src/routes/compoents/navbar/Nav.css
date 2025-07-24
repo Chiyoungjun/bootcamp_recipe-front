@@ -1,0 +1,12 @@
+.main-nav {
+  background: transparent;
+  margin-top: 35px;
+  display: flex;
+  justify-content: center;
+  gap: 370px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #222;
+  border-bottom: 2px solid #e0dddd;
+  padding-bottom: 8px;
+}
