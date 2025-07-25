@@ -1,49 +1,37 @@
-import { useNavigate } from "react-router-dom";
-import MainPresenter from "./MainPresenter";
 import { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom"; // 추가
+import MainPresenter from "./MainPresenter";
+import SignInContainer from "../SignIn/SignInContainer";
 
 const MainContainer = () => {
-  const [recipes, setRecipes] = useState([]);
-  const [searchKeyword, setSearchKeyword] = useState("");
-  const navigate = useNavigate();
+  const [showLogin, setShowLogin] = useState(false);
+  const navigate = useNavigate(); // 추가
 
-  const handleLogin = () => navigate('/signin');
-  const handleSignUp = () => navigate('/signup');
-
-  const handleSearchInputChange = (e) => {
-    setSearchKeyword(e.target.value);
+  // 로그인 버튼 클릭 시 모달 오픈
+  const handleLogin = () => {
+    setShowLogin(true);
   };
 
-  const handleSearch = async () => {
-    const trimmedKeyword = searchKeyword.trim();
-    if (!trimmedKeyword) {
-      setRecipes([]);
-      return;
-    }
+  // 모달 닫기 (SignInContainer에서 onClose로 내려줌)
+  const handleLoginClose = () => {
+    setShowLogin(false);
+  };
 
-    try {
-      const response = await axios.get(
-        `http://localhost:8000/api/recipes/external/search?q=${encodeURIComponent(trimmedKeyword)}`
-      );
-      console.log("API에서 받은 recipes:", response.data);
-      // 🔴 이 API는 배열만 반환하므로 그대로
-      setRecipes(response.data);
-    } catch (error) {
-      console.error("레시피 검색 중 오류 발생:", error);
-      setRecipes([]);
-    }
+  // 회원가입 버튼 클릭 시 페이지 이동
+  const handleSignUp = () => {
+    navigate("/signup"); // 회원가입 페이지로 이동
   };
 
   return (
-    <MainPresenter
-      onLogin={handleLogin}
-      onSignUp={handleSignUp}
-      recipes={recipes}
-      searchKeyword={searchKeyword}
-      onSearchInputChange={handleSearchInputChange}
-      onSearch={handleSearch}
-    />
+    <>
+      <MainPresenter
+        onLogin={handleLogin}
+        onSignUp={handleSignUp}
+      />
+      {showLogin && (
+        <SignInContainer onClose={handleLoginClose} />
+      )}
+    </>
   );
 };
 

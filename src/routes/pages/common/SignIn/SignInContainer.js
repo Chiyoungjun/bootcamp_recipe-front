@@ -1,15 +1,14 @@
 import { useState } from "react";
-import SignInPresenter from "./SignInPresenter"
+import SignInPresenter from "./SignInPresenter";
 import { useNavigate } from "react-router-dom";
 
-const SignInContainer = () => {
+const SignInContainer = ({ onClose }) => { // onClose props 추가
     const navigate = useNavigate();
 
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSignIn = async (e) => {
-        // <form></form> 태그로 작성 시, 새롭게 렌더링 되는 것을 막기 위해 추가함
         e.preventDefault();
 
         if (!id.length) {
@@ -42,6 +41,7 @@ const SignInContainer = () => {
                 console.log(`로그인 성공`, result);
                 alert(`${result.data.name}님 반갑습니다.`);
                 navigate('/');
+                if (onClose) onClose();
                 return;
             }
             
@@ -61,6 +61,7 @@ const SignInContainer = () => {
             setId={setId}
             setPassword={setPassword}
             handleSignIn={handleSignIn}
+            onClose={onClose} // 반드시 전달!
         />
     );
 };
