@@ -23,7 +23,9 @@ const MainPresenter = ({
         <button onClick={onSignUp} className="main-header__signup-btn">회원가입</button>
       </div>
     </header>
+
     <NavPresenter />
+
     <section className="main-search-section">
       <div className="main-search-box">
         <span className="main-search__icon">🔍</span>
