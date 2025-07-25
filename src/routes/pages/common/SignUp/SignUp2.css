@@ -31,9 +31,8 @@ body {
   letter-spacing: 1px;
 }
 
-/* 가로폭 넓게 */
 .signup-main-contents {
-  width: 500px;         /* (이전 430px → 500px) */
+  width: 500px;
   margin-top: 8px;
   display: flex;
   flex-direction: column;
@@ -52,6 +51,7 @@ body {
   margin-bottom: 28px;
 }
 
+/* 폼: input 간격(gap)으로만 통일, margin-bottom 제거 */
 .signup-main-form {
   width: 100%;
   display: flex;
@@ -60,42 +60,48 @@ body {
   margin-bottom: 8px;
 }
 
-/* input 세로는 더 짧게, 가로는 더 넓게 */
+/* 키/몸무게 2단 분할 레이아웃 */
+.signup-main-row-2 {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+.signup-main-row-2 .signup-main-input {
+  flex: 1 1 0;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+/* 모든 input 높이·간격 통일 */
 .signup-main-input {
   width: 100%;
   font-size: 17px;
-  padding: 12px 18px;      /* 상하 12px, 좌우 18px */
+  padding: 12px 18px;
   border: 1.5px solid #222;
   border-radius: 6px;
   outline: none;
   background: #fff;
   font-family: inherit;
   box-sizing: border-box;
+  margin-bottom: 0;
   transition: border 0.15s;
 }
-
 .signup-main-input:focus {
   border: 2px solid #111;
 }
 
-.signup-main-input-wrap {
-  position: relative;
-  width: 100%;
+.signup-main-agree-row {
   display: flex;
   align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  margin: 8px 0 0 0;
 }
-
-.signup-main-eye-btn {
-  background: none;
-  border: none;
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 22px;
-  color: #777;
+.signup-main-agree-label {
   cursor: pointer;
-  padding: 0;
+}
+.signup-main-agree-desc {
+  font-size: 15px;
 }
 
 .signup-main-btn {
@@ -111,7 +117,6 @@ body {
   cursor: pointer;
   transition: background 0.16s;
 }
-
 .signup-main-btn:hover {
   background: #222;
 }
@@ -131,7 +136,6 @@ body {
   font-weight: bold;
   margin-left: 2px;
 }
-
 .signup-main-login-link:hover {
   text-decoration: underline;
 }

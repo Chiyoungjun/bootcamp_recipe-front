@@ -1,0 +1,86 @@
+/* 뒤로가기 링크 */
+.forgotpw-back {
+  display: inline-block;
+  margin-bottom: 14px;
+  font-size: 0.96rem;
+  color: #666;
+  cursor: pointer;
+}
+
+/* 타이틀 */
+.signin-title {
+  font-size: 2.3rem;
+  font-weight: bold;
+  margin-bottom: 9px;
+  letter-spacing: -1px;
+}
+
+/* 설명 문구 */
+.signin-desc {
+  font-size: 1.07rem;
+  color: #888;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+/* 폼 전체 */
+.signin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* 라벨 + 인풋 묶음 */
+.signin-input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* 라벨 */
+.signin-label {
+  font-size: 1.06rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+  color: #232323;
+}
+
+/* input 박스 */
+.signin-input-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.signin-input {
+  width: 100%;
+  padding: 13px 12px;
+  font-size: 1.1rem;
+  border: 1.5px solid #bbb;
+  border-radius: 8px;
+  transition: border 0.2s;
+}
+
+.signin-input:focus {
+  border: 1.5px solid #222;
+  outline: none;
+}
+
+/* 버튼 */
+.signin-submit-btn {
+  width: 100%;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.11rem;
+  font-weight: bold;
+  margin-top: 10px;
+  padding: 14px 0;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.signin-submit-btn:hover {
+  background: #222;
+}
