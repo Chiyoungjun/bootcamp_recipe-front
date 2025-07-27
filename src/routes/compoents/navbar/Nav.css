@@ -1,12 +1,22 @@
 .main-nav {
-  background: transparent;
-  margin-top: 35px;
   display: flex;
   justify-content: center;
-  gap: 370px;
-  font-size: 16px;
+  gap: 650px;
+  background: black;
+  padding: 15px 0 20px 0;
+}
+
+.nav__item {
+  color: white;
+  background: none;
+  border: none;
+  font-size: 22px;
   font-weight: 700;
-  color: #222;
-  border-bottom: 2px solid #e0dddd;
-  padding-bottom: 8px;
+  cursor: pointer;
+  padding: 8px 24px;
+  transition: color 0.2s;
+}
+
+.nav__item:hover {
+  color: #369afe;
 }

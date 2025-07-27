@@ -1,18 +1,18 @@
-import './Card1.css'; // 필요에 따라 스타일 파일 만들거나 기존 Rank.css 재사용
+import React from "react";
+import "./Card1.css";
 
-const Card1Presenter = ({ topThree }) => {
-  return (
-    <div>
-      <h2>👤 마이페이지 - Top 3 유저</h2>
-      <ol>
-        {topThree.map((user, index) => (
-          <li key={user.id}>
-            <strong>{index + 1}위</strong> - {user.name} ({user.score}점)
-          </li>
-        ))}
-      </ol>
+const Card1Presenter = ({ recipe }) => (
+  <div className="card">
+    <img
+      src={recipe.ATT_FILE_NO_MAIN || "/default_recipe.jpg"}
+      alt={recipe.RCP_NM || "레시피 이미지"}
+      className="card__img"
+    />
+    <div className="card__body">
+      <div className="card__title">{recipe.RCP_NM || "이름없음"}</div>
+      {/* <div className="card__rating">⭐⭐⭐⭐⭐</div>  추후 평점 구현 */}
     </div>
-  );
-};
+  </div>
+);
 
 export default Card1Presenter;

@@ -1,6 +1,6 @@
 import { MainLayout } from '../../../../layouts';
 import mainLogo from './main_logo.png';
-import NavPresenter from '../../../compoents/navbar';
+import NavContainer from '../../../compoents/navbar/NavContainer';
 import RecipeListContainer from '../../../compoents/recipe/RecipeListContainer';
 import './Main.css';
 
@@ -14,8 +14,12 @@ const MainPresenter = ({
 }) => (
   <MainLayout>
     <header className="main-header">
-      <div className="main-header__logo-wrap">
-        <img src={mainLogo} alt="SNAP COOK 로고" className="main-header__logo-img" />
+      <div className="main-header__left">
+        <div className="main-header__logo-wrap">
+          <img src={mainLogo} alt="SNAP COOK 로고" className="main-header__logo-img" />
+        </div>
+      </div>
+      <div className="main-header__center">
         <div className="main-header__logo-title">SNAP COOK</div>
       </div>
       <div className="main-header__auth">
@@ -24,7 +28,8 @@ const MainPresenter = ({
       </div>
     </header>
 
-    <NavPresenter />
+
+    <NavContainer />
 
     <section className="main-search-section">
       <div className="main-search-box">
@@ -47,8 +52,8 @@ const MainPresenter = ({
           +
         </button>
       </div>
-      <RecipeListContainer recipes={recipes} />
     </section>
+     <RecipeListContainer recipes={recipes} />
   </MainLayout>
 );
 

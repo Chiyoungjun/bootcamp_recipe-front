@@ -1,12 +1,12 @@
 .main-header {
   width: 100%;
-  background: #f7ecec;
+  background: #F7F7F7;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 24px 32px 16px 32px;
   box-sizing: border-box;
-  border-bottom: 2px solid #369afe;
+  /* border-bottom: 2px solid #369afe; */
 }
 
 .main-header__logo-wrap {
@@ -22,8 +22,9 @@
 
 .main-header__logo-title {
   font-size: 50px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 2px;
+  
 }
 
 .main-header__auth {
@@ -62,10 +63,10 @@
 .main-search-box {
   display: flex;
   align-items: center;
-  background: #f5eef8;
+  background: white;
   border-radius: 12px;
   padding: 18px 23px 18px 22px;
-  width: 620px;
+  width: 900px;
   box-shadow: 0 2px 6px #eddbeb;
 }
 
@@ -84,7 +85,7 @@
 }
 
 .main-search__plus-btn {
-  background: #e3d0f7;
+  background: black;
   border: none;
   border-radius: 7px;
   width: 31px;
@@ -97,6 +98,6 @@
 
 /* 전체 페이지 배경 색 */
 .main-layout {
-  background: #f7ecec;
+  background: #F7F7F7;
   min-height: 100vh;
 }

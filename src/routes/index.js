@@ -8,7 +8,7 @@
 import { Route, Routes } from "react-router-dom";
 
 // pages
-import { Main, SignIn, SignUp, Rank, Recommend, MyPage } from './pages';
+import { Main, SignIn, SignUp, Rank, Recommend, MyPage, RecipeDetail } from './pages';
 
 const Router = () => {
     return (
@@ -54,6 +54,10 @@ const Router = () => {
                     element={<MyPage />}
                 />
 
+                {/* 상세 레시피 화면 */}
+                <Route
+                    path="/recipedetail"
+                    element={<RecipeDetail/>} />
             </Routes>
         </div>
     );

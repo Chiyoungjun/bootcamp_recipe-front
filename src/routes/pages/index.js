@@ -17,3 +17,6 @@ export { default as Recommend } from './common/Recommend';
 
 // 마이페이지 화면
 export { default as MyPage } from './common/MyPage';
+
+// 상세 레시피 화면
+export { default as RecipeDetail} from './common/RecipeDetail'
