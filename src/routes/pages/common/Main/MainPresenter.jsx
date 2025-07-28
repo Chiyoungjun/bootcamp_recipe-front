@@ -1,19 +1,20 @@
-import { MainLayout } from '../../../../layouts';
-import mainLogo from './main_logo.png';
-import NavContainer from '../../../compoents/navbar/NavContainer';
+// import { MainLayout } from '../../../../layouts';
+// import mainLogo from './main_logo.png';
+// import NavContainer from '../../../compoents/navbar/NavContainer';
 import RecipeListContainer from '../../../compoents/recipe/RecipeListContainer';
 import './Main.css';
 
 const MainPresenter = ({
-  onLogin,
-  onSignUp,
+  // onLogin,
+  // onSignUp,
   recipes,
   searchKeyword,
   onSearchInputChange,
   onSearch,
 }) => (
-  <MainLayout>
-    <header className="main-header">
+  <div>
+  {/* <MainLayout> */}
+    {/* <header className="main-header">
       <div className="main-header__left">
         <div className="main-header__logo-wrap">
           <img src={mainLogo} alt="SNAP COOK 로고" className="main-header__logo-img" />
@@ -26,10 +27,10 @@ const MainPresenter = ({
         <button onClick={onLogin} className="main-header__login-btn">로그인</button>
         <button onClick={onSignUp} className="main-header__signup-btn">회원가입</button>
       </div>
-    </header>
+    </header> */}
 
 
-    <NavContainer />
+    {/* <NavContainer /> */}
 
     <section className="main-search-section">
       <div className="main-search-box">
@@ -54,7 +55,8 @@ const MainPresenter = ({
       </div>
     </section>
      <RecipeListContainer recipes={recipes} />
-  </MainLayout>
+  {/* </MainLayout> */}
+  </div>
 );
 
 export default MainPresenter;

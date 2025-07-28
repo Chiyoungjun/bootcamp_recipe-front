@@ -1,29 +1,29 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MainPresenter from "./MainPresenter";
-import SignInContainer from "../SignIn/SignInContainer";
+// import SignInContainer from "../SignIn/SignInContainer";
 
 const MainContainer = () => {
   // 상태 관리
-  const [showLogin, setShowLogin] = useState(false);
+  // const [showLogin, setShowLogin] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [recipes, setRecipes] = useState([]);
   const navigate = useNavigate();
 
   // 로그인 모달 열기
-  const handleLogin = () => {
-    setShowLogin(true);
-  };
+  // const handleLogin = () => {
+  //   setShowLogin(true);
+  // };
 
   // 로그인 모달 닫기
-  const handleLoginClose = () => {
-    setShowLogin(false);
-  };
+  // const handleLoginClose = () => {
+  //   setShowLogin(false);
+  // };
 
   // 회원가입 페이지 이동
-  const handleSignUp = () => {
-    navigate("/signup");
-  };
+  // const handleSignUp = () => {
+  //   navigate("/signup");
+  // };
 
   // 검색어 입력 변경 처리
   const onSearchInputChange = (e) => {
@@ -64,14 +64,14 @@ const MainContainer = () => {
   return (
     <>
       <MainPresenter
-        onLogin={handleLogin}
-        onSignUp={handleSignUp}
+        // onLogin={handleLogin}
+        // onSignUp={handleSignUp}
         recipes={recipes}
         searchKeyword={searchKeyword}
         onSearchInputChange={onSearchInputChange}
         onSearch={onSearch}
       />
-      {showLogin && <SignInContainer onClose={handleLoginClose} />}
+      {/* {showLogin && <SignInContainer onClose={handleLoginClose} />} */}
     </>
   );
 };

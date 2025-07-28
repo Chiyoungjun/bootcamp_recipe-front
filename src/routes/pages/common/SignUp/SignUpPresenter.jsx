@@ -11,10 +11,10 @@ function SignUpPresenter({
 }) {
   return (
     <div className="signup-main-root">
-      <div className="signup-logo-row">
+      {/* <div className="signup-logo-row">
         <img src="/logo.png" alt="snap cook logo" className="signup-main-logo" />
         <span className="signup-main-title">SNAP COOK</span>
-      </div>
+      </div> */}
       <div className="signup-main-contents">
         <h2 className="signup-main-headline">회원 가입</h2>
         <div className="signup-main-desc">

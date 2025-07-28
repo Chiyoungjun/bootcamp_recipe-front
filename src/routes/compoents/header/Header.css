@@ -1,0 +1,55 @@
+/* ===========================
+   헤더 영역 (Header 전용 CSS)
+=========================== */
+
+.main-header {
+  width: 100%;
+  background: #F7F7F7;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px 16px 32px;
+  box-sizing: border-box;
+  /* border-bottom: 2px solid #369afe; */
+}
+
+.main-header__logo-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.main-header__logo-img {
+  width: 52px;
+  height: 52px;
+  margin-right: 12px;
+}
+
+.main-header__logo-title {
+  font-size: 50px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.main-header__auth {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.main-header__login-btn {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+.main-header__signup-btn {
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-size: 16px;
+  padding: 8px 20px;
+  cursor: pointer;
+}

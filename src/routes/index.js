@@ -9,6 +9,7 @@ import { Route, Routes } from "react-router-dom";
 
 // pages
 import { Main, SignIn, SignUp, Rank, Recommend, MyPage, RecipeDetail } from './pages';
+import { MainLayout } from "../layouts";
 
 const Router = () => {
     return (
@@ -16,7 +17,7 @@ const Router = () => {
 
             {/* 라우팅을 처리하는 컴포넌트, 각 URL 경로에 따라 어떤 컴포넌트(페이지)를 렌더링할지를 결정 */}
             <Routes>
-
+            <Route element={<MainLayout/>}>
                 {/* 메인 화면 */}
                 {/* 각 페이지의 경로와 해당 경로에서 렌더링할 컴포넌트(페이지)를 지정 */}
                 <Route
@@ -58,6 +59,7 @@ const Router = () => {
                 <Route
                     path="/recipedetail"
                     element={<RecipeDetail/>} />
+            </Route>
             </Routes>
         </div>
     );
