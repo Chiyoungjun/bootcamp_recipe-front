@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import "./RecipeDetail.css";
 
+// 영양정보 단위
 const nutritionUnit = {
   칼로리: "kcal",
   탄수화물: "g",
@@ -9,61 +10,92 @@ const nutritionUnit = {
   나트륨: "mg",
 };
 
-const RecipeDetailPresenter = ({ recipe, loading, error }) => {
-  const [favorite, setFavorite] = useState(false);
-  const [similarRecipes, setSimilarRecipes] = useState([]);
-
-  // 유사 레시피를 API로 불러온다(현재 레시피명 기준)
-  useEffect(() => {
-    if (!recipe?.RCP_NM) {
-      setSimilarRecipes([]);
-      return;
+// 키워드 추출 (2글자/3글자/단어 단위 모두)
+function extractKeywords(name) {
+  if (!name || typeof name !== "string") return [];
+  const arr = name.replace(/\s+/g, " ").split(" ");
+  let tokens = [];
+  arr.forEach(w => {
+    if (w.length > 1) {
+      for (let i = 0; i < w.length - 1; i++) tokens.push(w.slice(i, i + 2));
+      for (let i = 0; i < w.length - 2; i++) tokens.push(w.slice(i, i + 3));
     }
-    // 유사 레시피 검색
-    fetch(`http://127.0.0.1:8000/api/recipes/external/search?q=${encodeURIComponent(recipe.RCP_NM)}`)
-      .then(res => (res.ok ? res.json() : []))
-      .then(data => {
-        // 현재 상세 레시피와 같은 시퀀스는 제외, 최대 3개
-        const similars = (data || [])
-          .filter(r => String(r.RCP_SEQ) !== String(recipe.RCP_SEQ))
-          .slice(0, 3);
-        setSimilarRecipes(similars);
-      })
-      .catch(() => setSimilarRecipes([]));
-  }, [recipe?.RCP_SEQ, recipe?.RCP_NM]);
+    tokens.push(w); // 전체 단어도 추가
+  });
+  return [...new Set(tokens)].filter(x => x.length > 1);
+}
 
-  if (loading)
-    return <div className="detail-loading">로딩 중...</div>;
-  if (error)
-    return <div className="detail-error">{error}</div>;
-  if (!recipe)
-    return null;
+// 랜덤 3개 추출
+function getRandomItems(array, count) {
+  const arr = array.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr.slice(0, count);
+}
 
-  // 영양정보
+const RecipeDetailPresenter = ({ recipe, loading, error, allRecipes }) => {
+  const [favorite, setFavorite] = useState(false);
+
+  // ====== [API 데이터 콘솔 확인] ======
+  // 실제로 도착한 데이터 값 확인용 (운영 배포 전 삭제)
+  console.log("[Presenter] recipe", recipe);
+  console.log("[Presenter] allRecipes", allRecipes);
+
+  // === 유사 레시피: 2글자 키워드로 후보를 넓게 추출, 없으면 전체에서 랜덤 3개 ===
+  const similarRecipes = useMemo(() => {
+    if (!Array.isArray(allRecipes) || !recipe?.RCP_NM) return [];
+    const keywords = extractKeywords(recipe.RCP_NM).filter(x => x.length === 2);
+    const candidates = allRecipes.filter(
+      item =>
+        item.RCP_SEQ !== recipe.RCP_SEQ &&
+        keywords.some(kw => item.RCP_NM.includes(kw))
+    );
+    const picked = candidates.length > 0
+      ? getRandomItems(candidates, 3)
+      : getRandomItems(allRecipes.filter(i => i.RCP_SEQ !== recipe.RCP_SEQ), 3);
+    return picked.map(item => ({
+      img: item.ATT_FILE_NO_MAIN,
+      name: item.RCP_NM,
+      rating: 5,
+      views: Math.floor(Math.random() * 1000) + 1000,
+      RCP_SEQ: item.RCP_SEQ,
+    }));
+  }, [allRecipes, recipe]);
+
+  if (loading) return <div className="detail-loading">로딩 중...</div>;
+  if (error) return <div className="detail-error">{error}</div>;
+  if (!recipe) return null;
+
   const nutrition = {
-    칼로리: recipe.INFO_ENG, // kcal
+    칼로리: recipe.INFO_ENG,
     탄수화물: recipe.INFO_CAR,
     단백질: recipe.INFO_PRO,
     지방: recipe.INFO_FAT,
     나트륨: recipe.INFO_NA,
   };
 
-  // 만드는 법(끝부분 영문 알파벳/점 제거)
+  // 만드는 법
   const manual = [];
   for (let i = 1; i <= 20; i++) {
     const step = recipe[`MANUAL${String(i).padStart(2, "0")}`];
     const img = recipe[`MANUAL_IMG${String(i).padStart(2, "0")}`];
-    if (step && step.trim()) {
-      const cleanStep = step.trim().replace(/[a-z]\.?$/, "").trim();
-      manual.push({ step: cleanStep, img });
+    if (step && typeof step === "string" && step.trim()) {
+      manual.push({ step: step.trim(), img });
     }
   }
 
-  const toggleFavorite = () => setFavorite(f => !f);
+  const toggleFavorite = () => setFavorite(prev => !prev);
+
+  function handleSimilarClick(rcp_seq) {
+    if (!rcp_seq) return;
+    window.location.href = `/recipedetail?id=${rcp_seq}`;
+  }
 
   return (
     <div className="recipe-detail-wrapper">
-      {/* ===== 타이틀/즐겨찾기 ===== */}
+      {/* 타이틀/즐겨찾기 */}
       <div className="recipe-detail-title-row">
         <h2 className="recipe-detail-title">{recipe.RCP_NM}</h2>
         <button
@@ -75,11 +107,10 @@ const RecipeDetailPresenter = ({ recipe, loading, error }) => {
         </button>
       </div>
 
-      {/* ===== 메인이미지 & 영양정보 ===== */}
       <div className="recipe-detail-main">
         <div className="recipe-detail-imgblock">
           <img
-            src={recipe.ATT_FILE_NO_MAIN || "/default_recipe.jpg"}
+            src={recipe.ATT_FILE_NO_MAIN}
             alt={recipe.RCP_NM}
             className="recipe-detail-img"
           />
@@ -102,7 +133,7 @@ const RecipeDetailPresenter = ({ recipe, loading, error }) => {
         </div>
       </div>
 
-      {/* ===== 재료 ===== */}
+      {/* 재료 */}
       {recipe.RCP_PARTS_DTLS && (
         <section>
           <div className="ingredient-title">재료</div>
@@ -110,7 +141,7 @@ const RecipeDetailPresenter = ({ recipe, loading, error }) => {
         </section>
       )}
 
-      {/* ===== 만드는 법 (피그마 스타일) ===== */}
+      {/* 만드는 법 */}
       {manual.length > 0 && (
         <section>
           <div className="manual-title">만드는 법</div>
@@ -136,7 +167,7 @@ const RecipeDetailPresenter = ({ recipe, loading, error }) => {
         </section>
       )}
 
-      {/* ===== TIP ===== */}
+      {/* TIP */}
       {recipe.RCP_NA_TIP && (
         <section className="recipe-detail-tip-pigma">
           <strong>TIP: </strong>
@@ -144,26 +175,29 @@ const RecipeDetailPresenter = ({ recipe, loading, error }) => {
         </section>
       )}
 
-      {/* ===== 유사 레시피 (실제 API 연동) ===== */}
+      {/* 유사한 레시피 */}
       <section className="recipe-detail-similar">
         <h3 className="similar-title">유사한 레시피</h3>
         <div className="similar-recipe-list">
-          {similarRecipes.length > 0 ? 
-            similarRecipes.map((item, i) => (
-              <div className="similar-recipe-card" key={item.RCP_SEQ || i}>
-                <img src={item.ATT_FILE_NO_MAIN || "/default_recipe.jpg"} alt={item.RCP_NM} />
-                <div className="similar-name">{item.RCP_NM}</div>
-                <div className="similar-rating">
-                  {"★".repeat(5)}
-                  <span className="similar-views">
-                    {item.INFO_ENG ? `칼로리 ${item.INFO_ENG}kcal` : ""}
-                  </span>
+          {similarRecipes.length > 0
+            ? similarRecipes.map((item, i) => (
+                <div
+                  className="similar-recipe-card"
+                  key={item.RCP_SEQ || i}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleSimilarClick(item.RCP_SEQ)}
+                >
+                  <img src={item.img} alt={item.name} />
+                  <div className="similar-name">{item.name}</div>
+                  <div className="similar-rating">
+                    {"★".repeat(item.rating)}
+                    {"☆".repeat(5 - item.rating)}
+                    <span className="similar-views">조회수 {item.views}</span>
+                  </div>
                 </div>
-              </div>
-            ))
-          : (
-            <div style={{ color: "#aaa", fontSize: 15, padding: 20 }}>유사한 레시피가 없습니다.</div>
-          )}
+              ))
+            : <div style={{ color: "#999", padding: 32 }}>비슷한 레시피가 없습니다.</div>
+          }
         </div>
       </section>
     </div>
