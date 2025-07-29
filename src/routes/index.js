@@ -8,7 +8,7 @@
 import { Route, Routes } from "react-router-dom";
 
 // pages
-import { Main, SignIn, SignUp, Rank, Recommend, MyPage, RecipeDetail } from './pages';
+import { Main, SignIn, SignUp, Rank, Recommend, MyPage, RecipeDetail, UserEdit } from './pages';
 import { MainLayout } from "../layouts";
 
 const Router = () => {
@@ -52,13 +52,19 @@ const Router = () => {
                 {/* 마이페이지 화면 */}
                 <Route
                     path='/mypage'
-                    element={<MyPage />}
+                    element={<MyPage/>}
                 />
 
                 {/* 상세 레시피 화면 */}
                 <Route
                     path="/recipedetail"
-                    element={<RecipeDetail/>} />
+                    element={<RecipeDetail/>}
+                />
+                {/*회원정보 수정 화면 */}
+                <Route
+                    path="/useredit"
+                    element={<UserEdit/>} />
+
             </Route>
             </Routes>
         </div>

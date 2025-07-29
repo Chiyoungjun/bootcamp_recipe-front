@@ -1,0 +1,142 @@
+.edit-section-title {
+  margin-top: 18px;
+  margin-bottom: 10px;
+  font-size: 1.09rem;
+  font-weight: 700;
+  color: #1286ef;
+  letter-spacing: 0.3px;
+  border-left: 4px solid #1286ef;
+  padding-left: 12px;
+  background: #f8faff;
+}
+
+.mypage-root-app {
+  display: flex;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px #e5e7eb;
+  max-width: 820px;
+  min-height: 460px;
+  margin: 40px auto 0 auto;
+  overflow: hidden;
+}
+
+.mypage-sidebar-app {
+  width: 170px;
+  background: #f6f8fa;
+  border-right: 1.7px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  padding: 44px 0 0 0;
+  min-height: inherit;
+  box-sizing: border-box;
+}
+
+.mypage-sidebar-app ul {
+  list-style: none;
+  margin: 0; padding: 0;
+}
+
+.mypage-sidebar-app li {
+  padding: 18px 0 18px 36px;
+  font-size: 1.11rem;
+  color: #333;
+  border-left: 4px solid transparent;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.18s;
+}
+
+.mypage-sidebar-app li.active,
+.mypage-sidebar-app li:hover {
+  background: #fff;
+  border-left: 4px solid #1597ff;
+  color: #1597ff;
+  font-weight: bold;
+}
+
+.mypage-content-app {
+  flex: 1;
+  padding: 44px 42px 32px 42px;
+  background: #fff;
+  min-height: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mypage-edit-form-app {
+  background: #fcfcfd;
+  border-radius: 11px;
+  box-shadow: 0 1px 4px #f1f1f1;
+  /* width: 360px; */
+
+  margin: 0 auto;
+  padding: 36px 28px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.edit-title-app {
+  margin-bottom: 14px;
+  color: #1074c6;
+  font-size: 1.21rem;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: .5px;
+}
+
+.mypage-edit-form-app label {
+  display: block;
+  font-size: 0.96rem;
+  color: #222;
+  margin-bottom: 9px;
+}
+
+.mypage-edit-form-app input {
+  margin-top: 5px;
+  margin-bottom: 2px;
+  padding: 7px 12px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1.3px solid #e1e3e8;
+  width: 100%;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.edit-form-row-app {
+  display: flex;
+  gap: 18px;
+}
+
+.edit-save-btn-app {
+  background: linear-gradient(93deg,#109cf1 30%,#35c8fc 100%);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 11px 0;
+  font-size: 1.09rem;
+  font-weight: bold;
+  margin-top: 12px;
+  cursor: pointer;
+  transition: box-shadow 0.14s;
+}
+
+.edit-save-btn-app:hover {
+  box-shadow: 0 3px 12px #7cc9ff60;
+}
+
+.edit-save-msg-app {
+  margin-top: 13px;
+  color: #168c3c;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.mypage-empty-notice {
+  color: #aaa;
+  text-align: center;
+  margin-top: 68px;
+}

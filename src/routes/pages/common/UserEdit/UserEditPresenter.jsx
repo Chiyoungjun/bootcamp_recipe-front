@@ -2,11 +2,13 @@ import '../MyPage/MyPage.css';
 
 const UserEditPresenter = ({ userInfo, onChange, onSave, saved }) => (
   <form className="mypage-edit-form-app" onSubmit={onSave}>
-    <h2 className="edit-title-app">회원정보 수정</h2>
+    {/* === 상단 대제목 헤더 === */}
+    <div className="mypage-real-header-app">
+      <h2 className="edit-main-title-app">회원정보 수정</h2>
+    </div>
 
-    {/* 프로필 정보 영역 */}
-    <div className="edit-section-title">프로필 정보</div>
-
+    {/* --- 프로필 정보 구역 --- */}
+    <div className="edit-section-title-app">프로필 정보</div>
     <div className="input-group-app">
       <label>이름
         <input
@@ -17,7 +19,6 @@ const UserEditPresenter = ({ userInfo, onChange, onSave, saved }) => (
         />
       </label>
     </div>
-
     <div className="edit-form-row-app input-group-row">
       <div className="input-group-app">
         <label>키(cm)
@@ -40,7 +41,6 @@ const UserEditPresenter = ({ userInfo, onChange, onSave, saved }) => (
         </label>
       </div>
     </div>
-
     <div className="input-group-app">
       <label>생년월일
         <input
@@ -52,7 +52,6 @@ const UserEditPresenter = ({ userInfo, onChange, onSave, saved }) => (
         />
       </label>
     </div>
-
     <div className="input-group-app">
       <label>선호하는 음식
         <input
@@ -64,7 +63,6 @@ const UserEditPresenter = ({ userInfo, onChange, onSave, saved }) => (
         />
       </label>
     </div>
-
     <div className="input-group-app">
       <label>선호하는 태그
         <input
@@ -77,8 +75,8 @@ const UserEditPresenter = ({ userInfo, onChange, onSave, saved }) => (
       </label>
     </div>
 
-    {/* 계정 정보 영역 */}
-    <div className="edit-section-title" style={{ marginTop: 30 }}>계정 정보</div>
+    {/* --- 계정 정보 구역 --- */}
+    <div className="edit-section-title-app" style={{ marginTop: 30 }}>계정 정보</div>
     <div className="input-group-app">
       <label>이메일
         <input

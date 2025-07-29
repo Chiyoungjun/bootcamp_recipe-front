@@ -25,7 +25,7 @@ const HeaderContainer = () => {
 
   // 회원가입 클릭: 회원가입 페이지로 이동
   const handleSignUp = () => {
-    navigate('/signup');
+    navigate('/mypage');
   };
 
   return (

@@ -1,28 +1,41 @@
-import { useState, useEffect } from "react";
-import MyPagePresenter from "./MyPagePresenter";
+// MyPageContainer.jsx
+import { useState } from "react";
+import SidebarContainer from "../../../compoents/sidebar/SidebarContainer";
+import UserEditContainer from "../UserEdit";
 
 const MyPageContainer = () => {
-  // 사용자 데이터 상태
-  const [userData, setUserData] = useState([]);
+  const [selectedMenu, setSelectedMenu] = useState("edit");
 
-  useEffect(() => {
-    // 실제 환경에서는 fetch 또는 axios로 사용자 데이터를 불러옵니다
-    const dummyData = [
-      { id: 1, name: "Alice", score: 95 },
-      { id: 2, name: "Bob", score: 90 },
-      { id: 3, name: "Charlie", score: 85 },
-      { id: 4, name: "David", score: 80 }
-    ];
-
-    setUserData(dummyData);
-  }, []);
-
-  // 상위 3명 추출 (점수 기준 정렬)
-  const topThree = [...userData]
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 3);
-
-  return <MyPagePresenter topThree={topThree} />;
+  return (
+    <div style={{
+      display: "flex",
+      minHeight: "calc(100vh - 64px)", // 헤더/네비 높이 빼기
+      width: "100%",
+      background: "#f9f9fc" // 또는 transparent 등
+    }}>
+      <SidebarContainer selected={selectedMenu} onSelect={setSelectedMenu} />
+      <main style={{
+        flex: 1,
+        padding: '44px 42px 32px 42px',
+        background: '#fff',
+        minWidth: 0, // flex-bug 방지
+      }}>
+        {selectedMenu === "edit" && <UserEditContainer />}
+        {selectedMenu === "favorite" && (
+          <div style={{ color: "#aaa", textAlign: "center", marginTop: 60 }}>
+            <h3>즐겨찾기 기능 준비중</h3>
+            <p>곧 만나요 :)</p>
+          </div>
+        )}
+        {selectedMenu === "history" && (
+          <div style={{ color: "#aaa", textAlign: "center", marginTop: 60 }}>
+            <h3>검색 기록 기능 준비중</h3>
+            <p>곧 만나요 :)</p>
+          </div>
+        )}
+      </main>
+    </div>
+  );
 };
 
 export default MyPageContainer;

@@ -6,14 +6,15 @@ const Card1Container = ({ recipe }) => {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate("/recipedetail", { state: { id: recipe.RCP_SEQ } });
+    navigate("/recipedetail", {
+      state: {
+        id: recipe.RCP_SEQ,
+        foodName: recipe.RCP_NM,
+      },
+    });
   };
 
-  return (
-    <div onClick={handleCardClick} style={{ cursor: "pointer" }}>
-      <Card1Presenter recipe={recipe} />
-    </div>
-  );
+  return <Card1Presenter recipe={recipe} onClick={handleCardClick} />;
 };
 
 export default Card1Container;

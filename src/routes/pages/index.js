@@ -20,3 +20,6 @@ export { default as MyPage } from './common/MyPage';
 
 // 상세 레시피 화면
 export { default as RecipeDetail} from './common/RecipeDetail'
+
+//회원정보 수정 화면
+export { default as UserEdit} from './common/UserEdit'
