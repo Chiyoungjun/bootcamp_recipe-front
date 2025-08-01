@@ -23,3 +23,6 @@ export { default as RecipeDetail} from './common/RecipeDetail'
 
 //회원정보 수정 화면
 export { default as UserEdit} from './common/UserEdit'
+
+// 분류 화면
+export { default as Category } from './common/Category';

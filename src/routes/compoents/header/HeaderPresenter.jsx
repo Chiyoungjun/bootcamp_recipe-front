@@ -1,6 +1,14 @@
 import './Header.css';
 
-const HeaderPresenter = ({ mainLogo, onLogin, onSignUp, onLogoClick }) => (
+const HeaderPresenter = ({
+  mainLogo,
+  onLogin,
+  onSignUp,
+  onLogoClick,
+  isLoggedIn,
+  userName,
+  onLogout,
+}) => (
   <header className="main-header">
     <div className="main-header__left">
       <div
@@ -23,8 +31,26 @@ const HeaderPresenter = ({ mainLogo, onLogin, onSignUp, onLogoClick }) => (
       <div className="main-header__logo-title">SNAP COOK</div>
     </div>
     <div className="main-header__auth">
-      <button onClick={onLogin} className="main-header__login-btn">로그인</button>
-      <button onClick={onSignUp} className="main-header__signup-btn">마이페이지</button>
+      {isLoggedIn ? (
+        <>
+          <span className="main-header__user-name">{userName}님 환영합니다!</span>
+          <button onClick={onLogout} className="main-header__logout-btn">
+            로그아웃
+          </button>
+          <button onClick={onSignUp} className="main-header__signup-btn">
+            마이페이지
+          </button>
+        </>
+      ) : (
+        <>
+          <button onClick={onLogin} className="main-header__login-btn">
+            로그인
+          </button>
+          <button onClick={onSignUp} className="main-header__signup-btn">
+            마이페이지
+          </button>
+        </>
+      )}
     </div>
   </header>
 );

@@ -6,7 +6,6 @@
   align-items: center;
   padding: 24px 32px 16px 32px;
   box-sizing: border-box;
-  /* border-bottom: 2px solid #369afe; */
 }
 
 .main-header__logo-wrap {
@@ -24,7 +23,6 @@
   font-size: 50px;
   font-weight: 600;
   letter-spacing: 2px;
-  
 }
 
 .main-header__auth {
@@ -50,8 +48,6 @@
   padding: 8px 20px;
   cursor: pointer;
 }
-
-/* 네비게이션(nav) 관련 스타일 제거함 */
 
 .main-search-section {
   width: 100%;
@@ -96,7 +92,6 @@
   cursor: pointer;
 }
 
-/* 전체 페이지 배경 색 */
 .main-layout {
   background: #F7F7F7;
   min-height: 100vh;

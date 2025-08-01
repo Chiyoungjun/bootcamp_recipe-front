@@ -9,16 +9,19 @@ const UserEditPresenter = ({ userInfo, onChange, onSave, saved }) => (
 
     {/* --- 프로필 정보 구역 --- */}
     <div className="edit-section-title-app">프로필 정보</div>
+
     <div className="input-group-app">
       <label>이름
         <input
           type="text"
-          name="name"
-          value={userInfo.name}
+          name="ko_name"
+          value={userInfo.ko_name}
           onChange={onChange}
+          required
         />
       </label>
     </div>
+
     <div className="edit-form-row-app input-group-row">
       <div className="input-group-app">
         <label>키(cm)
@@ -41,34 +44,37 @@ const UserEditPresenter = ({ userInfo, onChange, onSave, saved }) => (
         </label>
       </div>
     </div>
+
     <div className="input-group-app">
       <label>생년월일
         <input
           type="text"
-          name="birth"
-          value={userInfo.birth || ""}
+          name="birth_date"
+          value={userInfo.birth_date || ""}
           onChange={onChange}
           placeholder="예: 030405"
         />
       </label>
     </div>
+
     <div className="input-group-app">
       <label>선호하는 음식
         <input
           type="text"
-          name="favoriteFood"
-          value={userInfo.favoriteFood || ""}
+          name="preferred_food"
+          value={userInfo.preferred_food || ""}
           onChange={onChange}
           placeholder="예: 김치찌개, 된장찌개"
         />
       </label>
     </div>
+
     <div className="input-group-app">
       <label>선호하는 태그
         <input
           type="text"
-          name="favoriteTag"
-          value={userInfo.favoriteTag || ""}
+          name="preferred_tags"
+          value={userInfo.preferred_tags || ""}
           onChange={onChange}
           placeholder="예: 찌개"
         />
@@ -77,6 +83,7 @@ const UserEditPresenter = ({ userInfo, onChange, onSave, saved }) => (
 
     {/* --- 계정 정보 구역 --- */}
     <div className="edit-section-title-app" style={{ marginTop: 30 }}>계정 정보</div>
+
     <div className="input-group-app">
       <label>이메일
         <input
@@ -88,13 +95,14 @@ const UserEditPresenter = ({ userInfo, onChange, onSave, saved }) => (
         />
       </label>
     </div>
+
     <div className="edit-form-row-app input-group-row">
       <div className="input-group-app">
         <label>아이디
           <input
             type="text"
-            name="id"
-            value={userInfo.id || ""}
+            name="user_id"
+            value={userInfo.user_id || ""}
             disabled
             style={{ background: '#f3f3f3', color: '#aaa' }}
           />

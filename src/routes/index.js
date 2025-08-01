@@ -8,7 +8,7 @@
 import { Route, Routes } from "react-router-dom";
 
 // pages
-import { Main, SignIn, SignUp, Rank, Recommend, MyPage, RecipeDetail, UserEdit } from './pages';
+import { Main, SignIn, SignUp, Rank, Recommend, MyPage, RecipeDetail, UserEdit, Category } from './pages';
 import { MainLayout } from "../layouts";
 
 const Router = () => {
@@ -47,6 +47,12 @@ const Router = () => {
                 <Route
                     path='/recommend'
                     element={<Recommend />}
+                />
+
+                {/* 분류 화면 */}
+                <Route
+                    path='/category'
+                    element={<Category />}
                 />
 
                 {/* 마이페이지 화면 */}

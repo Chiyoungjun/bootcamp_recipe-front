@@ -1,50 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
+// import Card from "../../../components/cards/Card/Card";
 import "./Recommend.css";
 
-function RecommendPresenter({ preferenceList, healthList }) {
+export default function RecommendPresenter({ title, list = [] }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleToggle = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
+  // 기본 6개 + 나머지
+  const baseList = list.slice(0, 6);
+  const expandedList = list.slice(6);
+
   return (
-    <div className="recommend-root">
-      {/* 상단: 3개씩 2줄, 하단 오른쪽 작은 이미지와 똑같은 크기로 */}
-      <h3 className="recommend-title">회원님의 선호 레시피를 바탕으로 추천해봤어요</h3>
-      <div className="recommend-preference-list">
-        {preferenceList.map((item, idx) => (
-          <div className="recommend-preference-card" key={idx}>
-            <img src={item.img} alt={item.title} className="recommend-preference-img" />
-            <div className="recommend-card-title">{item.title}</div>
-            <div className="recommend-card-desc">{item.desc}</div>
-          </div>
-        ))}
+    <section className="recommend-section">
+      <div className="recommend-section-header">
+        <span className="recommend-title">{title}</span>
+        {expandedList.length > 0 && (
+          <button className="recommend-more-btn" onClick={handleToggle}>
+            {isExpanded ? "닫기" : "+ 더 보기"}
+          </button>
+        )}
       </div>
 
-      {/* 하단: healthList가 3개 이상일 때만 좌우 분할로 보여줌 */}
-      {healthList.length >= 3 && (
-        <>
-          <h3 className="recommend-title" style={{ marginTop: 40 }}>
-            회원님의 건강상태를 바탕으로 추천해봤어요
-          </h3>
-          <div className="recommend-health-grid">
-            <div className="health-big-card">
-              <img src={healthList[0].img} alt={healthList[0].title} className="health-big-img" />
-              <div className="recommend-card-title">{healthList[0].title}</div>
-              <div className="recommend-card-desc">{healthList[0].desc}</div>
-            </div>
-            <div className="health-small-col">
-              <div className="health-small-card">
-                <img src={healthList[1].img} alt={healthList[1].title} className="health-small-img" />
-                <div className="recommend-card-title">{healthList[1].title}</div>
-                <div className="recommend-card-desc">{healthList[1].desc}</div>
-              </div>
-              <div className="health-small-card">
-                <img src={healthList[2].img} alt={healthList[2].title} className="health-small-img" />
-                <div className="recommend-card-title">{healthList[2].title}</div>
-                <div className="recommend-card-desc">{healthList[2].desc}</div>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
-    </div>
+      <div className="recommend-preference-list">
+        {/* {baseList.map((item, idx) => (
+          <Card
+            key={`base-${idx}`}
+            image={item.img}
+            title={item.title}
+            desc={item.desc}
+          />
+        ))}
+        {isExpanded &&
+          expandedList.map((item, idx) => (
+            <Card
+              key={`expanded-${idx}`}
+              image={item.img}
+              title={item.title}
+              desc={item.desc}
+            />
+          ))} */}
+      </div>
+    </section>
   );
 }
-
-export default RecommendPresenter;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SignUp2Presenter from "./SignUp2Presenter";
 
-function SignUp2Container() {
+function SignUp2Container({ onSubmit }) {
   const [form, setForm] = useState({
     height: "",
     weight: "",
@@ -21,19 +21,12 @@ function SignUp2Container() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.agree) {
-      alert("이용약관 및 개인정보 처리방침에 동의해야 합니다.");
-      return;
-    }
-    alert("회원가입 완료!\n" + JSON.stringify(form, null, 2));
+    // 부모가 전달한 onSubmit 호출 -> SignUpContainer의 handleSignUp이 실행됨
+    onSubmit(form);
   };
 
   return (
-    <SignUp2Presenter
-      form={form}
-      onChange={handleChange}
-      onSubmit={handleSubmit}
-    />
+    <SignUp2Presenter form={form} onChange={handleChange} onSubmit={handleSubmit} />
   );
 }
 

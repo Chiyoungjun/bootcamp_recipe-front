@@ -7,7 +7,7 @@
   align-items: flex-start;
 }
 
-.card {
+.card1{
   width: 220px;
   background: #fff;
   border-radius: 14px;
@@ -26,11 +26,11 @@
   background: #f6f6f6;
 }
 
-.card__body {
+.card1__body {
   padding: 16px 12px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   flex-grow: 1;
 }
 

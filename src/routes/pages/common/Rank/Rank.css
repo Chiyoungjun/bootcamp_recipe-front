@@ -1,5 +1,5 @@
 .rank-page-bg {
-  background: #faefec;
+  background: #f7f7f7;
   min-height: 100vh;
   padding: 32px 0 0 0;
 }
@@ -9,34 +9,37 @@
   max-width: 1200px;
   margin: 0 auto 20px auto;
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .rank-header h2 {
   font-size: 1.4rem;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 0;
+  letter-spacing: 0.2px;
 }
 
-.rank-tabs {
-  display: flex;
-  gap: 10px;
+.rank-dropdown-wrap {
+  min-width: 95px;
 }
 
-.rank-tab-btn {
-  background: #f3eae7;
-  border: none;
-  border-radius: 8px;
-  padding: 9px 25px;
-  font-weight: bold;
-  font-size: 1.1rem;
+.rank-period-select {
+  padding: 7px 24px 7px 15px;
+  border-radius: 7px;
+  border: 1.5px solid #e2cfc9;
+  background: #fff url("data:image/svg+xml,%3Csvg width='16' height='16' fill='gray' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%23666' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 9px center/16px 16px;
+  font-size: 1.07rem;
   color: #444;
+  appearance: none;
   cursor: pointer;
+  box-shadow: 0 2px 8px #ece0dd33;
+  font-weight: 500;
 }
-.rank-tab-btn.active {
-  background: #fff;
-  box-shadow: 0 0 8px #ece0dd;
+.rank-period-select:focus {
+  outline: 2px solid #369afe;
+  border-color: #369afe;
 }
 
 .rank-loading, .rank-error {
@@ -46,6 +49,7 @@
   font-size: 1.2rem;
 }
 
+/* 카드 리스트 (그리드) */
 .rank-recipe-list {
   width: 90vw;
   max-width: 1200px;
@@ -55,46 +59,17 @@
   gap: 35px;
 }
 
-.rank-recipe-card {
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 3px 14px #e9e0dd50;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: box-shadow 0.2s;
+/* 반응형 */
+@media (max-width: 900px) {
+  .rank-recipe-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+  }
 }
-.rank-recipe-card:hover {
-  box-shadow: 0 6px 22px #e2cfc9;
-}
-.rank-recipe-img {
-  width: 100%;
-  height: 155px;
-  object-fit: cover;
-}
-.rank-recipe-info {
-  padding: 15px 18px 18px 18px;
-}
-.rank-recipe-title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.rank-recipe-title {
-  font-size: 1.07rem;
-  font-weight: bold;
-}
-.rank-recipe-rank {
-  font-size: 0.97rem;
-  color: #b08c6d;
-}
-.rank-recipe-meta {
-  margin-top: 10px;
-  color: #555;
-  font-size: 0.96rem;
-  display: flex;
-  gap: 18px;
-}
-.rank-recipe-stars {
-  color: #ffbe00;
+
+@media (max-width: 600px) {
+  .rank-recipe-list {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 }
