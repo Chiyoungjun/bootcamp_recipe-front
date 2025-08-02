@@ -3,7 +3,7 @@ import './Header.css';
 const HeaderPresenter = ({
   mainLogo,
   onLogin,
-  onSignUp,
+  onMyPage,
   onLogoClick,
   isLoggedIn,
   userName,
@@ -37,7 +37,7 @@ const HeaderPresenter = ({
           <button onClick={onLogout} className="main-header__logout-btn">
             로그아웃
           </button>
-          <button onClick={onSignUp} className="main-header__signup-btn">
+          <button onClick={onMyPage} className="main-header__signup-btn">
             마이페이지
           </button>
         </>
@@ -46,7 +46,7 @@ const HeaderPresenter = ({
           <button onClick={onLogin} className="main-header__login-btn">
             로그인
           </button>
-          <button onClick={onSignUp} className="main-header__signup-btn">
+          <button onClick={onMyPage} className="main-header__signup-btn">
             마이페이지
           </button>
         </>

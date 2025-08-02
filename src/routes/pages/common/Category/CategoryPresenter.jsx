@@ -1,13 +1,13 @@
 import React from 'react';
-// import Card from '../../../components/cards/Card/Card';
+import Card1Container from '../../../components/cards/Card1/Card1Container';
 import './Category.css';
 
 const ALL_CATEGORIES = [
-  '한식', '중식', '일식', '퓨전 요리', '양식',
-  '밥', '국, 찌개', '면', '반찬', '구이, 찜'
+  '한식', '샐러드', '일식',  '양식','밥'
+  , '국, 찌개', '면', '반찬', '구이, 찜','기타'
 ];
 
-export default function CategoryPresenter({
+const CategoryPresenter = ({
   recipeList,
   category,
   setCategory,
@@ -15,7 +15,8 @@ export default function CategoryPresenter({
   setSearch,
   page,
   setPage,
-}) {
+  loading,
+}) => {
   return (
     <div className="category-root">
       {/* 카테고리: 한 줄에 5개씩 자동 줄바꿈 */}
@@ -41,27 +42,42 @@ export default function CategoryPresenter({
           placeholder="🔍 원하는 태그를 입력해보세요."
         />
       </div>
+
+      {/* 로딩 중 표시 */}
+      {loading && <div className="loading-text">로딩 중...</div>}
+
       {/* 카드 리스트 */}
       <div className="category-card-list">
-        {/* {recipeList.map(recipe => (
-          <Card
-            key={recipe.id}
-            image={recipe.img}
-            title={recipe.title}
-            stars={recipe.stars}
-            views={recipe.views}
+        {(!loading && recipeList.length === 0) && (
+          <div>레시피가 없습니다.</div>
+        )}
+
+        {!loading && recipeList.length > 0 && recipeList.map(recipe => (
+          <Card1Container
+            key={recipe.id || recipe.RCP_SEQ}
+            recipe={{
+              id: recipe.id || recipe.RCP_SEQ,
+              name: recipe.name || recipe.RCP_NM,
+              image_url: recipe.image_url || recipe.ATT_FILE_NO_MAIN,
+              avg_rating: recipe.avg_rating ?? recipe.AVG_RATING ?? 0,
+              rating_count: recipe.rating_count ?? recipe.RATING_COUNT ?? 0,
+              view_count: recipe.view_count ?? recipe.VIEW_COUNT ?? 0,
+            }}
           />
-        ))} */}
+        ))}
       </div>
+
       {/* 페이지네이션 */}
       <div className="category-pagination">
-        <button disabled className="page-btn active">1</button>
-        <button className="page-btn">2</button>
-        <button className="page-btn">3</button>
+        <button disabled={page === 1} className={`page-btn${page === 1 ? ' active' : ''}`} onClick={() => setPage(1)}>1</button>
+        <button className="page-btn" onClick={() => setPage(2)}>2</button>
+        <button className="page-btn" onClick={() => setPage(3)}>3</button>
         <span className="page-ellipsis">...</span>
-        <button className="page-btn">9</button>
-        <button className="page-btn">10</button>
+        <button className="page-btn" onClick={() => setPage(9)}>9</button>
+        <button className="page-btn" onClick={() => setPage(10)}>10</button>
       </div>
     </div>
   );
-}
+};
+
+export default CategoryPresenter;

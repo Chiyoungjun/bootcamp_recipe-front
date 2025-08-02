@@ -1,51 +1,6 @@
 import React, { useEffect, useState } from "react";
 import RankPresenter from "./RankPresenter";
-
-// 예시 데이터 (실제 API 연동 가능)
-// const dummyData = [
-//   {
-//     title: "비빔밥",
-//     rank: 1,
-//     views: 2025,
-//     stars: 5,
-//     img: "/images/bibimbap.jpg"
-//   },
-//   {
-//     title: "불고기",
-//     rank: 2,
-//     views: 2019,
-//     stars: 5,
-//     img: "/images/bulgogi.jpg"
-//   },
-//   {
-//     title: "김치찌개",
-//     rank: 3,
-//     views: 1592,
-//     stars: 4,
-//     img: "/images/kimchi_stew.jpg"
-//   },
-//   {
-//     title: "떡볶이",
-//     rank: 4,
-//     views: 1356,
-//     stars: 4,
-//     img: "/images/tteokbokki.jpg"
-//   },
-//   {
-//     title: "김밥",
-//     rank: 5,
-//     views: 950,
-//     stars: 4,
-//     img: "/images/kimbap.jpg"
-//   },
-//   {
-//     title: "제육볶음",
-//     rank: 6,
-//     views: 750,
-//     stars: 4,
-//     img: "/images/jeyuk.jpg"
-//   }
-// ];
+import axios from "axios";  // axios 추가 또는 fetch 사용 가능
 
 function RankContainer() {
   const [recipes, setRecipes] = useState([]);
@@ -53,11 +8,33 @@ function RankContainer() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      // setRecipes(dummyData);
-      setLoading(false);
-    }, 300);
+    // 랭킹 데이터 API 호출 함수
+    const fetchRankData = async () => {
+      setLoading(true);
+      try {
+        // period API 파라미터 형식 맞추기 (예: "일간" → "daily", "주간" → "weekly", "월간" → "monthly")
+        const periodMap = {
+          "일간": "daily",
+          "주간": "weekly",
+          "월간": "monthly",
+        };
+        const periodParam = periodMap[period] || "daily";
+
+        // 백엔드 API URL 예시 (적절히 변경하세요)
+       const response = await axios.get(`http://localhost:8000/api/rankings?period=${periodParam}`);
+
+        // 응답 데이터에 따라 recipes set
+        // 예) response.data.recipes 가 배열 형태라고 가정
+        setRecipes(response.data.recipes || []);
+      } catch (error) {
+        console.error("랭킹 데이터 불러오기 실패:", error);
+        setRecipes([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRankData();
   }, [period]);
 
   return (

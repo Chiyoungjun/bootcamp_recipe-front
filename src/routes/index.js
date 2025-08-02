@@ -10,12 +10,14 @@ import { Route, Routes } from "react-router-dom";
 // pages
 import { Main, SignIn, SignUp, Rank, Recommend, MyPage, RecipeDetail, UserEdit, Category } from './pages';
 import { MainLayout } from "../layouts";
+import { LoginProvider } from "./pages/common/SignIn/LoginContext";
 
 const Router = () => {
     return (
         <div className="app">
 
             {/* 라우팅을 처리하는 컴포넌트, 각 URL 경로에 따라 어떤 컴포넌트(페이지)를 렌더링할지를 결정 */}
+        <LoginProvider>
             <Routes>
             <Route element={<MainLayout/>}>
                 {/* 메인 화면 */}
@@ -73,6 +75,7 @@ const Router = () => {
 
             </Route>
             </Routes>
+        </LoginProvider>
         </div>
     );
 };

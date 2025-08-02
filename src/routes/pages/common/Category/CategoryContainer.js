@@ -1,25 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CategoryPresenter from './CategoryPresenter';
-
-// const RECIPE_LIST = [
-//   { id: 1, title: '비빔밥', img: '/images/bibimbap.jpg', stars: 5, views: 2025 },
-//   { id: 2, title: '간장계란밥', img: '/images/eggsoy.jpg', stars: 4, views: 1600 },
-//   { id: 3, title: '스크램블에그덮밥', img: '/images/scramble.jpg', stars: 4, views: 1500 },
-//   { id: 4, title: '명란버섯덮밥', img: '/images/myeongran.jpg', stars: 5, views: 1500 },
-//   { id: 5, title: '김밥', img: '/images/kimbap.jpg', stars: 4, views: 950 },
-//   { id: 6, title: '삼겹살덮밥', img: '/images/porkbowl.jpg', stars: 4, views: 940 },
-// ];
+import axios from 'axios';
 
 function CategoryContainer() {
   const [category, setCategory] = useState('한식');
-  const [subCategory, setSubCategory] = useState('밥');
+  // subCategory는 현재 Presenter에서 쓰이지 않으니 필요하면 관련 UI 및 로직 추가 가능
+  const [subCategory, setSubCategory] = useState('밥'); 
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
+  const [recipeList, setRecipeList] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // 카테고리, 검색어, 페이지가 변경될 때마다 레시피 목록 fetch
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      setLoading(true);
+      try {
+        // 간단 예시: 백엔드에 적절히 맞는 검색/카테고리 API 호출 예
+        const params = {
+          category,
+          search,
+          page,
+        };
+
+        // 예시 API URL, 실제 백엔드 API 경로와 파라미터에 맞게 조정
+        const response = await axios.get('http://localhost:8000/api/recipes', { params });
+
+
+        setRecipeList(response.data.recipes || []);
+      } catch (error) {
+        console.error('레시피 목록 불러오기 실패:', error);
+        setRecipeList([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecipes();
+  }, [category, search, page]);
 
   return (
     <CategoryPresenter
-      // recipeList={RECIPE_LIST}
-      // recipeList = {}
+      recipeList={recipeList}
       category={category}
       setCategory={setCategory}
       subCategory={subCategory}
@@ -28,6 +50,7 @@ function CategoryContainer() {
       setSearch={setSearch}
       page={page}
       setPage={setPage}
+      loading={loading}
     />
   );
 }
