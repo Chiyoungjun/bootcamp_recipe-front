@@ -29,7 +29,7 @@ const RankPresenter = ({ recipes, period, setPeriod, loading }) => {
           {recipes.length === 0 ? (
             <div>레시피가 없습니다.</div>
           ) : (
-            recipes.slice(0, 3).map((recipe) => (
+            recipes.slice(0, 9).map((recipe) => (
               <Card1Container
                 key={recipe.id || recipe.RCP_SEQ}
                 recipe={{
