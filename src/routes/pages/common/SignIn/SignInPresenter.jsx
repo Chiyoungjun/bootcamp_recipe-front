@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import './SignIn.css';
+import React, { useState } from "react";
+import "./SignIn.css";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { useNavigate } from 'react-router-dom';
-import ForgotPWContainer from './ForgotPWContainer'; // 🔹 비밀번호 찾기 컴포넌트 import
+import ForgotPWContainer from "./ForgotPWContainer";
 
 function SignInPresenter({
   id,
@@ -10,23 +9,21 @@ function SignInPresenter({
   setId,
   setPassword,
   handleSignIn,
-  onClose
+  onClose,
+  onGoSignUp, // 회원가입 콜백
 }) {
   const [showPw, setShowPw] = useState(false);
   const [autoLogin, setAutoLogin] = useState(false);
-  const [mode, setMode] = useState('signin'); // 🔹 모드 상태: signin | forgot
-  const navigate = useNavigate();
-
-  const goToSignUp = () => {
-    navigate('/signup');
-  };
+  const [mode, setMode] = useState("signin");
 
   return (
     <div className="modal-bg">
       <div className="modal-wrap signin-modal">
-        <button className="modal-close-btn" onClick={onClose}>×</button>
+        <button className="modal-close-btn" onClick={onClose}>
+          ×
+        </button>
 
-        {mode === 'signin' ? (
+        {mode === "signin" ? (
           <>
             <h2 className="signin-title">로그인</h2>
             <div className="signin-desc">SNAP COOK을 사용하려면 로그인하세요</div>
@@ -38,7 +35,7 @@ function SignInPresenter({
                     type="text"
                     className="signin-input"
                     value={id}
-                    onChange={e => setId(e.target.value)}
+                    onChange={(e) => setId(e.target.value)}
                     placeholder="아이디"
                     autoFocus
                   />
@@ -51,13 +48,13 @@ function SignInPresenter({
                     type={showPw ? "text" : "password"}
                     className="signin-input"
                     value={password}
-                    onChange={e => setPassword(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="비밀번호"
                   />
                   <button
                     type="button"
                     className="pw-eye-btn"
-                    onClick={() => setShowPw(v => !v)}
+                    onClick={() => setShowPw((v) => !v)}
                     tabIndex={-1}
                     aria-label="비밀번호 보기/숨기기"
                   >
@@ -70,11 +67,11 @@ function SignInPresenter({
                   <input
                     type="checkbox"
                     checked={autoLogin}
-                    onChange={() => setAutoLogin(v => !v)}
+                    onChange={() => setAutoLogin((v) => !v)}
                   />
                   로그인 유지
                 </label>
-                <span className="signin-forgot" onClick={() => setMode('forgot')}>
+                <span className="signin-forgot" onClick={() => setMode("forgot")}>
                   비밀번호를 잊으셨나요?
                 </span>
               </div>
@@ -84,13 +81,23 @@ function SignInPresenter({
             </form>
             <div className="signin-bottom-row">
               Snap Cook이 처음이신가요?
-              <span className="signin-signup-link" onClick={goToSignUp}>
+              <span
+                className="signin-signup-link"
+                onClick={() => {
+                  if (onGoSignUp) onGoSignUp();
+                }}
+                role="button"
+                tabIndex={0}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter" && onGoSignUp) onGoSignUp();
+                }}
+              >
                 회원가입
               </span>
             </div>
           </>
         ) : (
-          <ForgotPWContainer onBack={() => setMode('signin')} />
+          <ForgotPWContainer onBack={() => setMode("signin")} />
         )}
       </div>
     </div>

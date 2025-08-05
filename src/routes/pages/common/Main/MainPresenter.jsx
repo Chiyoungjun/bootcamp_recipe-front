@@ -11,6 +11,11 @@ const MainPresenter = ({
   page,
   setPage,
   itemsPerPage,
+  onPlusClick,
+  previewUrl,
+  showModal,
+  setShowModal,
+  onConfirmUpload,
 }) => {
   const totalPages = Math.ceil(recipes.length / itemsPerPage);
   const startIdx = (page - 1) * itemsPerPage;
@@ -18,6 +23,7 @@ const MainPresenter = ({
 
   return (
     <div>
+      {/* 검색창 */}
       <section className="main-search-section">
         <div className="main-search-box">
           <span className="main-search__icon">🔍</span>
@@ -32,7 +38,7 @@ const MainPresenter = ({
             }}
           />
           <button
-            onClick={onSearch}
+            onClick={onPlusClick}
             className="main-search__plus-btn"
             type="button"
           >
@@ -41,8 +47,30 @@ const MainPresenter = ({
         </div>
       </section>
 
-      <RecipeListContainer recipes={currentRecipes} />
+      {/* 이미지 모달 */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>이미지 미리보기</h3>
+            <img
+              src={previewUrl}
+              alt="미리보기"
+              style={{ maxWidth: "100%", maxHeight: "300px", borderRadius: "8px" }}
+            />
+            <div style={{ marginTop: "16px" }}>
+              <button onClick={onConfirmUpload} className="modal-confirm-btn">
+                확인
+              </button>
+              <button onClick={() => setShowModal(false)} className="modal-cancel-btn">
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
+      {/* 레시피 리스트 및 페이지네이션 */}
+      <RecipeListContainer recipes={currentRecipes} />
       <PaginationPresenter
         totalPages={totalPages}
         currentPage={page}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SignUp2Presenter from "./SignUp2Presenter";
 
-function SignUp2Container({ onSubmit }) {
+function SignUp2Container({ onSubmit, openLogin }) {
   const [form, setForm] = useState({
     height: "",
     weight: "",
@@ -21,12 +21,11 @@ function SignUp2Container({ onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // 부모가 전달한 onSubmit 호출 -> SignUpContainer의 handleSignUp이 실행됨
     onSubmit(form);
   };
 
   return (
-    <SignUp2Presenter form={form} onChange={handleChange} onSubmit={handleSubmit} />
+    <SignUp2Presenter form={form} onChange={handleChange} onSubmit={handleSubmit} openLogin={openLogin} />
   );
 }
 

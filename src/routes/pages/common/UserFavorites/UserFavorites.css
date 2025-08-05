@@ -1,0 +1,174 @@
+:root {
+  --main-bg: #f7f7f8;
+}
+
+
+body, .favorites-bg {
+  background: var(--main-bg);
+}
+
+
+.favorites-bg {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--main-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+}
+
+.favorites-widebox {
+  width: 1180px;    /* 중앙 와이드 박스, 타이틀-카드 정렬 */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 55px;
+}
+
+.favorites-title {
+  font-size: 2.8rem;
+  font-weight: 400;     /* 볼드 제거 */
+  letter-spacing: -1px;
+  margin-bottom: 38px;
+  width: 100%;
+  text-align: left;
+  color: #222;
+}
+
+/* 3열 그리드로 변경! */
+.favorites-list-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 54px;
+  column-gap: 34px;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+/* 그리드내 카드 크기와 정렬 */
+.favorites-card {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 18px;
+  border: none;
+  padding: 0 0 12px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  max-width: 360px;
+  width: 100%;
+}
+
+.favorites-image {
+  width: 100%;
+  max-width: 360px;
+  height: 220px;
+  border-radius: 14px;
+  object-fit: cover;
+  margin-bottom: 18px;
+  margin-top: 8px;
+  align-self: flex-start;
+  background: #e8e8e8;
+  box-shadow: none;
+}
+
+.favorites-info {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5px;
+}
+
+.favorites-name {
+  font-size: 1.20rem;
+  font-weight: 400;
+  margin-bottom: 1px;
+  color: #222;
+}
+
+.favorites-date {
+  font-size: 1.03rem;
+  color: #343434;
+  margin-bottom: 2px;
+  font-weight: 400;
+}
+
+.favorites-starrow {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 3px;
+}
+
+.favorites-stars {
+  color: #111;
+  font-size: 1.09rem;
+  font-weight: 400;
+  letter-spacing: 2px;
+}
+
+.favorites-view {
+  color: #444;
+  font-size: 0.98rem;
+  font-weight: 400;
+}
+
+.favorites-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 38px;
+  width: 100%;
+}
+
+.pagination-btn {
+  border: 1px solid #bbb;
+  background: white;
+  border-radius: 7px;
+  padding: 7px 13px;
+  margin: 0 2px;
+  font-size: 1.04rem;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.pagination-btn.active {
+  background: #222;
+  color: white;
+  border: 1.8px solid #222;
+}
+.pagination-btn:disabled {
+  color: #bbb;
+  border-color: #eee;
+  background: #eee;
+  cursor: not-allowed;
+}
+.pagination-ellipsis {
+  display: inline-block;
+  padding: 0 7px;
+  color: #bbb;
+  font-size: 1.09rem;
+  user-select: none;
+}
+
+/* 반응형(옵션, 모바일에서 2열/1열로 변경) */
+@media (max-width: 1200px) {
+  .favorites-widebox {
+    width: 98vw;
+  }
+  .favorites-list-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .favorites-card, .favorites-image {
+    max-width: 98vw;
+  }
+}
+@media (max-width: 800px) {
+  .favorites-list-grid {
+    grid-template-columns: 1fr;
+  }
+}

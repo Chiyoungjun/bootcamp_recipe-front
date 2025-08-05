@@ -1,6 +1,6 @@
 import React from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import './SignUp.css';
+import "./SignUp.css";
 
 function SignUpPresenter({
   inputs,
@@ -8,6 +8,7 @@ function SignUpPresenter({
   onTogglePassword,
   onTogglePasswordConfirm,
   onSubmit,
+  openLogin
 }) {
   return (
     <div className="signup-main-root">
@@ -94,9 +95,16 @@ function SignUpPresenter({
         </form>
         <div className="signup-main-bottom">
           이미 계정이 있으신가요?{" "}
-          <a href="#" className="signup-main-login-link">
+          <button
+            type="button"
+            className="signup-main-login-link"
+            onClick={(e) => {
+              e.preventDefault();
+              if (openLogin) openLogin();
+            }}
+          >
             로그인
-          </a>
+          </button>
         </div>
       </div>
     </div>

@@ -1,0 +1,173 @@
+:root {
+  --main-bg: white;
+}
+
+body, .history-bg {
+  background: var(--main-bg);
+}
+
+.history-bg {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--main-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+}
+
+.history-widebox {
+  width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 55px;
+}
+
+.history-title {
+  font-size: 2.8rem;
+  font-weight: 400;
+  letter-spacing: -1px;
+  margin-bottom: 38px;
+  width: 100%;
+  text-align: left;
+  color: #222;
+}
+
+/* 3열 그리드 (PC 기준) */
+.history-list-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 54px;
+  column-gap: 34px;
+  width: 100%;
+  margin-bottom: 32px;
+  justify-items: center;
+}
+
+.history-card {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 18px;
+  border: none;
+  padding: 0 0 12px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  max-width: 340px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.history-image {
+  width: 100%;
+  max-width: 340px;
+  height: 220px;
+  border-radius: 14px;
+  object-fit: cover;
+  margin-bottom: 18px;
+  margin-top: 8px;
+  align-self: flex-start;
+  background: #e8e8e8;
+  box-shadow: none;
+}
+
+.history-info {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5px;
+}
+
+.history-name {
+  font-size: 1.20rem;
+  font-weight: 400;
+  margin-bottom: 1px;
+  color: #222;
+}
+
+.history-date {
+  font-size: 1.03rem;
+  color: #343434;
+  margin-bottom: 2px;
+  font-weight: 400;
+}
+
+.history-starrow {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 3px;
+}
+
+.history-stars {
+  color: #111;
+  font-size: 1.09rem;
+  font-weight: 400;
+  letter-spacing: 2px;
+}
+
+.history-view {
+  color: #444;
+  font-size: 0.98rem;
+  font-weight: 400;
+}
+
+.history-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 38px;
+  width: 100%;
+}
+
+.pagination-btn {
+  border: 1px solid #bbb;
+  background: white;
+  border-radius: 7px;
+  padding: 7px 13px;
+  margin: 0 2px;
+  font-size: 1.04rem;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.pagination-btn.active {
+  background: #222;
+  color: white;
+  border: 1.8px solid #222;
+}
+.pagination-btn:disabled {
+  color: #bbb;
+  border-color: #eee;
+  background: #eee;
+  cursor: not-allowed;
+}
+.pagination-ellipsis {
+  display: inline-block;
+  padding: 0 7px;
+  color: #bbb;
+  font-size: 1.09rem;
+  user-select: none;
+}
+
+/* 반응형: 1200px 이하 2열, 800px 이하 1열 */
+@media (max-width: 1200px) {
+  .history-widebox {
+    width: 98vw;
+  }
+  .history-list-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .history-card, .history-image {
+    max-width: 98vw;
+  }
+}
+@media (max-width: 800px) {
+  .history-list-grid {
+    grid-template-columns: 1fr;
+  }
+}

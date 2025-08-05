@@ -2,6 +2,8 @@
 import { useState } from "react";
 import SidebarContainer from "../../../compoents/sidebar/SidebarContainer";
 import UserEditContainer from "../UserEdit";
+import FavoritesContainer from "../UserFavorites";
+import SearchHistoryContainer from "../UserSearchHistory";
 
 const MyPageContainer = () => {
   const [selectedMenu, setSelectedMenu] = useState("edit");
@@ -16,23 +18,13 @@ const MyPageContainer = () => {
       <SidebarContainer selected={selectedMenu} onSelect={setSelectedMenu} />
       <main style={{
         flex: 1,
-        padding: '44px 42px 32px 42px',
-        background: '#fff',
-        minWidth: 0, // flex-bug 방지
+        padding: "44px 42px 32px 42px",
+        background: "#fff",
+        minWidth: 0,
       }}>
         {selectedMenu === "edit" && <UserEditContainer />}
-        {selectedMenu === "favorite" && (
-          <div style={{ color: "#aaa", textAlign: "center", marginTop: 60 }}>
-            <h3>즐겨찾기 기능 준비중</h3>
-            <p>곧 만나요 :)</p>
-          </div>
-        )}
-        {selectedMenu === "history" && (
-          <div style={{ color: "#aaa", textAlign: "center", marginTop: 60 }}>
-            <h3>검색 기록 기능 준비중</h3>
-            <p>곧 만나요 :)</p>
-          </div>
-        )}
+        {selectedMenu === "favorite" && <FavoritesContainer />}
+        {selectedMenu === "history" && <SearchHistoryContainer />}
       </main>
     </div>
   );

@@ -7,15 +7,18 @@ export const LoginContext = createContext({
 });
 
 export const LoginProvider = ({ children }) => {
-  // 1) 세션스토리지에서 user_id를 읽어 임시 상태 세팅 (최초 마운트 시)
+  // 로그인 user 초기화 (sessionStorage에 저장된 user_id 기반)
   const [user, setUser] = useState(() => {
     const storedUserId = sessionStorage.getItem("user_id");
     return storedUserId ? { user_id: storedUserId } : null;
   });
 
-  // 2) user_id가 존재하면 상세 유저 정보를 백엔드에서 가져와 user 상태를 완전하게 채운다
+  // 유저 정보 로딩 상태 플래그
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const fetchUserDetails = async () => {
+    async function fetchUserDetails() {
+      // user_id는 있지만 프로필 정보가 없으면 보완 fetch
       if (user?.user_id && (!user.ko_name || !user.email)) {
         try {
           const response = await fetch(`http://localhost:8000/api/users/${user.user_id}`);
@@ -34,26 +37,30 @@ export const LoginProvider = ({ children }) => {
               birth_date: d.birth_date || "",
             });
           } else {
-            // 상세 정보 불러오기 실패 시 안전하게 로그아웃 처리
             setUser(null);
             sessionStorage.removeItem("user_id");
           }
         } catch (error) {
-          console.error("사용자 상세정보 호출 실패", error);
           setUser(null);
           sessionStorage.removeItem("user_id");
         }
       }
-    };
-
+      // user 정보 충분하면 loading 해제
+      setLoading(false);
+    }
     fetchUserDetails();
-  }, [user?.user_id]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   // 로그아웃 함수
   const logout = () => {
     setUser(null);
     sessionStorage.removeItem("user_id");
   };
+
+  // 유저 정보 로딩 중에는 children 렌더링 안 함 (Undefined 에러 방지)
+  if (loading) return <div>로딩 중...</div>;
 
   return (
     <LoginContext.Provider value={{ user, setUser, logout }}>

@@ -4,132 +4,172 @@ body {
   font-family: 'Noto Sans KR', 'Pretendard', Arial, sans-serif;
 }
 
-.signup-main-root {
-  min-height: 100vh;
+/* ===== 모달 배경, 래퍼, 닫기 버튼 ===== */
+.modal-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 9999; /* 로그인과 동일하게 상위 */
   display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.signup-logo-row {
-  display: flex;
-  align-items: center;
   justify-content: center;
-  margin-top: 32px;
-  margin-bottom: 10px;
+  align-items: center;
 }
 
-.signup-main-logo {
-  width: 48px;
-  height: 48px;
-  margin-right: 12px;
-}
-
-.signup-main-title {
-  font-size: 48px;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
-/* 가로폭 넓게 */
-.signup-main-contents {
-  width: 500px;         /* (이전 430px → 500px) */
-  margin-top: 8px;
+.modal-wrap {
+  background: #fff;
+  border-radius: 10px;
+  width: 410px;
+  padding: 40px 36px 24px 36px; /* 로그인과 동일하게 상단 40px, 하단 24px */
+  position: relative;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.12);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
+  z-index: 10000; /* 모달 앞쪽에 표시 */
 }
+
+.modal-close-btn {
+  position: absolute;
+  right: 30px;
+  top: 18px; /* 로그인과 동일하게 위쪽 살짝 올림 */
+  background: none;
+  border: none;
+  font-size: 28px; /* 로그인과 동일한 크기 */
+  cursor: pointer;
+  color: #222;
+  z-index: 10001;
+}
+
+/* ===== 회원가입 공통 스타일 ===== */
 
 .signup-main-headline {
-  font-size: 40px;
-  font-weight: 700;
-  margin: 32px 0 12px 0;
+  font-size: 2.3rem;
+  font-weight: bold;
+  margin-bottom: 12px; /* 로그인과 동일 */
+  letter-spacing: -1px;
 }
 
 .signup-main-desc {
-  color: #444;
-  font-size: 16px;
-  margin-bottom: 28px;
+  font-size: 1.07rem;
+  color: #888;
+  margin-bottom: 24px; /* 로그인과 동일 */
 }
 
 .signup-main-form {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  margin-bottom: 8px;
+  gap: 16px; /* 로그인과 동일 */
 }
 
-/* input 세로는 더 짧게, 가로는 더 넓게 */
-.signup-main-input {
+/* 키/몸무게 2단 분할 레이아웃 */
+.signup-main-row-2 {
+  display: flex;
+  gap: 12px;
   width: 100%;
-  font-size: 17px;
-  padding: 12px 18px;      /* 상하 12px, 좌우 18px */
-  border: 1.5px solid #222;
-  border-radius: 6px;
-  outline: none;
-  background: #fff;
-  font-family: inherit;
-  box-sizing: border-box;
-  transition: border 0.15s;
+}
+.signup-main-row-2 .signup-main-input {
+  flex: 1 1 0;
+  min-width: 0;
+  margin-bottom: 0;
 }
 
-.signup-main-input:focus {
-  border: 2px solid #111;
-}
-
+/* 모든 input 공통 높이 및 간격 */
 .signup-main-input-wrap {
   position: relative;
-  width: 100%;
   display: flex;
   align-items: center;
 }
 
-.signup-main-eye-btn {
-  background: none;
-  border: none;
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 22px;
-  color: #777;
-  cursor: pointer;
-  padding: 0;
+.signup-main-input {
+  width: 100%;
+  padding: 13px 12px; /* 로그인과 동일한 패딩 */
+  font-size: 1.1rem;
+  border: 1.5px solid #bbb;
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+  font-family: inherit;
+  box-sizing: border-box;
+  margin-bottom: 0;
+  transition: border 0.2s;
 }
 
+.signup-main-input:focus {
+  border: 1.5px solid #222;
+}
+
+/* 비밀번호 보기 버튼 */
+.signup-main-eye-btn {
+  position: absolute;
+  right: 13px;
+  background: none;
+  border: none;
+  font-size: 1.12rem;
+  color: #757575;
+  cursor: pointer;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0 3px;
+}
+
+/* 체크박스 및 약관 동의 영역 */
+.signup-main-agree-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  margin: 8px 0 0 0;
+}
+.signup-main-agree-label {
+  cursor: pointer;
+}
+.signup-main-agree-desc {
+  font-size: 15px;
+}
+
+/* 버튼 스타일 */
 .signup-main-btn {
   width: 100%;
   background: #111;
   color: #fff;
-  font-size: 20px;
-  font-weight: 700;
-  padding: 16px 0;
+  font-size: 1.11rem;
+  font-weight: bold;
+  margin-top: 16px; /* 로그인과 동일 */
+  padding: 14px 0;
   border: none;
   border-radius: 8px;
-  margin-top: 10px;
   cursor: pointer;
-  transition: background 0.16s;
+  transition: background 0.15s;
 }
 
 .signup-main-btn:hover {
   background: #222;
 }
 
+/* 하단 안내 및 링크 */
 .signup-main-bottom {
+  margin-top: 24px; /* 로그인과 동일 */
   text-align: center;
-  color: #888;
-  font-size: 15px;
-  margin-top: 32px;
-  margin-bottom: 36px;
-  width: 100%;
+  color: #444;
+  font-size: 1.05rem;
+  letter-spacing: -0.2px;
 }
 
 .signup-main-login-link {
-  color: #ef6464;
+  color: #fa7070;
+  margin-left: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1.05rem;
   text-decoration: none;
-  font-weight: bold;
-  margin-left: 2px;
+  background: none;
+  border: none;
+  padding: 0;
+  outline: none;
+  font-family: inherit;  /* 폰트 일치 */
+  /* (선택) 버튼이면 밑줄 제거 */
+  box-shadow: none;
 }
 
 .signup-main-login-link:hover {

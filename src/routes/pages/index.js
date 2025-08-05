@@ -26,3 +26,9 @@ export { default as UserEdit} from './common/UserEdit'
 
 // 분류 화면
 export { default as Category } from './common/Category';
+
+// 검색 기록 화면
+export { default as UserSearchHistory} from './common/UserSearchHistory';
+
+// 즐겨찾기 화면
+export { default as UserFavorites} from './common/UserFavorites';

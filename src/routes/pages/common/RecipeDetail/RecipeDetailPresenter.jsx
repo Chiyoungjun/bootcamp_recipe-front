@@ -9,11 +9,10 @@ const nutritionUnit = {
   나트륨: "mg",
 };
 
-const itemsPerPage = 3; // 한 번에 보여줄 카드 개수
+const itemsPerPage = 3;
 
 const StarRating = ({ rating, onRate }) => {
   const [hover, setHover] = useState(0);
-
   return (
     <div className="star-rating" style={{ cursor: "pointer", userSelect: "none" }}>
       {[1, 2, 3, 4, 5].map((star) => (
@@ -31,19 +30,19 @@ const StarRating = ({ rating, onRate }) => {
   );
 };
 
-
 const RecipeDetailPresenter = ({
   recipe,
   loading,
   error,
   relatedRecipes,
-  userRating,       // 추가: 사용자가 선택한 별점
-  onRate,           // 추가: 별점 선택 시 호출되는 함수
+  userRating,
+  onRate,
+  favorite,         // 추가: 찜 여부
+  onToggleFavorite, // 추가: 찜/찜 해제 버튼 클릭리스너
+  favoriteLoading,  // 추가: 찜 로딩
 }) => {
-  const [favorite, setFavorite] = useState(false);
   const [slideIndex, setSlideIndex] = useState(0);
 
-  // 만드는 법
   const manual = useMemo(() => {
     if (!recipe) return [];
     const arr = [];
@@ -57,7 +56,6 @@ const RecipeDetailPresenter = ({
     return arr;
   }, [recipe]);
 
-  // 영양정보
   const nutrition = {
     칼로리: recipe?.INFO_ENG,
     탄수화물: recipe?.INFO_CAR,
@@ -66,7 +64,6 @@ const RecipeDetailPresenter = ({
     나트륨: recipe?.INFO_NA,
   };
 
-  // 슬라이더 관련
   const maxSlides = relatedRecipes ? Math.ceil(relatedRecipes.length / itemsPerPage) : 0;
   const visibleCards = relatedRecipes
     ? relatedRecipes.slice(slideIndex * itemsPerPage, (slideIndex + 1) * itemsPerPage)
@@ -78,8 +75,6 @@ const RecipeDetailPresenter = ({
   const handleNext = () => {
     setSlideIndex((prev) => (prev < maxSlides - 1 ? prev + 1 : 0));
   };
-
-  const toggleFavorite = () => setFavorite((prev) => !prev);
 
   const handleSimilarClick = (rcp_seq) => {
     if (!rcp_seq) return;
@@ -98,13 +93,13 @@ const RecipeDetailPresenter = ({
         <button
           className={`favorite-btn${favorite ? " on" : ""}`}
           aria-label={favorite ? "즐겨찾기 취소" : "즐겨찾기 추가"}
-          onClick={toggleFavorite}
+          onClick={favoriteLoading ? undefined : onToggleFavorite}
+          disabled={favoriteLoading}
         >
           {favorite ? "★" : "☆"}
         </button>
       </div>
 
-      {/* ★ 여기부터 별점과 조회수 UI를 “추가”합니다 */}
       <div className="recipe-rating-info" style={{ marginBottom: 16 }}>
         <div>
           <strong>평균 별점:</strong> {recipe.avg_rating?.toFixed(1) ?? "0.0"} ({recipe.rating_count ?? 0}명)
@@ -118,7 +113,8 @@ const RecipeDetailPresenter = ({
         </div>
       </div>
 
-      {/* 메인 이미지 및 영양정보 */}
+      {/* 이하 동일… */}
+
       <div className="recipe-detail-main">
         <div className="recipe-detail-imgblock">
           <img
@@ -143,8 +139,6 @@ const RecipeDetailPresenter = ({
           </ul>
         </div>
       </div>
-
-      {/* 재료 */}
       {(recipe.description || recipe.RCP_PARTS_DTLS) && (
         <section>
           <div className="ingredient-title">재료</div>
@@ -153,8 +147,6 @@ const RecipeDetailPresenter = ({
           </div>
         </section>
       )}
-
-      {/* 만드는 법 */}
       {manual.length > 0 && (
         <section>
           <div className="manual-title">만드는 법</div>
@@ -173,16 +165,12 @@ const RecipeDetailPresenter = ({
           </div>
         </section>
       )}
-
-      {/* TIP */}
       {recipe.RCP_NA_TIP && (
         <section className="recipe-detail-tip-pigma">
           <strong>TIP: </strong>
           {recipe.RCP_NA_TIP}
         </section>
       )}
-
-      {/* 유사한 레시피 - 슬라이더 */}
       <section className="recipe-detail-similar">
         <h3 className="similar-title">유사한 레시피</h3>
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
@@ -217,7 +205,6 @@ const RecipeDetailPresenter = ({
             <div style={{ color: "#999", padding: 32 }}>비슷한 레시피가 없습니다.</div>
           )}
         </div>
-        {/* 현재 페이지 표기 */}
         {maxSlides > 1 && (
           <div style={{ textAlign: "center", marginTop: "8px", color: "#999" }}>
             {slideIndex + 1}/{maxSlides}

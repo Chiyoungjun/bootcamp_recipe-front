@@ -4,11 +4,10 @@
   padding-bottom: 60px;
 }
 
-/* ---- 카테고리 바 (자동 줄바꿈, 검정색) ---- */
 .category-full-filter-wrap {
   background: #000;
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 1줄에 5개, 2줄로 자동 */
+  grid-template-columns: repeat(5, 1fr);
   width: 100vw;
   min-width: 100%;
   padding: 15px 0 13px 0;
@@ -25,7 +24,6 @@
   font-weight: 500;
   border-radius: 22px;
   padding: 8px 22px;
-  margin: 0 0px;
   height: 36px;
   cursor: pointer;
   opacity: 0.88;
@@ -40,7 +38,6 @@
   opacity: 1;
 }
 
-/* ---- 나머지 기존 코드 그대로 ---- */
 .category-search-row {
   width: 92vw;
   max-width: 1160px;
@@ -49,11 +46,13 @@
   align-items: center;
   justify-content: space-between;
 }
+
 .category-title {
   font-size: 1.15rem;
   font-weight: bold;
   margin-bottom: 0;
 }
+
 .category-search-input {
   border: 1.3px solid #e5e5e5;
   border-radius: 9px;
@@ -64,13 +63,16 @@
   background: #fff;
 }
 
+/* 카드 리스트: 3열 5행, 총 15개 영역 확보 */
 .category-card-list {
   width: 92vw;
   max-width: 1160px;
   margin: 0 auto 32px auto;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr); /* 3열 */
   gap: 28px 20px;
+  grid-auto-rows: auto; /* 행 높이 자동 조절 */
+  grid-template-rows: repeat(5, auto); /* 최대 5줄 */
 }
 
 .category-pagination {
@@ -80,6 +82,7 @@
   gap: 6px;
   margin-top: 28px;
 }
+
 .page-btn {
   border: none;
   background: #fff;
@@ -90,12 +93,24 @@
   padding: 5px 13px;
   cursor: pointer;
   transition: background 0.15s, color 0.13s;
+  min-width: 36px;
+  text-align: center;
+  user-select: none;
 }
+
 .page-btn.active {
   background: #222;
   color: #fff;
   font-weight: bold;
 }
+
+.page-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background: #eee;
+  color: #999;
+}
+
 .page-ellipsis {
   color: #888;
   padding: 0 6px;
@@ -106,9 +121,10 @@
     grid-template-columns: repeat(2, 1fr);
   }
   .category-full-filter-wrap {
-    grid-template-columns: repeat(3, 1fr); /* 태블릿에서 한 줄에 3개 */
+    grid-template-columns: repeat(3, 1fr);
   }
 }
+
 @media (max-width: 600px) {
   .category-card-list {
     grid-template-columns: 1fr;
@@ -119,6 +135,6 @@
     align-items: flex-start;
   }
   .category-full-filter-wrap {
-    grid-template-columns: repeat(2, 1fr); /* 모바일에서 한 줄에 2개 */
+    grid-template-columns: repeat(2, 1fr);
   }
 }

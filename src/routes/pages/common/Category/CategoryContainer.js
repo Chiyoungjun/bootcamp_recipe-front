@@ -2,35 +2,51 @@ import React, { useState, useEffect } from 'react';
 import CategoryPresenter from './CategoryPresenter';
 import axios from 'axios';
 
+const ITEMS_PER_PAGE = 12; // 한 페이지에 보여줄 아이템 수
+
 function CategoryContainer() {
   const [category, setCategory] = useState('한식');
-  // subCategory는 현재 Presenter에서 쓰이지 않으니 필요하면 관련 UI 및 로직 추가 가능
-  const [subCategory, setSubCategory] = useState('밥'); 
+  const [subCategory, setSubCategory] = useState('밥');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [recipeList, setRecipeList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
 
-  // 카테고리, 검색어, 페이지가 변경될 때마다 레시피 목록 fetch
   useEffect(() => {
     const fetchRecipes = async () => {
       setLoading(true);
       try {
-        // 간단 예시: 백엔드에 적절히 맞는 검색/카테고리 API 호출 예
         const params = {
           category,
           search,
           page,
+          page_size: ITEMS_PER_PAGE,
         };
 
-        // 예시 API URL, 실제 백엔드 API 경로와 파라미터에 맞게 조정
         const response = await axios.get('http://localhost:8000/api/recipes', { params });
+        const data = response.data;
 
+        // 디버깅용 로그 추가
+        console.log('API 응답:', data);
 
-        setRecipeList(response.data.recipes || []);
+        // 레시피 목록
+        const recipes = data.recipes || data.data?.recipes || [];
+        setRecipeList(recipes);
+
+        // 전체 개수
+        const totalCount =
+          data.total_count || data.data?.total_count || recipes.length;
+
+        const calculatedTotalPages = Math.max(1, Math.ceil(totalCount / ITEMS_PER_PAGE));
+        setTotalPages(calculatedTotalPages);
+
+        console.log('총 개수:', totalCount);
+        console.log('총 페이지 수:', calculatedTotalPages);
       } catch (error) {
         console.error('레시피 목록 불러오기 실패:', error);
         setRecipeList([]);
+        setTotalPages(1);
       } finally {
         setLoading(false);
       }
@@ -51,6 +67,7 @@ function CategoryContainer() {
       page={page}
       setPage={setPage}
       loading={loading}
+      totalPages={totalPages}
     />
   );
 }

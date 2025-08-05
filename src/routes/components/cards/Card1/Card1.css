@@ -1,20 +1,58 @@
-.card {
-  width: 220px;
+/* 즐겨찾기/검색 그리드 화면의 카드 전용 - margin: 0 auto; 절대 금지! */
+.favorites-card {
+  width: 100%;
+  max-width: 320px;
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 2px 10px #eee;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  /* min-height: 320px; */
   cursor: pointer;
+  position: relative;
+  transition: box-shadow 0.2s, transform 0.15s;
 }
 
+.favorites-card:hover {
+  box-shadow: 0 6px 24px #e6e6e6;
+  transform: translateY(-2px) scale(1.02);
+}
+.card {
+  width: 100%;
+  max-width: 220px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px #eee;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  margin: 0 auto;
+  position: relative;    /* 랭킹뱃지 위치용 */
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+.card:hover {
+  box-shadow: 0 6px 24px #e6e6e6;
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* 1위 카드만 더 크게 */
+.card--large {
+  max-width: 260px;
+  min-width: 220px;
+  box-shadow: 0 4px 18px #e8d167;
+  z-index: 2;
+}
 .card__img {
   width: 100%;
   height: 140px;
   object-fit: cover;
   background: #f6f6f6;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+.card--large .card__img {
+  height: 180px;
 }
 
 .card__body {
@@ -26,9 +64,12 @@
   font-size: 1.07rem;
   margin-bottom: 6px;
   text-align: left;
+  word-break: keep-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* ★ 별점/조회수 정보 라인 추가 */
 .card__info-row {
   margin-top: 4px;
   font-size: 0.96rem;
@@ -54,8 +95,54 @@
   font-size: 0.93em;
 }
 
-/* 기존 재료용 */
 .card__parts {
   font-size: 0.95rem;
   color: #666;
+}
+
+/* ----- 랭킹 뱃지 (1~3위) ----- */
+.card__rank-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 4px 14px;
+  font-size: 1.12rem;
+  background: #FFD700;
+  color: #222;
+  font-weight: bold;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  min-width: 54px;
+  justify-content: center;
+  letter-spacing: 0;
+}
+.card__rank-badge--1 {
+  background: #FFD700;   /* Gold */
+  color: #9b7700;
+  font-size: 1.22rem;
+  font-weight: bold;
+}
+.card__rank-badge--2 {
+  background: #E5E5E5;   /* Silver */
+  color: #666;
+}
+.card__rank-badge--3 {
+  background: #FFD7AF;   /* Bronze */
+  color: #ae772d;
+}
+
+/* 반응형 예시 (선택 적용) */
+@media (max-width: 600px) {
+  .card, .card--large {
+    max-width: 96vw;
+  }
+  .card__img,
+  .card--large .card__img {
+    height: 30vw;
+    min-height: 100px;
+    max-height: 180px;
+  }
 }
