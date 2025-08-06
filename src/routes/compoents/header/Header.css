@@ -3,6 +3,7 @@
 =========================== */
 
 .main-header {
+  position: relative; /* 절대위치 자식 기준 설정 */
   width: 100%;
   background: #F7F7F7;
   display: flex;
@@ -10,7 +11,8 @@
   align-items: center;
   padding: 24px 32px 16px 32px;
   box-sizing: border-box;
-  /* border-bottom: 2px solid #369afe; */
+  margin-bottom: 35px;
+  margin-top: 15px;
 }
 
 .main-header__logo-wrap {
@@ -24,12 +26,23 @@
   margin-right: 12px;
 }
 
+/* SNAP COOK 텍스트를 화면 가로 중앙에 고정 */
+.main-header__center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  z-index: 10; /* 겹침 방지 */
+  
+}
+
 .main-header__logo-title {
   font-size: 50px;
   font-weight: 600;
   letter-spacing: 2px;
 }
 
+/* 로그인/마이페이지 영역 */
 .main-header__auth {
   display: flex;
   align-items: center;
@@ -53,6 +66,7 @@
   padding: 8px 20px;
   cursor: pointer;
 }
+
 .main-header__logout-btn {
   background: transparent;
   border: none;

@@ -1,7 +1,7 @@
 .main-nav {
   display: flex;
   justify-content: center;
-  gap: 650px;
+  gap: 480px;
   background: black;
   padding: 15px 0 20px 0;
 }

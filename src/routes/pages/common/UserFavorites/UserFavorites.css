@@ -2,11 +2,9 @@
   --main-bg: #f7f7f8;
 }
 
-
 body, .favorites-bg {
   background: var(--main-bg);
 }
-
 
 .favorites-bg {
   width: 100%;
@@ -19,57 +17,64 @@ body, .favorites-bg {
 }
 
 .favorites-widebox {
-  width: 1180px;    /* 중앙 와이드 박스, 타이틀-카드 정렬 */
+  width: 1200px;          /* history-widebox와 동일 */
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding-top: 55px;
+  padding-top: 24px;
 }
 
 .favorites-title {
-  font-size: 2.8rem;
-  font-weight: 400;     /* 볼드 제거 */
+  font-size: 2.4rem;
+  font-weight: 400;
   letter-spacing: -1px;
-  margin-bottom: 38px;
+  margin-bottom: 32px;
   width: 100%;
   text-align: left;
   color: #222;
 }
 
-/* 3열 그리드로 변경! */
+/* 2열 그리드 (history-list-grid와 동일) */
 .favorites-list-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  row-gap: 54px;
-  column-gap: 34px;
+  grid-template-columns: repeat(2, 1fr);  /* 2열로 맞춤 */
+  row-gap: 32px;
+  column-gap: 16px;
   width: 100%;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+  justify-items: stretch;   /* 카드 넓게 퍼지도록 */
 }
 
-/* 그리드내 카드 크기와 정렬 */
+/* 카드 크기/폭 최적화 */
 .favorites-card {
   background: transparent;
   box-shadow: none;
-  border-radius: 18px;
+  border-radius: 16px;
   border: none;
-  padding: 0 0 12px 0;
-  display: flex;
+  padding: 0 0 50px 0;     /* 50px padding으로 하단 공간 확보(history와 동일) */
   flex-direction: column;
   align-items: flex-start;
   min-width: 0;
-  max-width: 360px;
+  max-width: 340px;        /* 340px로 history와 동일 */
   width: 100%;
+  box-sizing: border-box;
+  transition: box-shadow 0.2s;
 }
 
+.favorites-card:hover {
+  box-shadow: 0 4px 20px #eee;
+}
+
+/* 이미지 크기 */
 .favorites-image {
   width: 100%;
-  max-width: 360px;
-  height: 220px;
-  border-radius: 14px;
+  max-width: none;         /* 제한 없음 */
+  height: 200px;           /* history 이미지 높이와 동일 */
+  border-radius: 12px;
   object-fit: cover;
-  margin-bottom: 18px;
-  margin-top: 8px;
+  margin-bottom: 12px;
+  margin-top: 6px;
   align-self: flex-start;
   background: #e8e8e8;
   box-shadow: none;
@@ -84,14 +89,14 @@ body, .favorites-bg {
 }
 
 .favorites-name {
-  font-size: 1.20rem;
+  font-size: 1.15rem;
   font-weight: 400;
   margin-bottom: 1px;
   color: #222;
 }
 
 .favorites-date {
-  font-size: 1.03rem;
+  font-size: 1.01rem;
   color: #343434;
   margin-bottom: 2px;
   font-weight: 400;
@@ -100,15 +105,15 @@ body, .favorites-bg {
 .favorites-starrow {
   display: flex;
   align-items: center;
-  gap: 13px;
-  margin-top: 3px;
+  gap: 10px;
+  margin-top: 2px;
 }
 
 .favorites-stars {
   color: #111;
-  font-size: 1.09rem;
+  font-size: 1.05rem;
   font-weight: 400;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
 }
 
 .favorites-view {
@@ -122,7 +127,7 @@ body, .favorites-bg {
   justify-content: center;
   align-items: center;
   gap: 8px;
-  margin-top: 38px;
+  margin-top: 32px;
   width: 100%;
 }
 
@@ -136,17 +141,20 @@ body, .favorites-bg {
   cursor: pointer;
   transition: background 0.1s;
 }
+
 .pagination-btn.active {
   background: #222;
   color: white;
   border: 1.8px solid #222;
 }
+
 .pagination-btn:disabled {
   color: #bbb;
   border-color: #eee;
   background: #eee;
   cursor: not-allowed;
 }
+
 .pagination-ellipsis {
   display: inline-block;
   padding: 0 7px;
@@ -155,7 +163,7 @@ body, .favorites-bg {
   user-select: none;
 }
 
-/* 반응형(옵션, 모바일에서 2열/1열로 변경) */
+/* 반응형 */
 @media (max-width: 1200px) {
   .favorites-widebox {
     width: 98vw;
@@ -167,6 +175,7 @@ body, .favorites-bg {
     max-width: 98vw;
   }
 }
+
 @media (max-width: 800px) {
   .favorites-list-grid {
     grid-template-columns: 1fr;

@@ -1,4 +1,4 @@
-import '../MyPage/MyPage.css';
+import './MyPage.css';
 
 const UserEditPresenter = ({ userInfo, onChange, onSave, saved }) => (
   <form className="mypage-edit-form-app" onSubmit={onSave}>

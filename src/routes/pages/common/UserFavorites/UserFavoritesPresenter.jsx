@@ -20,7 +20,6 @@ function UserFavoritesPresenter({
                 key={recipe.id}
                 recipe={recipe}
                 userId={userId}
-                cardClass="favorites-card"
               />
             ))
           ) : (

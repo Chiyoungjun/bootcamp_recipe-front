@@ -1,5 +1,5 @@
 :root {
-  --main-bg: white;
+  --main-bg: #f7f7f8;
 }
 
 body, .history-bg {
@@ -17,62 +17,63 @@ body, .history-bg {
 }
 
 .history-widebox {
-  width: 1180px;
+  width: 1200px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding-top: 55px;
+  padding-top: 24px;
 }
 
 .history-title {
-  font-size: 2.8rem;
+  font-size: 2.4rem;
   font-weight: 400;
   letter-spacing: -1px;
-  margin-bottom: 38px;
+  margin-bottom: 32px;
   width: 100%;
   text-align: left;
   color: #222;
 }
 
-/* 3열 그리드 (PC 기준) */
+/* 3열 그리드 */
 .history-list-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  row-gap: 54px;
-  column-gap: 34px;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 32px;
+  column-gap: 16px;
   width: 100%;
-  margin-bottom: 32px;
-  justify-items: center;
+  margin-bottom: 24px;
+  justify-items: stretch;
 }
 
+/* 카드 폭 넉넉하게, 세로 확대 */
 .history-card {
   background: transparent;
   box-shadow: none;
-  border-radius: 18px;
+  border-radius: 16px;
   border: none;
-  padding: 0 0 12px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  padding: 0 0 10px 0;
   min-width: 0;
-  max-width: 340px;
+  max-width: 380px;           /* ★ 살짝 키움 */
   width: 100%;
   box-sizing: border-box;
+  transition: box-shadow 0.2s;
+}
+.history-card:hover {
+  box-shadow: 0 4px 24px #eee;
 }
 
 .history-image {
   width: 100%;
-  max-width: 340px;
-  height: 220px;
+  height: 330px;              /* ★ 200px → 330px (1.5~2배 확장!) */
   border-radius: 14px;
   object-fit: cover;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
   margin-top: 8px;
-  align-self: flex-start;
   background: #e8e8e8;
   box-shadow: none;
 }
+/* 이미지 세로로 길~게 확장! */
 
 .history-info {
   width: 100%;
@@ -83,14 +84,14 @@ body, .history-bg {
 }
 
 .history-name {
-  font-size: 1.20rem;
+  font-size: 1.15rem;
   font-weight: 400;
   margin-bottom: 1px;
   color: #222;
 }
 
 .history-date {
-  font-size: 1.03rem;
+  font-size: 1.01rem;
   color: #343434;
   margin-bottom: 2px;
   font-weight: 400;
@@ -99,15 +100,15 @@ body, .history-bg {
 .history-starrow {
   display: flex;
   align-items: center;
-  gap: 13px;
-  margin-top: 3px;
+  gap: 10px;
+  margin-top: 2px;
 }
 
 .history-stars {
   color: #111;
-  font-size: 1.09rem;
+  font-size: 1.05rem;
   font-weight: 400;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
 }
 
 .history-view {
@@ -121,7 +122,7 @@ body, .history-bg {
   justify-content: center;
   align-items: center;
   gap: 8px;
-  margin-top: 38px;
+  margin-top: 32px;
   width: 100%;
 }
 
@@ -154,7 +155,6 @@ body, .history-bg {
   user-select: none;
 }
 
-/* 반응형: 1200px 이하 2열, 800px 이하 1열 */
 @media (max-width: 1200px) {
   .history-widebox {
     width: 98vw;
@@ -165,9 +165,15 @@ body, .history-bg {
   .history-card, .history-image {
     max-width: 98vw;
   }
+  .history-image {
+    height: 280px;      /* 화면 좁아질 때 이미지 살짝 축소 */
+  }
 }
 @media (max-width: 800px) {
   .history-list-grid {
     grid-template-columns: 1fr;
+  }
+  .history-image {
+    height: 200px;
   }
 }

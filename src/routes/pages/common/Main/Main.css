@@ -53,7 +53,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 70px;
+  margin-top: 180px;
 }
 
 .main-search-box {
@@ -62,7 +62,7 @@
   background: white;
   border-radius: 12px;
   padding: 18px 23px 18px 22px;
-  width: 900px;
+  width: 700px;
   box-shadow: 0 2px 6px #eddbeb;
 }
 
