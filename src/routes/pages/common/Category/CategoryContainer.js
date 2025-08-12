@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import CategoryPresenter from './CategoryPresenter';
 import axios from 'axios';
+import { LoginContext } from '../SignIn/LoginContext'; // 경로 주의!
 
 const ITEMS_PER_PAGE = 12; // 한 페이지에 보여줄 아이템 수
 
 function CategoryContainer() {
+  const { user } = useContext(LoginContext);
+  const userId = user?.user_id;
+
   const [category, setCategory] = useState('한식');
   const [subCategory, setSubCategory] = useState('밥');
   const [search, setSearch] = useState('');
@@ -27,14 +31,11 @@ function CategoryContainer() {
         const response = await axios.get('http://localhost:8000/api/recipes', { params });
         const data = response.data;
 
-        // 디버깅용 로그 추가
         console.log('API 응답:', data);
 
-        // 레시피 목록
         const recipes = data.recipes || data.data?.recipes || [];
         setRecipeList(recipes);
 
-        // 전체 개수
         const totalCount =
           data.total_count || data.data?.total_count || recipes.length;
 
@@ -68,6 +69,7 @@ function CategoryContainer() {
       setPage={setPage}
       loading={loading}
       totalPages={totalPages}
+      userId={userId}  // ✅ 여기서 전달
     />
   );
 }

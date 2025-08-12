@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Card1Container from "../../../components/cards/Card1/Card1Container";
+import Card1Container from "../../../compoents/Card1";
 import "./Recommend.css";
 
 export default function RecommendPresenter({ title, list = [] }) {

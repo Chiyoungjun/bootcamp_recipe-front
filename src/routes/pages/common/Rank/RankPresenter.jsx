@@ -1,12 +1,8 @@
-import React, { useContext } from "react";
-import Card1Container from "../../../components/cards/Card1/Card1Container";
-import { LoginContext } from "../SignIn/LoginContext"; // 실제 경로에 맞게 수정해주세요
+import React from "react";
+import Card1Container from "../../../compoents/Card1";
 import "./Rank.css";
 
-const RankPresenter = ({ recipes, period, setPeriod, loading }) => {
-  const { user } = useContext(LoginContext);
-  const userId = user?.user_id;
-
+const RankPresenter = ({ recipes, period, setPeriod, loading, userId }) => {
   return (
     <div className="rank-page-bg">
       <div className="rank-header">
@@ -46,7 +42,7 @@ const RankPresenter = ({ recipes, period, setPeriod, loading }) => {
                 }}
                 rank={idx < 3 ? idx + 1 : undefined}
                 size={idx === 0 ? "large" : "default"}
-                userId={userId} // ★ 이 부분 반드시 추가 ★
+                userId={userId} // ✅ 컨테이너에서 받은 userId 사용
               />
             ))
           )}
