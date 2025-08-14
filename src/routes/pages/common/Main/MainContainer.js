@@ -1,5 +1,8 @@
-import { useState, useRef } from "react";
+// MainContainer.js
+import { useState, useRef, useContext } from "react";
 import MainPresenter from "./MainPresenter";
+import SignInContainer from "../SignIn/SignInContainer"; // 로그인 모달 컴포넌트
+import { LoginContext } from "../SignIn/LoginContext";    // 전역 모달 상태
 
 const ITEMS_PER_PAGE = 20;
 
@@ -9,10 +12,13 @@ const MainContainer = () => {
   const [page, setPage] = useState(1);
 
   const [previewUrl, setPreviewUrl] = useState(null); // 이미지 미리보기
-  const [showModal, setShowModal] = useState(false);  // 모달 표시 여부
-  const [selectedFile, setSelectedFile] = useState(null); // 실제 파일 객체
+  const [showModal, setShowModal] = useState(false);  // 이미지 업로드 미리보기 모달
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const fileInputRef = useRef(null);
+
+  // ✅ 전역 로그인 모달 상태/제어 가져오기
+  const { loginModalOpen, closeLoginModal } = useContext(LoginContext);
 
   const onSearchInputChange = (e) => setSearchKeyword(e.target.value);
 
@@ -23,7 +29,9 @@ const MainContainer = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:8000/api/recipes/external/search?q=${encodeURIComponent(searchKeyword.trim())}`
+        `http://localhost:8000/api/recipes/external/search?q=${encodeURIComponent(
+          searchKeyword.trim()
+        )}`
       );
 
       if (!response.ok) {
@@ -63,7 +71,6 @@ const MainContainer = () => {
     setShowModal(true); // 미리보기 모달 표시
   };
 
-  // 모달 내 "확인" 버튼 클릭 시 이미지 서버로 전송
   const onConfirmUpload = async () => {
     if (!selectedFile) return;
 
@@ -81,14 +88,15 @@ const MainContainer = () => {
       const data = await res.json();
       setRecipes(data);
       setPage(1);
-      setShowModal(false); // 모달 닫기
-    } catch (err) {
+      setShowModal(false); // 이미지 미리보기 모달 닫기
+    } catch {
       alert("이미지 검색 실패");
     }
   };
 
   return (
     <>
+      {/* 숨겨진 파일 입력 */}
       <input
         type="file"
         accept="image/*"
@@ -97,6 +105,7 @@ const MainContainer = () => {
         onChange={onFileChange}
       />
 
+      {/* 메인 콘텐츠 */}
       <MainPresenter
         recipes={recipes}
         searchKeyword={searchKeyword}
@@ -111,6 +120,11 @@ const MainContainer = () => {
         setShowModal={setShowModal}
         onConfirmUpload={onConfirmUpload}
       />
+
+      {/* ✅ 전역 로그인 모달: 다른 페이지에서 openLoginModal() 호출해도 여기서 렌더링됨 */}
+      {loginModalOpen && (
+        <SignInContainer open={loginModalOpen} onClose={closeLoginModal} />
+      )}
     </>
   );
 };

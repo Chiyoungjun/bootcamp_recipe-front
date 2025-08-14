@@ -1,0 +1,110 @@
+/* 루트 */
+.bc-root { width: 100%; }
+
+/* 카드 */
+.bc-card {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* 미디어 영역(오버레이 베이스) */
+.bc-media {
+  position: relative;
+  /* aspect-ratio: 1521 / 448; */
+  width: 100%;
+  /* height: 300px;            배너 높이 조절 */
+  /* height: 180px; */
+  /*height: calc(100vw * (448 / 1521));  화면 너비 기준 높이 자동 계산 */
+  height: calc(100vw * (500 / 1521));
+  /*max-height: 448px;  너무 커지는 거 방지 */
+  max-height: 500px;
+}
+
+/* 이미지 */
+.bc-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;        /* 꽉 차게 */
+  object-position: center;
+  display: block;
+}
+.bc-img.placeholder {
+  background: rgba(255,255,255,.12);
+}
+
+/* 좌→우 그라디언트(텍스트 가독성) */
+/* .bc-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,.55) 0%,
+    rgba(0,0,0,.25) 45%,
+    rgba(0,0,0,0) 75%
+  );
+} */
+
+.bc-overlay {
+  display: none;
+}
+
+/* 오버레이 텍스트 */
+.bc-text {
+  position: absolute;
+  left: 70px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  max-width: 60%;
+}
+.bc-title {
+  margin: 0 0 6px 0;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+.bc-desc {
+  margin: 0;
+  font-size: 15px;
+  opacity: .95;
+}
+.bc-cta {
+  display: inline-block;
+  margin-top: 10px;
+  font-weight: 700;
+  opacity: .95;
+}
+
+.banner-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: rgba(0,0,0,.35);
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+  opacity: 0;                /* 처음엔 안 보이게 */
+  transition: opacity 0.3s ease;
+}
+
+/* hover 시 표시 */
+.banner-root:hover .banner-nav {
+  opacity: 1;
+}
+
+.banner-nav.prev { left: 12px; }
+.banner-nav.next { right: 12px; }
+
+/* 반응형(선택) */
+@media (min-width: 1024px) {
+  .bc-media { height: 220px; }
+  .bc-title { font-size: 28px; }
+  .bc-desc  { font-size: 16px; }
+}
+

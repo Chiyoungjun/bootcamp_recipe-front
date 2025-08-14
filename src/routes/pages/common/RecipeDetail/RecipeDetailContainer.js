@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useMemo, useContext } from "react";
+import React, { useEffect, useState, useMemo, useContext, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import RecipeDetailPresenter from "./RecipeDetailPresenter"; // 프레젠터 컴포넌트 임포트
 import { LoginContext } from "../SignIn/LoginContext";
 
-// ---------------------------
-// 모달 컴포넌트 (별도 파일 없이 여기서 정의)
-// ---------------------------
+/* ---------------------------
+   모달 컴포넌트 (별도 파일 없이 여기서 정의)
+--------------------------- */
 const StarRatingModal = ({ visible, rating, onClose, onSubmit }) => {
   const [tempRating, setTempRating] = useState(rating || 0);
   const [hover, setHover] = useState(0);
@@ -17,16 +17,14 @@ const StarRatingModal = ({ visible, rating, onClose, onSubmit }) => {
   if (!visible) return null;
 
   const handleSubmit = () => {
-    if (tempRating > 0) {
-      onSubmit(tempRating);
-    }
+    if (tempRating > 0) onSubmit(tempRating);
   };
 
   return (
     <div
       style={{
         position: "fixed",
-        top: 0, left: 0, right: 0, bottom: 0,
+        inset: 0,
         backgroundColor: "rgba(0,0,0,0.5)",
         display: "flex",
         justifyContent: "center",
@@ -39,9 +37,9 @@ const StarRatingModal = ({ visible, rating, onClose, onSubmit }) => {
       <div
         style={{
           backgroundColor: "white",
-          padding: "24px",
-          borderRadius: "8px",
-          width: "320px",
+          padding: 24,
+          borderRadius: 8,
+          width: 320,
           textAlign: "center",
           boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
         }}
@@ -56,7 +54,7 @@ const StarRatingModal = ({ visible, rating, onClose, onSubmit }) => {
               onMouseLeave={() => setHover(0)}
               style={{
                 color: star <= (hover || tempRating) ? "#f5a623" : "#ddd",
-                fontSize: "36px",
+                fontSize: 36,
                 cursor: "pointer",
                 userSelect: "none",
                 marginRight: 4,
@@ -75,19 +73,11 @@ const StarRatingModal = ({ visible, rating, onClose, onSubmit }) => {
         <button
           onClick={handleSubmit}
           disabled={tempRating === 0}
-          style={{
-            padding: "8px 24px",
-            fontSize: "16px",
-            cursor: tempRating === 0 ? "not-allowed" : "pointer",
-            marginRight: 12,
-          }}
+          style={{ padding: "8px 24px", marginRight: 12, cursor: tempRating === 0 ? "not-allowed" : "pointer" }}
         >
           확인
         </button>
-        <button
-          onClick={onClose}
-          style={{ padding: "8px 24px", fontSize: "16px", cursor: "pointer" }}
-        >
+        <button onClick={onClose} style={{ padding: "8px 24px", cursor: "pointer" }}>
           취소
         </button>
       </div>
@@ -95,9 +85,9 @@ const StarRatingModal = ({ visible, rating, onClose, onSubmit }) => {
   );
 };
 
-// ---------------------------
-// normalize 함수
-// ---------------------------
+/* ---------------------------
+   normalize 함수
+--------------------------- */
 function normalizeRecipeFields(recipeObj) {
   return {
     id: recipeObj.id || recipeObj.RCP_SEQ,
@@ -119,14 +109,15 @@ function normalizeRecipeFields(recipeObj) {
   };
 }
 
-// ---------------------------
-// RecipeDetailContainer 컴포넌트 시작
-// ---------------------------
+/* ---------------------------
+   RecipeDetailContainer
+--------------------------- */
 const RecipeDetailContainer = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const idFromState = location.state?.id;
   const idFromQuery = searchParams.get("id");
+  const nameFromQuery = searchParams.get("name"); // ← 이름 기반 진입 지원 (예: 삼계탕)
   const id = idFromState || idFromQuery;
   const relatedList = location.state?.list;
 
@@ -142,48 +133,76 @@ const RecipeDetailContainer = () => {
   const [favorite, setFavorite] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
 
-  // 모달 열림 여부 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 레시피 상세 정보 조회 함수
-  // incrementView=true일 때만 조회수 증가
-  const fetchRecipeDetail = (incrementView = true) => {
-    if (!id) {
-      setRecipe(null);
-      setError("잘못된 레시피 id");
-      setLoading(false);
-      return;
-    }
-    setLoading(true);
-    setError("");
-    const baseUrl = `http://127.0.0.1:8000/api/recipedetail?id=${id}${userId ? `&user_id=${userId}` : ""}`;
-    const url = incrementView ? baseUrl : `${baseUrl}&increment_view=false`;
+  /** 상세 조회 (id 우선, 없으면 name으로 2단계 조회: 목록 검색 → id 추출 → 상세) */
+  const fetchRecipeDetail = useCallback(
+    async (incrementView = true) => {
+      if (!id && !nameFromQuery) {
+        setRecipe(null);
+        setError("레시피 식별자(id 또는 name)가 없습니다.");
+        setLoading(false);
+        return;
+      }
 
-    fetch(url)
-      .then(async (res) => {
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(`서버 오류: ${res.status} - ${res.statusText} - ${text}`);
+      try {
+        setLoading(true);
+        setError("");
+        let targetId = id;
+
+        // 1) name으로 들어온 경우: 검색해서 id 찾기
+        if (!targetId && nameFromQuery) {
+          const listRes = await fetch(
+            `http://127.0.0.1:8000/api/recipelist?search=${encodeURIComponent(nameFromQuery)}`
+          );
+          if (!listRes.ok) {
+            const t = await listRes.text();
+            throw new Error(`검색 실패: ${listRes.status} - ${t}`);
+          }
+          const listJson = await listRes.json();
+          const arr = Array.isArray(listJson) ? listJson : listJson?.recipes || [];
+
+          // 우선순위: 완전일치 > 포함 > 첫 항목
+          const picked =
+            arr.find((r) => (r.RCP_NM || r.name)?.trim() === nameFromQuery.trim()) ||
+            arr.find((r) => (r.RCP_NM || r.name)?.includes(nameFromQuery)) ||
+            arr[0];
+
+          targetId = picked?.RCP_SEQ || picked?.id;
+          if (!targetId) throw new Error(`${nameFromQuery} 레시피를 찾을 수 없습니다.`);
         }
-        return res.json();
-      })
-      .then((data) => {
-        setRecipe(normalizeRecipeFields(data));
-        setLoading(false);
-        setUserRating(data.user_rating || 0);
-      })
-      .catch((err) => {
-        setError(err.message || "레시피를 불러오는 데 실패했습니다.");
-        setLoading(false);
-      });
-  };
 
-  // 컴포넌트 마운트 또는 id/userId 변경 시 초기 상세 정보 호출 (조회수 증가 포함)
+        // 2) id로 상세 조회
+        const baseUrl = `http://127.0.0.1:8000/api/recipedetail?id=${targetId}${
+          userId ? `&user_id=${userId}` : ""
+        }`;
+        const url = incrementView ? baseUrl : `${baseUrl}&increment_view=false`;
+
+        const detailRes = await fetch(url);
+        if (!detailRes.ok) {
+          const t = await detailRes.text();
+          throw new Error(`상세 조회 실패: ${detailRes.status} - ${t}`);
+        }
+        const detailJson = await detailRes.json();
+
+        setRecipe(normalizeRecipeFields(detailJson));
+        setUserRating(detailJson.user_rating || 0);
+      } catch (e) {
+        setError(e?.message || "레시피를 불러오는 데 실패했습니다.");
+        setRecipe(null);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [id, nameFromQuery, userId]
+  );
+
+  // 마운트 또는 id/name/userId 변경 시 상세 호출
   useEffect(() => {
     fetchRecipeDetail(true);
-  }, [id, userId]);
+  }, [fetchRecipeDetail]);
 
-  // 관련 레시피 리스트 셋팅
+  // 관련 레시피 목록
   useEffect(() => {
     if (relatedList && Array.isArray(relatedList) && relatedList.length > 0) {
       setAllRecipes(relatedList.map(normalizeRecipeFields));
@@ -211,15 +230,16 @@ const RecipeDetailContainer = () => {
       }));
   }, [recipe, allRecipes]);
 
-  // 별점 등록 함수 (모달에서 호출)
+  // 별점 등록 (이름 진입 시 응답의 recipe.id 사용)
   const submitUserRating = (rating) => {
-    if (!id) return;
+    const targetId = recipe?.id || id;
+    if (!targetId) return;
     if (!userId) {
       alert("별점 등록은 로그인 후 가능합니다.");
       return;
     }
     const requestBody = { user_id: userId, rating };
-    fetch(`http://127.0.0.1:8000/api/recipes/${id}/rating`, {
+    fetch(`http://127.0.0.1:8000/api/recipes/${targetId}/rating`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
@@ -244,17 +264,18 @@ const RecipeDetailContainer = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  // 즐겨찾기 여부 확인
+  // 즐겨찾기 여부 확인 (이름 진입 대응)
   useEffect(() => {
-    if (userId && id) {
+    const targetId = recipe?.id || id;
+    if (userId && targetId) {
       setFavoriteLoading(true);
       fetch(`http://localhost:8000/api/favorites/${userId}`)
         .then((res) => res.json())
         .then((data) => {
           if (Array.isArray(data.favorites)) {
-            setFavorite(!!data.favorites.find((r) => String(r.id) === String(id)));
+            setFavorite(!!data.favorites.find((r) => String(r.id) === String(targetId)));
           } else if (Array.isArray(data)) {
-            setFavorite(!!data.find((r) => String(r.id) === String(id)));
+            setFavorite(!!data.find((r) => String(r.id) === String(targetId)));
           } else {
             setFavorite(false);
           }
@@ -264,21 +285,24 @@ const RecipeDetailContainer = () => {
     } else {
       setFavorite(false);
     }
-  }, [userId, id]);
+  }, [userId, id, recipe?.id]);
 
-  // 즐겨찾기 토글
+  // 즐겨찾기 토글 (이름 진입 대응)
   const handleToggleFavorite = () => {
     if (!userId) {
       alert("찜 기능은 로그인 후 이용 가능합니다.");
       return;
     }
+    const targetId = recipe?.id || id;
+    if (!targetId) return;
+
     setFavoriteLoading(true);
     const url = `http://127.0.0.1:8000/api/favorites`;
     const method = favorite ? "DELETE" : "POST";
     fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: userId, recipe_id: Number(id) }),
+      body: JSON.stringify({ user_id: userId, recipe_id: Number(targetId) }),
     })
       .then(async (res) => {
         if (!res.ok) {
@@ -301,8 +325,8 @@ const RecipeDetailContainer = () => {
         error={error}
         relatedRecipes={relatedRecipes}
         userRating={userRating}
-        onRate={submitUserRating}// 별점은 모달에서 처리
-        onOpenModal={openModal} // 모달 열기 함수
+        onRate={submitUserRating} // 별점은 모달에서 처리
+        onOpenModal={openModal}   // 모달 열기 함수
         favorite={favorite}
         onToggleFavorite={handleToggleFavorite}
         favoriteLoading={favoriteLoading}

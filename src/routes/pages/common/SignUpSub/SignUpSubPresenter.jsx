@@ -1,14 +1,16 @@
 import React from "react";
-import './SignUp2.css'
+import "./SignUpSub.css";
 
-function SignUp2Presenter({ form, onChange, onSubmit, openLogin }) {
+function SignUpSubPresenter({ form, onChange, onSubmit, openLogin }) {
   return (
     <>
       <h2 className="signup-main-headline">회원 가입</h2>
       <div className="signup-main-desc">
         SNAP COOK의 추천레시피를 사용하기 위해 계정을 등록해 주세요.
       </div>
+
       <form className="signup-main-form" onSubmit={onSubmit} autoComplete="off">
+        {/* 키/몸무게 (2단) */}
         <div className="signup-main-row-2">
           <input
             className="signup-main-input"
@@ -29,15 +31,32 @@ function SignUp2Presenter({ form, onChange, onSubmit, openLogin }) {
             required
           />
         </div>
-        <input
-          className="signup-main-input"
-          type="text"
-          name="birth"
-          placeholder="생년월일 (6자리, 예: 010101)"
-          value={form.birth}
-          onChange={onChange}
-          required
-        />
+
+        {/* 생년월일 + 성별 (2단) */}
+        <div className="signup-main-row-2">
+          <input
+            className="signup-main-input birth-input"
+            type="text"
+            name="birth"
+            placeholder="생년월일 (6자리, 예: 010101)"
+            value={form.birth}
+            onChange={onChange}
+            required
+          />
+          <select
+            className="signup-main-input gender-select narrow"
+            name="gender"
+            value={form.gender}
+            onChange={onChange}
+            required
+            aria-label="성별"
+          >
+            <option value="" disabled>성별</option>
+            <option value="남성">남성</option>
+            <option value="여성">여성</option>
+          </select>
+        </div>
+
         <input
           className="signup-main-input"
           type="text"
@@ -46,6 +65,7 @@ function SignUp2Presenter({ form, onChange, onSubmit, openLogin }) {
           value={form.favoriteFood}
           onChange={onChange}
         />
+
         <input
           className="signup-main-input"
           type="text"
@@ -54,6 +74,8 @@ function SignUp2Presenter({ form, onChange, onSubmit, openLogin }) {
           value={form.favoriteTag}
           onChange={onChange}
         />
+
+        {/* 약관 동의 */}
         <div className="signup-main-agree-row">
           <input
             type="checkbox"
@@ -71,12 +93,14 @@ function SignUp2Presenter({ form, onChange, onSubmit, openLogin }) {
             </span>
           </label>
         </div>
+
         <button className="signup-main-btn" type="submit">
           회원 가입
         </button>
       </form>
 
-      <div className="signup-main-bottom" style={{ marginTop: '24px', width: '100%' }}>
+      {/* 로그인 링크 */}
+      <div className="signup-main-bottom" style={{ marginTop: "24px", width: "100%" }}>
         이미 계정이 있으신가요?{" "}
         <button
           type="button"
@@ -93,4 +117,4 @@ function SignUp2Presenter({ form, onChange, onSubmit, openLogin }) {
   );
 }
 
-export default SignUp2Presenter;
+export default SignUpSubPresenter;

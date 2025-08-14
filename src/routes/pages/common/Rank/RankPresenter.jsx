@@ -7,7 +7,9 @@ const RankPresenter = ({ recipes, period, setPeriod, loading, userId }) => {
     <div className="rank-page-bg">
       <div className="rank-header">
         <h2>Recipe</h2>
+        {/* <div className="rank-dropdown-wrap" id="filter">  이렇게 해도 되고 안 해도 되고 */} 
         <div className="rank-dropdown-wrap">
+
           <select
             className="rank-period-select"
             value={period}
