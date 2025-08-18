@@ -4,8 +4,8 @@ import './Category.css';
 
 const ALL_CATEGORIES = [
   '한식', '샐러드', '일식', '양식', '밥',
-  '국, 찌개', '면', '반찬', '구이, 찜', '기타'
-];
+  '국, 찌개', '면', '반찬', '구이,찜', '기타'
+]
 
 const PAGE_GROUP_SIZE = 5;
 

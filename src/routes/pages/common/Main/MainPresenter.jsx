@@ -1,6 +1,7 @@
 import React from "react";
 import PaginationPresenter from "../../../compoents/pagination/PaginationPresenter";
 import RecipeListContainer from "../../../compoents/recipe/RecipeListContainer";
+import BannerContainer from "../Banner/BannerContainer";
 import "./Main.css";
 
 const MainPresenter = ({
@@ -23,6 +24,14 @@ const MainPresenter = ({
 
   return (
     <div>
+      {/*
+        ✅ 여기서부터 검색창 위에 배너 카드 영역 추가
+        - BannerCardContainer는 월간 랭킹 / 샐러드 / 더미 3개 카드 표시
+        - 추후 API로 대체 가능
+      */}
+      <BannerContainer />
+      {/* ✅ 배너 카드 영역 끝 */}
+
       {/* 검색창 */}
       <section className="main-search-section">
         <div className="main-search-box">

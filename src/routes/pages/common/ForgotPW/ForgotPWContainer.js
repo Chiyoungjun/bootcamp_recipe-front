@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ForgotPWPresenter from './ForgotPWPresenter';
-import ResetPWContainer from './ResetPWContainer'; // 🔹 새 비밀번호 입력 화면 import
+import ResetPWContainer from '../ResetPW/ResetPWContainer'; // 🔹 새 비밀번호 입력 화면 import
 
 function ForgotPWContainer({ onBack }) {
   const [step, setStep] = useState('email'); // 🔹 상태: 'email' | 'reset'

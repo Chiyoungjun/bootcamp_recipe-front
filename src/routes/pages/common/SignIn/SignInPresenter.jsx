@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./SignIn.css";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import ForgotPWContainer from "./ForgotPWContainer";
+import ForgotPWContainer from "../ForgotPW/ForgotPWContainer";
 
 function SignInPresenter({
   id,
