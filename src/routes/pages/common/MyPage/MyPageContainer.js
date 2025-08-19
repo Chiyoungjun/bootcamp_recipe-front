@@ -5,6 +5,7 @@ import SidebarContainer from "../../../compoents/sidebar/SidebarContainer";
 import UserEditContainer from "../UserEdit";
 import FavoritesContainer from "../UserFavorites";
 import SearchHistoryContainer from "../UserSearchHistory";
+import RecipeContainer from "../UserRecipe";
 import { LoginContext } from "../../common/SignIn/LoginContext"; // 전역 로그인/모달 컨텍스트
 
 const MyPageContainer = () => {
@@ -60,6 +61,7 @@ const MyPageContainer = () => {
         {selectedMenu === "edit" && <UserEditContainer />}
         {selectedMenu === "favorite" && <FavoritesContainer />}
         {selectedMenu === "history" && <SearchHistoryContainer />}
+        {selectedMenu === "recipe" && <RecipeContainer />}
       </main>
     </div>
   );

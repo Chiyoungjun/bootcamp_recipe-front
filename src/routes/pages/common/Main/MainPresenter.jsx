@@ -23,17 +23,14 @@ const MainPresenter = ({
   const currentRecipes = recipes.slice(startIdx, startIdx + itemsPerPage);
 
   return (
-    <div>
-      {/*
-        ✅ 여기서부터 검색창 위에 배너 카드 영역 추가
-        - BannerCardContainer는 월간 랭킹 / 샐러드 / 더미 3개 카드 표시
-        - 추후 API로 대체 가능
-      */}
-      <BannerContainer />
-      {/* ✅ 배너 카드 영역 끝 */}
+    <>
+      {/* 배너 영역: 별도 div */}
+      <div className="main-banner-section">
+        <BannerContainer />
+      </div>
 
-      {/* 검색창 */}
-      <section className="main-search-section">
+      {/* 검색창: 별도 div */}
+      <div className="main-search-section">
         <div className="main-search-box">
           <span className="main-search__icon">🔍</span>
           <input
@@ -54,38 +51,41 @@ const MainPresenter = ({
             +
           </button>
         </div>
-      </section>
+      </div>
 
-      {/* 이미지 모달 */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>이미지 미리보기</h3>
-            <img
-              src={previewUrl}
-              alt="미리보기"
-              style={{ maxWidth: "100%", maxHeight: "300px", borderRadius: "8px" }}
-            />
-            <div style={{ marginTop: "16px" }}>
-              <button onClick={onConfirmUpload} className="modal-confirm-btn">
-                확인
-              </button>
-              <button onClick={() => setShowModal(false)} className="modal-cancel-btn">
-                취소
-              </button>
+      {/* 본문: 리스트/페이지네이션/모달은 main-root로 묶음 */}
+      <div className="main-root">
+        {/* 이미지 모달 */}
+        {showModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3>이미지 미리보기</h3>
+              <img
+                src={previewUrl}
+                alt="미리보기"
+                style={{ maxWidth: "100%", maxHeight: "300px", borderRadius: "8px" }}
+              />
+              <div style={{ marginTop: "16px" }}>
+                <button onClick={onConfirmUpload} className="modal-confirm-btn">
+                  확인
+                </button>
+                <button onClick={() => setShowModal(false)} className="modal-cancel-btn">
+                  취소
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* 레시피 리스트 및 페이지네이션 */}
-      <RecipeListContainer recipes={currentRecipes} />
-      <PaginationPresenter
-        totalPages={totalPages}
-        currentPage={page}
-        onPageChange={setPage}
-      />
-    </div>
+        {/* 레시피 리스트 및 페이지네이션 */}
+        <RecipeListContainer recipes={currentRecipes} />
+        <PaginationPresenter
+          totalPages={totalPages}
+          currentPage={page}
+          onPageChange={setPage}
+        />
+      </div>
+    </>
   );
 };
 

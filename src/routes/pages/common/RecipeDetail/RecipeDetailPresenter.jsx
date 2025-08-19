@@ -11,7 +11,7 @@ const nutritionUnit = {
 
 const itemsPerPage = 3;
 
-// 별점 표시 컴포넌트 (클릭 시 모달 열기에 사용, onRate는 빈 함수 또는 제거)
+// 별점 표시 컴포넌트 (표시 전용)
 const StarRating = ({ rating }) => {
   const [hover, setHover] = useState(0);
   return (
@@ -28,8 +28,9 @@ const StarRating = ({ rating }) => {
             fontSize: "24px",
             userSelect: "none",
           }}
-          // onMouseEnter={() => setHover(star)}
-          // onMouseLeave={() => setHover(0)}
+
+          onMouseEnter={() => setHover(star)}
+          onMouseLeave={() => setHover(0)}
         >
           ★
         </span>
@@ -44,21 +45,20 @@ const RecipeDetailPresenter = ({
   error,
   relatedRecipes,
   userRating,
-  onRate,          // 별점 제출 콜백
-  favorite,        // 찜 여부
-  onToggleFavorite, // 찜 토글 콜백
-  favoriteLoading, // 찜 버튼 로딩 여부
+  onRate,            // 별점 제출 콜백
+  favorite,          // 찜 여부
+  onToggleFavorite,  // 찜 토글 콜백
+  favoriteLoading,   // 찜 버튼 로딩 여부
+  onOpenMap = () => {}, // ★ 주변 가게 지도 모달 열기 콜백
 }) => {
   const [slideIndex, setSlideIndex] = useState(0);
 
-  // 모달 열림 상태 추가
+  // 별점 모달 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // 모달 내 임시 별점 상태
   const [tempRating, setTempRating] = useState(userRating || 0);
-  // 모달 내 별점 호버 상태
   const [hover, setHover] = useState(0);
 
-  // recipe 만드는 법 메모이제이션
+  // 만드는 법 수집
   const manual = useMemo(() => {
     if (!recipe) return [];
     const arr = [];
@@ -88,20 +88,12 @@ const RecipeDetailPresenter = ({
     window.location.href = `/recipedetail?id=${rcp_seq}`;
   };
 
-  // 모달 열기 함수
+  // 별점 모달
   const openModal = () => {
     setTempRating(userRating || 0);
     setIsModalOpen(true);
   };
-  // 모달 닫기 함수
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-  // 모달 내 별점 선택 시 임시 상태 변경
-  const onTempRate = (star) => {
-    setTempRating(star);
-  };
-  // 모달 내 별점 제출
+  const closeModal = () => setIsModalOpen(false);
   const onSubmitRating = () => {
     if (tempRating > 0) {
       onRate(tempRating);
@@ -132,14 +124,15 @@ const RecipeDetailPresenter = ({
         {/* 별점 및 조회수 */}
         <div className="recipe-rating-info" style={{ marginBottom: 16 }}>
           <div>
-            <strong>평균 별점:</strong> {recipe.avg_rating?.toFixed(1) ?? "0.0"} ({recipe.rating_count ?? 0}명)
+            <strong>평균 별점:</strong>{" "}
+            {typeof recipe.avg_rating === "number" ? recipe.avg_rating.toFixed(1) : "0.0"} (
+            {recipe.rating_count ?? 0}명)
           </div>
           <div>
             <strong>조회수:</strong> {recipe.view_count ?? 0}
           </div>
           <div style={{ marginTop: 8 }}>
             <strong>내 별점 주기:</strong>
-            {/* 클릭 시 모달 열기 */}
             <div
               style={{ display: "inline-block", cursor: "pointer" }}
               onClick={openModal}
@@ -155,7 +148,7 @@ const RecipeDetailPresenter = ({
           </div>
         </div>
 
-        {/* 이미지 및 영양 정보 등 기존 UI */}
+        {/* 이미지 + 영양정보 */}
         <div className="recipe-detail-main">
           <div className="recipe-detail-imgblock">
             <img
@@ -219,6 +212,18 @@ const RecipeDetailPresenter = ({
           </section>
         )}
 
+        {/* ★ 유사한 레시피 위: 주변 가게 지도 열기 버튼 */}
+        <div className="nearby-map-open-row">
+          <button
+            className="nearby-map-open-btn"
+            type="button"
+            onClick={onOpenMap}
+          >
+            주변 가게 지도 열기
+          </button>
+        </div>
+
+        {/* 유사한 레시피 */}
         <section className="recipe-detail-similar">
           <h3 className="similar-title">유사한 레시피</h3>
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
@@ -255,7 +260,7 @@ const RecipeDetailPresenter = ({
         </section>
       </div>
 
-      {/* 별점 입력용 모달 */}
+      {/* 별점 입력 모달 */}
       {isModalOpen && (
         <div
           style={{
@@ -271,7 +276,7 @@ const RecipeDetailPresenter = ({
           aria-modal={true}
           role="dialog"
           aria-label="별점 입력 모달"
-          onClick={closeModal} // 바깥 클릭 시 닫기
+          onClick={closeModal}
         >
           <div
             style={{
@@ -283,7 +288,7 @@ const RecipeDetailPresenter = ({
               boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
             }}
             className="modal-content"
-            onClick={(e) => e.stopPropagation()} // 내부 클릭엔 닫기 방지
+            onClick={(e) => e.stopPropagation()}
           >
             <h3 style={{ marginBottom: 16 }}>별점을 선택하세요</h3>
             <div style={{ marginBottom: 24 }}>

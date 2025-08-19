@@ -8,7 +8,7 @@
 import { Route, Routes } from "react-router-dom";
 
 // pages
-import { Main, SignIn, SignUp, Rank, Recommend, MyPage, RecipeDetail, UserEdit, Category, UserSearchHistory, UserFavorites } from './pages';
+import { Main, SignIn, SignUp, Rank, Recommend, MyPage, RecipeDetail, UserEdit, Category, UserSearchHistory, UserFavorites, UserRecipe, UserRecipeCreate, MapModal } from './pages';
 import { MainLayout } from "../layouts";
 import { LoginProvider } from "./pages/common/SignIn/LoginContext";
 
@@ -82,6 +82,21 @@ const Router = () => {
                 <Route
                     path="userfavorites"
                     element={<UserFavorites/>}/>
+
+                {/* 레시피 등록 화면 */}
+                <Route
+                    path="userRecipe"
+                    element={<UserRecipe/>}/>
+
+                {/* 레시피 작성 화면 */}
+                <Route
+                    path="userRecipeCreate"
+                    element={<UserRecipeCreate/>}/>
+
+                {/* 맵 화면 */}
+                <Route
+                    path="mapModal"
+                    element={<MapModal/>}/>
             </Route>
             </Routes>
         </LoginProvider>

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo, useContext, useCallback } from "re
 import { useLocation } from "react-router-dom";
 import RecipeDetailPresenter from "./RecipeDetailPresenter"; // 프레젠터 컴포넌트 임포트
 import { LoginContext } from "../SignIn/LoginContext";
+import MapModalContainer from "../MapModal/MapModalContainer"; // ★ 지도 모달 컨테이너
 
 /* ---------------------------
    모달 컴포넌트 (별도 파일 없이 여기서 정의)
@@ -134,6 +135,7 @@ const RecipeDetailContainer = () => {
   const [favoriteLoading, setFavoriteLoading] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [mapOpen, setMapOpen] = useState(false); // ★ 지도 모달 상태
 
   /** 상세 조회 (id 우선, 없으면 name으로 2단계 조회: 목록 검색 → id 추출 → 상세) */
   const fetchRecipeDetail = useCallback(
@@ -263,6 +265,8 @@ const RecipeDetailContainer = () => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const openMap = () => setMapOpen(true);    // ★ 추가
+  const closeMap = () => setMapOpen(false);  // ★ 추가
 
   // 즐겨찾기 여부 확인 (이름 진입 대응)
   useEffect(() => {
@@ -326,7 +330,8 @@ const RecipeDetailContainer = () => {
         relatedRecipes={relatedRecipes}
         userRating={userRating}
         onRate={submitUserRating} // 별점은 모달에서 처리
-        onOpenModal={openModal}   // 모달 열기 함수
+        onOpenModal={openModal}   // 별점 모달 열기
+        onOpenMap={openMap}       // ★ 지도 모달 열기
         favorite={favorite}
         onToggleFavorite={handleToggleFavorite}
         favoriteLoading={favoriteLoading}
@@ -337,6 +342,13 @@ const RecipeDetailContainer = () => {
         rating={userRating}
         onClose={closeModal}
         onSubmit={submitUserRating}
+      />
+
+      {/* ★ 지도 모달 */}
+      <MapModalContainer
+        open={mapOpen}
+        onClose={closeMap}
+        defaultKeyword={recipe?.name || recipe?.RCP_NM || "분식"}
       />
     </>
   );

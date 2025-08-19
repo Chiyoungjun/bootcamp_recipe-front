@@ -189,6 +189,49 @@
   margin-bottom: 28px;
 }
 
+
+/* 지도 버튼 */
+.nearby-map-open-row {
+  margin: 18px 0 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 오른쪽 스타일과 동일한 검정 버튼 */
+.nearby-map-open-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;              /* 필요 시 36~44px로 조절 */
+  padding: 0 18px;
+  background: #000;          /* 검정 배경 */
+  color: #fff;               /* 흰 글자 */
+  border: 0;
+  border-radius: 12px;       /* 둥근 모서리 */
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform .03s ease, filter .15s ease, box-shadow .15s ease;
+}
+
+/* hover/active/focus/disabled 상태 */
+.nearby-map-open-btn:hover { filter: brightness(1.05); }
+.nearby-map-open-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(0,0,0,.3);
+}
+.nearby-map-open-btn:focus-visible {
+  outline: 3px solid #99c2ff;
+  outline-offset: 2px;
+}
+.nearby-map-open-btn:disabled {
+  background: #bdbdbd;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+
+
 /* --------- 유사 레시피 카드 --------- */
 .recipe-detail-similar {
   margin-top: 40px;

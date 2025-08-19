@@ -1,0 +1,332 @@
+/* ========== 타이포 & 공통 레이아웃 ========== */
+:root {
+  --ur-body: 20px;
+  --ur-small: 15px;
+  --ur-label: 25px;
+  --ur-title: 40px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.ur-root {
+  width: 100%;
+  max-width: 1800px;               /* 전체 폭 */
+  margin: 0 auto;
+  padding: 28px 28px 96px;         /* 좌우 패딩 */
+  background: #f4f5f7;
+  font-size: var(--ur-body);
+  line-height: 1.6;
+  color: #111;
+}
+
+.ur-page-title {
+  font-size: var(--ur-title);
+  font-weight: 800;
+  margin: 10px 0 18px;
+}
+
+.ur-section {
+  margin-top: 22px;
+}
+
+.ur-section-title {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.ur-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.05);
+  overflow: visible;
+}
+
+.ur-section + .ur-section {
+  margin-top: 28px;
+}
+
+/* ========== 폼 레이아웃 ========== */
+.ur-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 26px;
+}
+
+@media(max-width: 1024px) {
+  .ur-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ur-left {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ur-label {
+  font-size: var(--ur-label);
+  font-weight: 800;
+  margin-bottom: 3px;
+  color: #111;
+}
+
+.ur-help {
+  font-size: var(--ur-small);
+  color: #6b7280;
+  margin: 0 0 4px;
+}
+
+/* ========== 입력 컴포넌트 ========== */
+.ur-input,
+.ur-select,
+.ur-textarea {
+  width: 100%;
+  border: 1px solid #dfe3ea;
+  border-radius: 12px;
+  background: #f8f9fb;
+  padding: 13px 16px;
+  font-size: var(--ur-body);
+  line-height: 1.55;
+  outline: none;
+  transition: border-color .15s ease, background .15s ease;
+}
+
+.ur-input:focus,
+.ur-select:focus,
+.ur-textarea:focus {
+  border-color: #9aa9ff;
+  background: #fff;
+}
+
+/* ========== 영양 정보 입력 ========== */
+.ur-nutrition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 10px;
+}
+
+/* .ur-nutri-item .ur-label {
+  display: block;
+  margin-bottom: 6px;
+} */
+
+/* 영양 정보(칼로리/탄수화물/단백질/지방/나트륨) 라벨만 작고 얇게 */
+.ur-nutri-item .ur-label {
+  display: block;
+  margin-bottom: 3px;   /* 여백 소폭 축소 */
+  font-size: 20px;      /* 기존 .ur-label(25px)보다 작게 */
+  font-weight: 600;     /* 기존 800 → 600으로 가볍게 */
+  color: #111;
+}
+
+.ur-nutri-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ur-input.with-unit {
+  width: 100%;
+  padding-right: 44px;  /* 단위 자리 확보 */
+  box-sizing: border-box;
+}
+
+.ur-unit {
+  position: absolute;
+  right: 12px;
+  font-weight: 700;
+  color: #333;
+}
+
+/* ========== 대표 이미지 ========== */
+.ur-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.ur-image-uploader {
+  width: 100%;
+  aspect-ratio: 1/1;
+  border: 1px dashed #d1d5db;
+  border-radius: 14px;
+  background: #f3f4f6;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.ur-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.ur-plus {
+  width: 68px;
+  height: 68px;
+  border-radius: 999px;
+  border: 2px solid #cbd5e1;
+  color: #94a3b8;
+  font-size: 38px;
+  line-height: 64px;
+  text-align: center;
+}
+
+.ur-image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ur-image-help {
+  margin-top: 8px;
+  font-size: var(--ur-small);
+  color: #6b7280;
+}
+
+/* ========== 스텝 섹션 ========== */
+.ur-steps-card {
+  padding: 22px;
+}
+
+.ur-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ur-step {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+@media(max-width: 980px) {
+  .ur-step {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ur-step-thumb {
+  display: block;
+  background: #f3f4f6;
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;
+  height: 140px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.ur-step-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ur-step-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.ur-step-textbox {
+  position: relative;
+}
+
+.ur-step-number {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #374151;
+}
+
+.ur-step-textarea {
+  width: 100%;
+  min-height: 128px;
+  border: 1px solid #dfe3ea;
+  border-radius: 12px;
+  background: #fff;
+  padding: 16px 16px 16px 34px;
+  font-size: var(--ur-body);
+  line-height: 1.6;
+  resize: vertical;
+}
+
+/* 스텝 액션 버튼 */
+.ur-step-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.ur-step-remove,
+.ur-step-add {
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.ur-step-remove {
+  background: #ff8a80;
+  color: #fff;
+}
+
+.ur-step-add {
+  background: #59c972;
+  color: #fff;
+}
+
+.ur-step-remove:hover,
+.ur-step-add:hover {
+  opacity: .92;
+}
+
+/* ========== 하단 액션(저장/취소) ========== */
+.ur-actions.two {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.ur-save,
+.ur-cancel {
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.ur-save {
+  background: #111827;
+  color: #fff;
+}
+
+.ur-cancel {
+  background: #ff7b7b;
+  color: #fff;
+}
+
+.ur-save:hover,
+.ur-cancel:hover {
+  opacity: .92;
+}
