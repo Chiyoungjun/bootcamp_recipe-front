@@ -11,7 +11,7 @@
 
 .mm-modal {
   width: min(1000px, 96vw);
-  max-height: 86vh;
+  max-height: 70vh; /* 원래 86vh */
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 12px 40px rgba(0,0,0,.25);
@@ -70,20 +70,62 @@
 }
 
 /* ===== 본문 ===== */
-.mm-body {
+/* .mm-body {
   display: grid;
   grid-template-columns: 1.8fr 1fr;
   gap: 0;
   min-height: 440px;
+} */
+
+.mm-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); /* 컬럼이 넘칠 때 줄어들 수 있게 */
+  gap: 0;
+
+  /* 핵심 */
+  flex: 1;          /* 헤더/툴바/푸터 사이 영역을 꽉 채움 */
+  min-height: 0;    /* 자식(.mm-side)이 스크롤 가능하도록 줄어들 수 있게 */
 }
+
+
+/* .mm-map {
+  min-width: 300px;
+  width: 100%;
+  height: 440px;
+  background: #fafbfc;
+  border: 1px solid #eee;
+} */
+
 .mm-map {
-  min-height: 440px;
+  width: 100%;
+  height: 100%;      /* 핵심: 고정 440px 대신 본문 높이에 맞춤 */
+  min-height: 300px; /* 너무 작아지는 것 방지용(선택) */
+  /* background: #fafbfc; */
+  background: #f7f8fa !important;
+  border: 1px solid #eee;
+  contain: paint;
+  transform: translateZ(0);
 }
-.mm-side {
+
+.mm-map .bg_tile { background: #f7f8fa !important; }
+
+/* .mm-side {
   border-left: 1px solid #f2f2f2;
   padding: 10px 12px;
   overflow: auto;
+} */
+
+.mm-side {
+  border-left: 1px solid #f2f2f2;
+  padding: 10px 12px;
+
+  /* 핵심 */
+  overflow-y: auto;  /* 세로 스크롤만 */
+  min-height: 0;     /* 부모 높이 제약 안에서 스크롤 활성화 */
+  /* 선택: 모바일 튐 방지 */
+  overscroll-behavior: contain;
 }
+
 
 .mm-error {
   color: #c00;
@@ -97,7 +139,7 @@
 }
 
 /* ===== 리스트 ===== */
-.mm-list {
+/* .mm-list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -105,7 +147,31 @@
 .mm-item {
   padding: 10px 6px;
   border-bottom: 1px solid #f5f5f5;
+} */
+
+.mm-list { 
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 10px; /* 항목 간 간격 */
 }
+.mm-item {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 1px 0 rgba(0,0,0,.03);
+}
+
+/* 선택 항목 하이라이트 */
+.mm-item {
+  cursor: pointer;
+}
+
+.mm-item-on {
+  border-color:#cbd5e1;
+  box-shadow:0 2px 0 rgba(0,0,0,.04);
+  cursor: pointer;
+}
+
 .mm-item-title {
   font-weight: 600;
   margin-bottom: 4px;
