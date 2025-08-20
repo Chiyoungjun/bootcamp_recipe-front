@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import RecipeDetailPresenter from "./RecipeDetailPresenter";
 import { LoginContext } from "../SignIn/LoginContext";
+import MapModalContainer from "../MapModal/MapModalContainer"; 
 
 const StarRatingModal = ({ visible, rating, onClose, onSubmit }) => {
   const [tempRating, setTempRating] = useState(rating || 0);
@@ -139,8 +140,11 @@ const RecipeDetailContainer = () => {
   const [favorite, setFavorite] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [lang, setLang] = useState("ko");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [mapOpen, setMapOpen] = useState(false);
 
   // 음식점 검색 관련 상태 추가
   const [shopList, setShopList] = useState([]);
@@ -178,6 +182,9 @@ const RecipeDetailContainer = () => {
         setLoading(false);
       });
   };
+
+  const openMap = () => setMapOpen(true);    // ★ 추가
+  const closeMap = () => setMapOpen(false);
 
   useEffect(() => {
     fetchRecipeDetail(lang, true);
@@ -308,16 +315,17 @@ const RecipeDetailContainer = () => {
       (pos) => {
         const longitude = pos.coords.longitude;
         const latitude = pos.coords.latitude;
-          fetch(`http://localhost:8000/api/maps/search?keyword=${encodeURIComponent(recipe.name)}&x=${longitude}&y=${latitude}&radius=2000`)
+        fetch(
+          `http://localhost:8000/api/maps/search?keyword=${encodeURIComponent(
+            recipe.name
+          )}&x=${longitude}&y=${latitude}&radius=2000`
+        )
           .then(async (res) => {
             if (!res.ok) {
-              // 서버쪽 500, 403 등 에러라면 여기서 error 발생
               const text = await res.text();
               throw new Error(text);
             }
-            // 여기에서 JSON 구조 점검
             const data = await res.json();
-            // 프론트에서 results가 잘 오면 저장
             if (Array.isArray(data.results)) {
               setShopList(data.results);
             } else {
@@ -369,6 +377,7 @@ const RecipeDetailContainer = () => {
         mapLoading={mapLoading}
         mapError={mapError}
         handleFindNearShops={handleFindNearShops}
+        onOpenMap={openMap}
       />
 
       <StarRatingModal
@@ -377,6 +386,13 @@ const RecipeDetailContainer = () => {
         onClose={closeModal}
         onSubmit={submitUserRating}
       />
+       {/* ★ 지도 모달 */}
+      <MapModalContainer
+        open={mapOpen}
+        onClose={closeMap}
+        defaultKeyword={recipe?.name || recipe?.RCP_NM || ""}
+      />
+
     </>
   );
 };

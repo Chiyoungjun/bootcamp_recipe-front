@@ -32,3 +32,24 @@ export { default as UserSearchHistory} from './common/UserSearchHistory';
 
 // 즐겨찾기 화면
 export { default as UserFavorites} from './common/UserFavorites';
+
+// 레시피 등록 화면
+export { default as UserRecipe } from './common/UserRecipe';
+
+// 레시피 작성 화면
+export { default as UserRecipeCreate } from './common/UserRecipeCreate';
+
+// 비밀번호 찾기 화면
+export { default as ForgotPW } from './common/ForgotPW';
+
+// 비밀번호 재설정 화면
+export { default as ResetPW } from './common/ResetPW';
+
+// 회원가입 서브 화면
+export { default as SignUpSub } from './common/SignUpSub';
+
+// 배너 화면
+export { default as Banner } from './common/Banner';
+
+// 맵 화면
+export { default as MapModal } from './common/MapModal';

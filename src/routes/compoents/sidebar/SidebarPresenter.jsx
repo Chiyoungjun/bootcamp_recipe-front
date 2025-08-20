@@ -22,6 +22,14 @@ const SidebarPresenter = ({ selected, onSelect }) => (
       >
         검색 기록
       </li>
+
+      <li
+        className={selected === "recipe" ? "active" : ""}
+        onClick={() => onSelect("recipe")}
+      >
+        레시피 등록
+      </li>
+
     </ul>
   </aside>
 );

@@ -51,6 +51,7 @@ const RecipeDetailPresenter = ({
   mapLoading = false,
   mapError = "",
   handleFindNearShops,
+  onOpenMap
 }) => {
   const [slideIndex, setSlideIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -214,6 +215,17 @@ const RecipeDetailPresenter = ({
             {displayedTip}
           </section>
         )}
+
+        {/* ★ 유사한 레시피 위: 주변 가게 지도 열기 버튼 */}
+        <div className="nearby-map-open-row">
+          <button
+            className="nearby-map-open-btn"
+            type="button"
+            onClick={onOpenMap}
+          >
+            주변 가게 지도 열기
+          </button>
+        </div>
 
         <section className="recipe-detail-similar">
           <h3 className="similar-title">유사한 레시피</h3>

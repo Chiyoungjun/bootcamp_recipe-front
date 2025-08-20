@@ -17,6 +17,7 @@ const MainPresenter = ({
   showModal,
   setShowModal,
   onConfirmUpload,
+  userRecipes = [],
 }) => {
   const totalPages = Math.ceil(recipes.length / itemsPerPage);
   const startIdx = (page - 1) * itemsPerPage;
@@ -79,7 +80,7 @@ const MainPresenter = ({
       )}
 
       {/* 레시피 리스트 및 페이지네이션 */}
-      <RecipeListContainer recipes={currentRecipes} />
+      <RecipeListContainer recipes={currentRecipes} userRecipes={userRecipes} />
       <PaginationPresenter
         totalPages={totalPages}
         currentPage={page}

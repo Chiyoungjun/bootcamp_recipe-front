@@ -1,24 +1,23 @@
-// MainContainer.js
 import { useState, useRef, useContext } from "react";
 import MainPresenter from "./MainPresenter";
-import SignInContainer from "../SignIn/SignInContainer"; // 로그인 모달 컴포넌트
-import { LoginContext } from "../SignIn/LoginContext";    // 전역 모달 상태
+import SignInContainer from "../SignIn/SignInContainer";
+import { LoginContext } from "../SignIn/LoginContext";
 
 const ITEMS_PER_PAGE = 20;
+const BACKEND_URL = "http://localhost:8000";
 
 const MainContainer = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState([]);         // 기본 레시피
+  const [userRecipes, setUserRecipes] = useState([]); // 사용자 작성 레시피
   const [page, setPage] = useState(1);
 
-  const [previewUrl, setPreviewUrl] = useState(null); // 이미지 미리보기
-  const [showModal, setShowModal] = useState(false);  // 이미지 업로드 미리보기 모달
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
   const fileInputRef = useRef(null);
-
-  // ✅ 전역 로그인 모달 상태/제어 가져오기
-  const { loginModalOpen, closeLoginModal } = useContext(LoginContext);
+  const { loginModalOpen, closeLoginModal, user } = useContext(LoginContext);
 
   const onSearchInputChange = (e) => setSearchKeyword(e.target.value);
 
@@ -28,31 +27,48 @@ const MainContainer = () => {
       return;
     }
     try {
-      const response = await fetch(
-        `http://localhost:8000/api/recipes/external/search?q=${encodeURIComponent(
+      // 기본 레시피 검색
+      let basicData = [];
+      const basicRes = await fetch(
+        `${BACKEND_URL}/api/recipes/external/search?q=${encodeURIComponent(
           searchKeyword.trim()
         )}`
       );
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          setRecipes([]);
-          alert("검색 결과가 없습니다.");
-        } else {
-          throw new Error("서버 오류");
-        }
-        return;
-      }
-
-      const data = await response.json();
-      if (Array.isArray(data) && data.length > 0) {
-        setRecipes(data);
-        setPage(1);
+      if (basicRes.ok) {
+        basicData = await basicRes.json();
+      } else if (basicRes.status === 404) {
+        basicData = []; // 검색 결과 없음은 빈 배열
       } else {
-        setRecipes([]);
-        alert("검색 결과가 없습니다.");
+        throw new Error("서버 오류"); // 500 계열이면 에러 처리
       }
-    } catch {
+
+      // 사용자 레시피 검색
+      let userData = [];
+      if (user?.user_id) {
+        const userRes = await fetch(
+          `${BACKEND_URL}/api/users/${user.user_id}/recipes/search?q=${encodeURIComponent(
+            searchKeyword.trim()
+          )}`
+        );
+        if (userRes.ok) {
+          userData = await userRes.json();
+        } else {
+          userData = []; // 혹시라도 404, 빈 배열로 처리
+        }
+        console.log("userRecipes:", userData);
+      }
+
+      // 결과 합침
+      if ((basicData.length === 0) && (userData.length === 0)) {
+        setRecipes([]);
+        setUserRecipes([]);
+        alert("검색 결과가 없습니다.");
+      } else {
+        setRecipes(basicData);
+        setUserRecipes(userData);
+        setPage(1);
+      }
+    } catch (e) {
       alert("검색 중 오류가 발생했습니다.");
     }
   };
@@ -68,7 +84,7 @@ const MainContainer = () => {
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
     setSelectedFile(file);
-    setShowModal(true); // 미리보기 모달 표시
+    setShowModal(true);
   };
 
   const onConfirmUpload = async () => {
@@ -78,7 +94,7 @@ const MainContainer = () => {
     formData.append("image", selectedFile);
 
     try {
-      const res = await fetch("http://localhost:8000/api/recipes/upload", {
+      const res = await fetch(`${BACKEND_URL}/api/recipes/upload`, {
         method: "POST",
         body: formData,
       });
@@ -87,8 +103,9 @@ const MainContainer = () => {
 
       const data = await res.json();
       setRecipes(data);
+      setUserRecipes([]); // 필요할 경우, 업로드 후 초기화
       setPage(1);
-      setShowModal(false); // 이미지 미리보기 모달 닫기
+      setShowModal(false);
     } catch {
       alert("이미지 검색 실패");
     }
@@ -108,6 +125,7 @@ const MainContainer = () => {
       {/* 메인 콘텐츠 */}
       <MainPresenter
         recipes={recipes}
+        userRecipes={userRecipes}
         searchKeyword={searchKeyword}
         onSearchInputChange={onSearchInputChange}
         onSearch={onSearch}
@@ -121,7 +139,7 @@ const MainContainer = () => {
         onConfirmUpload={onConfirmUpload}
       />
 
-      {/* ✅ 전역 로그인 모달: 다른 페이지에서 openLoginModal() 호출해도 여기서 렌더링됨 */}
+      {/* 로그인 모달 */}
       {loginModalOpen && (
         <SignInContainer open={loginModalOpen} onClose={closeLoginModal} />
       )}

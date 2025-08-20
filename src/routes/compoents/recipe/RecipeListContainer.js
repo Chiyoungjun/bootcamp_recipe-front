@@ -1,13 +1,18 @@
 import React, { useContext } from "react";
 import RecipeListPresenter from "./RecipeListPresenter";
-import { LoginContext } from "../../pages/common/SignIn/LoginContext"; // 경로 주의
+import { LoginContext } from "../../pages/common/SignIn/LoginContext";
 
-// recipes: [{id, name, image_url, avg_rating, rating_count, view_count, ...}]
-const RecipeListContainer = ({ recipes }) => {
+const RecipeListContainer = ({ recipes, userRecipes }) => {
   const { user } = useContext(LoginContext);
   const userId = user?.user_id;
 
-  return <RecipeListPresenter recipes={recipes} userId={userId} />;
+  return (
+    <RecipeListPresenter
+      recipes={recipes}
+      userRecipes={userRecipes} // 사용자 레시피 프로퍼티 추가
+      userId={userId}
+    />
+  );
 };
 
 export default RecipeListContainer;
