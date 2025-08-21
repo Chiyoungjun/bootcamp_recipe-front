@@ -1,8 +1,20 @@
-.banner-root {
+/* .banner-root {
   position: relative;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  overflow: hidden;
+  margin-top: 20px;
+} */
+
+.banner-root {
+  position: relative;
+  width: 100vw;          /* 화면 전체 폭 */
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;    /* 컨테이너 한계 탈출 */
+  margin-right: -50vw;
+  margin-top: 20px;      /* 기존 값 유지 */
   overflow: hidden;
 }
 
