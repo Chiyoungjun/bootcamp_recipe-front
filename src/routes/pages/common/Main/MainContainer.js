@@ -17,49 +17,45 @@ const MainContainer = () => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const fileInputRef = useRef(null);
-  const { loginModalOpen, closeLoginModal, user } = useContext(LoginContext);
+  const { loginModalOpen, closeLoginModal } = useContext(LoginContext);
 
   const onSearchInputChange = (e) => setSearchKeyword(e.target.value);
 
-  const onSearch = async () => {
-    if (!searchKeyword.trim()) {
-      alert("검색어를 입력해주세요");
-      return;
+const onSearch = async () => {
+  if (!searchKeyword.trim()) {
+    alert("검색어를 입력해주세요");
+    return;
+  }
+  try {
+    // 기본 외부 레시피 검색
+    let basicData = [];
+    const basicRes = await fetch(
+      `${BACKEND_URL}/api/recipes/external/search?q=${encodeURIComponent(searchKeyword.trim())}`
+    );
+    if (basicRes.ok) {
+      basicData = await basicRes.json();
+    } else if (basicRes.status === 404) {
+      basicData = [];
+    } else {
+      throw new Error("서버 오류");
     }
-    try {
-      // 기본 레시피 검색
-      let basicData = [];
-      const basicRes = await fetch(
-        `${BACKEND_URL}/api/recipes/external/search?q=${encodeURIComponent(
-          searchKeyword.trim()
-        )}`
-      );
-      if (basicRes.ok) {
-        basicData = await basicRes.json();
-      } else if (basicRes.status === 404) {
-        basicData = []; // 검색 결과 없음은 빈 배열
-      } else {
-        throw new Error("서버 오류"); // 500 계열이면 에러 처리
-      }
 
-      // 사용자 레시피 검색
-      let userData = [];
-      if (user?.user_id) {
-        const userRes = await fetch(
-          `${BACKEND_URL}/api/users/${user.user_id}/recipes/search?q=${encodeURIComponent(
-            searchKeyword.trim()
-          )}`
-        );
-        if (userRes.ok) {
-          userData = await userRes.json();
-        } else {
-          userData = []; // 혹시라도 404, 빈 배열로 처리
-        }
-        console.log("userRecipes:", userData);
-      }
+    // 사용자 전체 레시피 검색 (user_id 없이)
+    let userData = [];
+    const userRes = await fetch(
+      `${BACKEND_URL}/api/users/recipes/search?q=${encodeURIComponent(searchKeyword.trim())}`
+    );
+    if (userRes.ok) {
+      userData = await userRes.json();
+    } else if (userRes.status === 404) {
+      userData = [];
+    } else {
+      userData = [];
+    }
+    console.log("userRecipes:", userData);
 
-      // 결과 합침
-      if ((basicData.length === 0) && (userData.length === 0)) {
+      // 결과 병합 및 상태 설정
+      if (basicData.length === 0 && userData.length === 0) {
         setRecipes([]);
         setUserRecipes([]);
         alert("검색 결과가 없습니다.");
@@ -70,8 +66,10 @@ const MainContainer = () => {
       }
     } catch (e) {
       alert("검색 중 오류가 발생했습니다.");
+      console.error(e);
     }
   };
+
 
   const onPlusClick = () => {
     fileInputRef.current?.click();

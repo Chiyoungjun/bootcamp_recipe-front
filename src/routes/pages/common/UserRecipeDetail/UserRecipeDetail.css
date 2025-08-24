@@ -1,0 +1,510 @@
+.ud-detail-wrapper {
+  max-width: 950px;
+  margin: 40px auto;
+  padding: 48px 44px;
+  background: none;
+}
+
+/* 상단 타이틀 */
+.ud-detail-title-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+.ud-detail-title {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: #222;
+}
+.ud-favorite-btn {
+  background: none;
+  border: none;
+  font-size: 36px;
+  margin-top: 4px;
+  color: #FFD600;
+  cursor: pointer;
+  padding: 0 8px;
+  transition: color 0.15s;
+}
+.ud-favorite-btn.on {
+  color: #FFD600;
+}
+
+/* 영양정보/재료/이미지 등 */
+.ud-detail-main {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  margin-bottom: 26px;
+}
+
+.ud-detail-imgblock {
+  flex: 0 0 300px;
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.ud-detail-img {
+  width: 100%;
+  height: 300px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px 0 #ececec;
+}
+.ud-detail-info {
+  flex: 1;
+}
+.ud-nutrition-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #222;
+}
+.ud-nutrition-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.ud-nutrition-list li {
+  font-size: 18px;
+  color: #444;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+}
+.ud-nutri-key {
+  width: 92px;
+  display: inline-block;
+  color: #444;
+}
+.ud-nutri-value {
+  font-weight: 600;
+  color: #222;
+}
+.ud-unit {
+  color: #222;
+  font-size: 16px;
+}
+.ud-ingredient-title {
+  font-size: 21px;
+  font-weight: 700;
+  margin-bottom: 2px;
+  margin-top: 18px;
+}
+.ud-ingredient-desc {
+  font-size: 18px;
+  color: #222;
+  margin-bottom: 18px;
+}
+.ud-manual-title {
+  font-size: 21px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  margin-top: 20px;
+}
+
+/* --------- 만드는 법(피그마 스타일) --------- */
+.ud-detail-manual-list-pigma {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.ud-manual-row {
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 0;
+}
+
+.ud-manual-img-wrap {
+  flex: 0 0 300px;
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  margin-right: 24px;
+}
+.ud-manual-img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px 0 #ececec;
+  display: block;
+}
+
+.ud-manual-box {
+  flex: 1 1 0;
+  background: #fff;
+  border: 2px solid #5b5b5b;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  height: 170px;
+  min-height: 170px;
+  max-height: 170px;
+  padding: 18px 26px;
+  gap: 20px;
+  font-size: 18px;
+  font-weight: 400;
+  color: #444;
+  box-sizing: border-box;
+  box-shadow: 0 1.5px 8px 0 #eeeeee;
+}
+
+.ud-manual-num {
+  font-size: 28px;
+  font-weight: 700;
+  color: #444;
+  min-width: 28px;
+  text-align: right;
+  margin-right: 16px;
+}
+.ud-manual-desc {
+  font-size: 18px;
+  color: #444;
+  font-weight: 400;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+/* --------- TIP box --------- */
+.ud-detail-tip-pigma {
+  background: #fafafd;
+  border-left: 5px solid #bbb;
+  border-radius: 8px;
+  margin-top: 16px;
+  padding: 12px 24px;
+  font-size: 17px;
+  color: #5b5b5b;
+  margin-bottom: 28px;
+}
+
+/* --------- 유사 레시피 카드 --------- */
+.ud-detail-similar {
+  margin-top: 40px;
+}
+.ud-similar-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+/* 카드 가로 3개, 좌~우 동일 간격 */
+.similar-ud-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  gap: 0;
+  margin-bottom: 6px;
+  min-height: 210px;
+  padding: 0;
+}
+.similar-ud-card {
+  width: 31.5%;
+  min-width: 190px;
+  max-width: 370px;
+  box-sizing: border-box;
+  padding: 20px 12px 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px 0 #eeeeee;
+  transition: box-shadow 0.15s;
+  cursor: pointer;
+}
+.similar-ud-card img {
+  width: 85%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+.ud-similar-name {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 3px;
+  color: #222;
+  text-align: center;
+}
+.ud-similar-rating {
+  color: #fc0;
+  font-size: 17px;
+  margin-top: 2px;
+}
+.ud-similar-views {
+  color: #888;
+  font-size: 15px;
+  margin-left: 7px;
+}
+
+/* --------- 반응형 --------- */
+@media (max-width: 1000px) {
+  .similar-ud-list {
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+  .similar-ud-card {
+    width: 45vw;
+    min-width: 150px;
+    max-width: 99vw;
+  }
+}
+@media (max-width: 900px) {
+  .similar-ud-list { flex-wrap: wrap; }
+  .similar-ud-card { width: 48%; margin-bottom: 20px; }
+}
+@media (max-width: 850px) {
+  .ud-manual-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ud-manual-img-wrap,
+  .ud-manual-box {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: auto;
+    min-height: unset;
+    max-height: unset;
+  }
+  .ud-manual-img {
+    width: 100%;
+    height: 170px;
+  }
+  .similar-ud-list {
+    flex-direction: column;
+    gap: 18px;
+    max-width: 100%;
+  }
+  .similar-ud-card {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+@media (max-width: 700px) {
+  .similar-ud-list {
+    flex-direction: column;
+    gap: 18px;
+  }
+  .similar-ud-card {
+    width: 100%;
+    min-width: 0;
+  }
+}
+@media (max-width: 600px) {
+  .similar-ud-card { width: 100%; }
+}
+
+/* 슬라이더 버튼 */
+.ud-slider-btn {
+  border: none;
+  background: #eee;
+  font-size: 2rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 19px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.ud-slider-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 리스트/카드 재정의(원본 하단 규칙 유지) */
+.similar-ud-list {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+.similar-ud-card {
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 8px 12px;
+  width: 160px;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.similar-ud-card img {
+  width: 110px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+.ud-similar-name {
+  font-weight: 600;
+  margin: 6px 0;
+}
+.ud-similar-rating {
+  font-size: 0.92rem;
+  color: #ffa800;
+}
+.ud-similar-views {
+  display: block;
+  font-size: 0.85em;
+  color: #888;
+  margin-left: 6px;
+}
+
+/* (선택) 별점 표시용 */
+.ud-star-rating span {
+  font-size: 24px;
+}
+
+/* 모달 스타일 (프레젠터 모달을 ud-로 사용 시) */
+.ud-modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.ud-modal-content {
+  background-color: white;
+  padding: 24px;
+  border-radius: 8px;
+  width: 320px;
+  max-width: 90vw;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.ud-modal-content .ud-star-rating span {
+  font-size: 36px !important;
+  cursor: pointer;
+  user-select: none;
+  margin-right: 4px;
+  color: #ddd;
+  transition: color 0.2s ease;
+}
+.ud-modal-content .ud-star-rating span.selected,
+.ud-modal-content .ud-star-rating span:hover,
+.ud-modal-content .ud-star-rating span.hovered {
+  color: #f5a623 !important;
+}
+.ud-modal-content button {
+  padding: 8px 24px;
+  font-size: 16px;
+  margin-right: 12px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background-color: #f5a623;
+  color: #fff;
+  transition: background-color 0.15s ease;
+}
+.ud-modal-content button:disabled {
+  cursor: not-allowed;
+  background-color: #ddd;
+  color: #888;
+}
+.ud-modal-content button:last-child {
+  background-color: #ccc;
+  color: #333;
+}
+
+
+/* 언어 토글 버튼(컨테이너에서 className 부여) */
+.ud-lang-toggle-btn {
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.ud-lang-toggle-btn:hover { background: #fafafa; border-color: #ccc; }
+
+/* 상단 별점/조회수 영역(프레젠터) */
+.ud-rating-info {
+  display: flex;
+  gap: 24px;
+  row-gap: 6px;
+  flex-wrap: wrap;
+  font-size: 15px;
+  color: #444;
+}
+
+/* 로딩/에러 텍스트(프레젠터) */
+.ud-detail-loading { margin: 16px 0; color: #666; font-size: 15px; }
+.ud-detail-error { margin: 16px 0; color: #d33; font-size: 15px; }
+
+/* ───── 근처 음식점 리스트 영역(프레젠터) ───── */
+.ud-shoplist-section { margin: 32px 0; }
+.ud-shoplist-search-btn {
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  background: #f5a623;
+  color: #fff;
+  cursor: pointer;
+  transition: filter .15s;
+}
+.ud-shoplist-search-btn:hover { filter: brightness(0.95); }
+
+.ud-shoplist-loading { margin: 10px 0; color: #666; }
+.ud-shoplist-error { margin: 10px 0; color: #d33; }
+.ud-shoplist-empty { margin: 10px 0; color: #777; }
+
+.ud-shoplist-wrap { margin: 16px 0; }
+.ud-shoplist-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+.ud-shoplist-ul { list-style: none; padding: 0; margin: 0; }
+.ud-shoplist-item {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+.ud-shoplist-name { font-weight: 700; color: #222; }
+.ud-shoplist-addr, .ud-shoplist-phone { color: #555; font-size: 14px; }
+.ud-shoplist-link {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 14px;
+  color: #2c7be5;
+  text-decoration: none;
+}
+.ud-shoplist-link:hover { text-decoration: underline; }
+
+/* (이미 추가했다면 중복 불필요) 별점 아이콘 크기
+.ud-star-rating span { font-size: 24px; }
+
+/* (이미 추가했다면 중복 불필요) 슬라이더 버튼 */
+/*
+.ud-slider-btn {
+  border: none;
+  background: #eee;
+  font-size: 2rem;
+  width: 38px; height: 38px; border-radius: 19px;
+  cursor: pointer; transition: background .2s;
+}
+.ud-slider-btn:disabled { opacity: .4; cursor: not-allowed; } */
+
+
+/* (선택) 지도 모달 버튼을 계속 노출하는 경우만 사용
+.ud-nearby-open-row { margin: 16px 0; }
+.ud-nearby-open-btn {
+  padding: 10px 16px; border: 1px solid #ddd; border-radius: 8px;
+  background: #fff; cursor: pointer;
+}
+.ud-nearby-open-btn:hover { background: #fafafa; }
+*/
+

@@ -30,7 +30,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;        /* 꽉 차게 */
+  object-fit:  contain;        /* 꽉 차게 */
   object-position: center;
   display: block;
 }

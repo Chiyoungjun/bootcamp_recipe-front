@@ -12,9 +12,9 @@
   width: 100vw;          /* 화면 전체 폭 */
   left: 50%;
   right: 50%;
-  margin-left: -50vw;    /* 컨테이너 한계 탈출 */
+  margin-left: -50vw;    
   margin-right: -50vw;
-  margin-top: 20px;      /* 기존 값 유지 */
+  /* margin-top: 20px;      */
   overflow: hidden;
 }
 

@@ -7,7 +7,7 @@ import remarkBreaks from "remark-breaks";
 
 /** 백엔드 엔드포인트 */
 const CHAT_API_JSON = "http://localhost:8000/api/chatbot";         // 일반 JSON
-const CHAT_API_STREAM = "http://localhost:8000/api/chatbot/stream"; // 🔥 스트리밍(plain text)
+const CHAT_API_STREAM = "http://localhost:8000/api/chatbot/stream"; // 🔥 스트리밍(plain text or SSE)
 
 export default function ChatPanel({
   open,
@@ -37,13 +37,43 @@ export default function ChatPanel({
   const abortRef = useRef(null);   // AbortController
   const idxRef = useRef(-1);       // 현재 스트리밍 중인 assistant 인덱스
 
+  // ✅ 추가: 렌더 폭주 방지용 버퍼/플러시(스로틀)
+  const bufferRef = useRef("");
+  const flushingRef = useRef(false);
+  const flushDelayMs = 50; // 30~100ms 사이 조절
+
+  const scheduleFlush = () => {
+    if (flushingRef.current) return;
+    flushingRef.current = true;
+    setTimeout(() => {
+      const chunk = bufferRef.current;
+      bufferRef.current = "";
+      flushingRef.current = false;
+      if (chunk) appendChunk(chunk);
+    }, flushDelayMs);
+  };
+
   // ESC 닫기
   useEffect(() => {
     if (!open) return;
-    const onKey = (e) => e.key === "Escape" && onClose();
+    const onKey = (e) => e.key === "Escape" && handleClose();
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  // ✅ onClose 시에도 요청 중단
+  const handleClose = () => {
+    try { abortRef.current?.abort(); } catch {}
+    onClose?.();
+  };
+
+  // 컴포넌트 언마운트 시 요청 중단
+  useEffect(() => {
+    return () => {
+      try { abortRef.current?.abort(); } catch {}
+    };
+  }, []);
 
   // 스크롤 최신으로
   useEffect(() => {
@@ -91,9 +121,7 @@ export default function ChatPanel({
     if (!userText || sending) return;
 
     // 이전 스트림 취소
-    try {
-      abortRef.current?.abort();
-    } catch {}
+    try { abortRef.current?.abort(); } catch {}
 
     // user + (빈) assistant를 한 번에 push해서 인덱스 확보
     setMessages((prev) => {
@@ -109,12 +137,13 @@ export default function ChatPanel({
     abortRef.current = controller;
 
     try {
-      // 1) 🔥 스트리밍 호출 (text/plain; chunked)
+      // 1) 🔥 스트리밍 호출
       const res = await fetch(CHAT_API_STREAM, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Accept": "text/plain, application/json",
+          // ✅ SSE도 허용
+          "Accept": "text/plain, text/event-stream, application/json",
           "Cache-Control": "no-cache",
           "Connection": "keep-alive",
         },
@@ -125,29 +154,94 @@ export default function ChatPanel({
       const ct = (res.headers.get("content-type") || "").toLowerCase();
 
       if (!res.ok) {
-        // 스트리밍 엔드포인트 실패 시 일반 JSON으로 폴백
         await fallbackToJson(userText);
         return;
       }
 
-      if (res.body && ct.includes("text/plain")) {
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder("utf-8");
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const chunk = decoder.decode(value, { stream: true });
-          appendChunk(chunk);
-        }
-      } else if (ct.includes("application/json")) {
-        // 혹시 서버가 JSON으로 내려주면 폴백 처리
-        const data = await res.json();
-        const reply = data.answer ?? data.text ?? data.reply ?? "";
-        setMessages((prev) => replaceAt(prev, idxRef.current, { role: "assistant", content: reply || "빈 응답입니다." }));
-      } else {
-        // 마지막 폴백: 그냥 텍스트로 읽기
+      if (!res.body) {
+        // 마지막 폴백: 그냥 텍스트
         const txt = await res.text();
         appendChunk(txt || "빈 응답입니다.");
+        return;
+      }
+
+      // ✅ 공통: UTF-8 디코더 준비
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      try {
+        if (ct.includes("text/event-stream")) {
+          // ===== SSE 파서 =====
+          let buf = "";
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buf += decoder.decode(value, { stream: true });
+            let sep;
+            while ((sep = buf.indexOf("\n\n")) >= 0) {
+              const event = buf.slice(0, sep);
+              buf = buf.slice(sep + 2);
+              // data: ... 라인만 취함
+              const lines = event.split("\n");
+              for (const line of lines) {
+                const s = line.trim();
+                if (s.startsWith("data:")) {
+                  const payload = s.slice(5).trim();
+                  if (payload) {
+                    bufferRef.current += payload;
+                    scheduleFlush();
+                  }
+                }
+              }
+            }
+          }
+          // flush 남은 바이트
+          const rest = decoder.decode();
+          if (rest) {
+            buf += rest;
+          }
+          if (buf) {
+            // 남은 조각을 data 없이 보낸 서버 대응
+            bufferRef.current += buf;
+            scheduleFlush();
+          }
+          // flush 마무리 대기
+          await new Promise(r => setTimeout(r, flushDelayMs + 10));
+        } else if (ct.includes("text/plain")) {
+          // ===== text/plain 청크 =====
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            const chunk = decoder.decode(value, { stream: true });
+            if (chunk) {
+              bufferRef.current += chunk;
+              scheduleFlush();
+            }
+          }
+          const rest = decoder.decode();
+          if (rest) {
+            bufferRef.current += rest;
+            scheduleFlush();
+          }
+          await new Promise(r => setTimeout(r, flushDelayMs + 10));
+        } else if (ct.includes("application/json")) {
+          // 혹시 서버가 JSON으로 내려주면 폴백 처리
+          const data = await res.json();
+          const reply = data.answer ?? data.text ?? data.reply ?? "";
+          setMessages((prev) =>
+            replaceAt(prev, idxRef.current, {
+              role: "assistant",
+              content: reply || "빈 응답입니다.",
+            })
+          );
+        } else {
+          // 마지막 폴백: 그냥 텍스트로 읽기
+          const txt = await res.text();
+          appendChunk(txt || "빈 응답입니다.");
+        }
+      } finally {
+        // ✅ 리더 해제 (메모리/락 정리)
+        try { reader.releaseLock(); } catch {}
       }
     } catch (err) {
       if (err?.name !== "AbortError") {
@@ -186,7 +280,7 @@ export default function ChatPanel({
       const data = await r.json();
       const reply = data.answer ?? data.text ?? data.reply ?? "빈 응답입니다.";
       setMessages((prev) => replaceAt(prev, idxRef.current, { role: "assistant", content: reply }));
-    } catch (e) {
+    } catch {
       setMessages((prev) =>
         replaceAt(prev, idxRef.current, {
           role: "assistant",
@@ -213,7 +307,7 @@ export default function ChatPanel({
       <div className="chat-panel">
         {/* 헤더 */}
         <div className="chat-panel__header">
-          <button className="chat-panel__back" onClick={onClose} aria-label="닫기">
+          <button className="chat-panel__back" onClick={handleClose} aria-label="닫기">
             <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -223,7 +317,12 @@ export default function ChatPanel({
           <div className="chat-panel__title">SNAPCOOK Chat</div>
 
           <div style={{ flex: 1 }} />
-          <button type="button" className="chat-panel__reset" onClick={handleReset} aria-label="대화 초기화">
+          <button
+            type="button"
+            className="chat-panel__reset"
+            onClick={handleReset}
+            aria-label="대화 초기화"
+          >
             <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M21 12a9 9 0 1 1-3.3-6.9" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
               <path d="M21 3v6h-6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />

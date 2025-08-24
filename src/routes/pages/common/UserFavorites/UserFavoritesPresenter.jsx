@@ -1,5 +1,6 @@
 import React from "react";
 import Card1Container from "../../../compoents/Card1";
+import Card2Container from "../../../compoents/Card2";
 import './UserFavorites.css';
 
 function UserFavoritesPresenter({
@@ -15,13 +16,24 @@ function UserFavoritesPresenter({
         <h2 className="favorites-title">즐겨찾기</h2>
         <div className="favorites-list-grid">
           {recipeList && recipeList.length > 0 ? (
-            recipeList.map(recipe => (
-              <Card1Container
-                key={recipe.id}
-                recipe={recipe}
-                userId={userId}
-              />
-            ))
+            recipeList.map((recipe, idx) =>
+              // user_id가 있으면 사용자 레시피!
+              recipe.user_id ? (
+                <Card2Container
+                  key={`user_${recipe.id}_${idx}`}
+                  recipe={recipe}
+                  userId={userId}
+                  size="default"
+                  cardClass="user-recipe-card"
+                />
+              ) : (
+                <Card1Container
+                  key={`basic_${recipe.id}_${idx}`}
+                  recipe={recipe}
+                  userId={userId}
+                />
+              )
+            )
           ) : (
             <div style={{ padding: "2rem", textAlign: "center", color: "#888" }}>
               즐겨찾기한 레시피가 없습니다.

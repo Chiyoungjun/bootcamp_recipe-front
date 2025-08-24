@@ -5,8 +5,6 @@ import "./Recipe.css";
 
 const RecipeListPresenter = ({ recipes, userRecipes = [], userId }) => {
   // 디버깅: 현재 받아온 userRecipes 전체 콘솔 출력
-  console.log("RecipeListPresenter: userRecipes", userRecipes);
-
   if (
     (!recipes || recipes.length === 0) &&
     (!userRecipes || userRecipes.length === 0)

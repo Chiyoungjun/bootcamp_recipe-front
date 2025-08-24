@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useMemo, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
-import RecipeDetailPresenter from "./RecipeDetailPresenter";
+import UserRecipeDetailPresenter from "./UserRecipeDetailPresenter";
 import { LoginContext } from "../SignIn/LoginContext";
-import MapModalContainer from "../MapModal/MapModalContainer"; 
 
 const StarRatingModal = ({ visible, rating, onClose, onSubmit }) => {
   const [tempRating, setTempRating] = useState(rating || 0);
@@ -46,7 +45,7 @@ const StarRatingModal = ({ visible, rating, onClose, onSubmit }) => {
       >
         <h3 style={{ marginBottom: 16 }}>별점을 선택하세요</h3>
         <div style={{ marginBottom: 24 }}>
-          {[1, 2, 3, 4, 5].map((star) => (
+          {[1, 2, 3, 4, 5].map(star => (
             <span
               key={star}
               onClick={() => setTempRating(star)}
@@ -116,60 +115,49 @@ function normalizeRecipeFields(recipeObj) {
     rating_count: recipeObj.rating_count || 0,
     view_count: recipeObj.view_count || 0,
     user_rating: recipeObj.user_rating || 0,
+    user_id: recipeObj.user_id,
+
+    author_name: recipeObj.author_name || "",
+
     ...recipeObj,
   };
 }
 
-const normalizeLang = (code) => {
-  const c = (code || "ko").toLowerCase();
-  if(c === "jp") return "ja";
-  if(c === "cn" || c === "zh") return "zh-cn";
-  if(c === "kr" || c === "ko-kr") return "ko";
-  return ["ko", "en", "ja", "zh-cn"].includes(c) ? c : "ko";
-};
-
-const RecipeDetailContainer = () => {
+const UserRecipeDetailContainer = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const idFromState = location.state?.id;
   const idFromQuery = searchParams.get("id");
-  const id = idFromState || idFromQuery;
-  const relatedList = location.state?.list;
+  const id = String(idFromState || idFromQuery || "");
+
+  let isUserRecipe = location.state?.isUserRecipe;
+  if (typeof isUserRecipe === "undefined") {
+    isUserRecipe = location.pathname.includes("/user");
+  }
 
   const { user } = useContext(LoginContext);
   const userId = user?.user_id;
 
   const [recipe, setRecipe] = useState(null);
-  const [allRecipes, setAllRecipes] = useState([]);
+  const [authorName, setAuthorName] = useState("");
+  const [userRecipes, setUserRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [userRating, setUserRating] = useState(0);
 
   const [favorite, setFavorite] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // 알림 메시지 상태 추가
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
 
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [mapOpen, setMapOpen] = useState(false);
-
-  const openMap = () => setMapOpen(true);
-  const closeMap = () => setMapOpen(false);
-
-
-  // 신규: 언어 상태 초기화 및 관리
-  const initialLang = normalizeLang(searchParams.get("lang") || "ko");
-  const [lang, setLang] = useState(initialLang);
-
-  // URL 변경시 lang 상태 동기화
   useEffect(() => {
-    const nextLang = normalizeLang(new URLSearchParams(location.search).get("lang") || "ko");
-    setLang(nextLang);
-  }, [id, location.search]);
+    console.log("상세조회 분기:", { id, isUserRecipe });
+  }, [id, isUserRecipe]);
 
-  const fetchRecipeDetail = (selectedLang = lang, incrementView = true) => {
+  const fetchRecipeDetail = (incrementView = true) => {
     if (!id) {
       setRecipe(null);
       setError("잘못된 레시피 id");
@@ -178,11 +166,11 @@ const RecipeDetailContainer = () => {
     }
     setLoading(true);
     setError("");
-  
-    const baseUrl = `http://127.0.0.1:8000/api/recipedetail?id=${id}${
-      userId ? `&user_id=${userId}` : ""
-    }&lang=${selectedLang}&increment_view=${incrementView}`;
-  
+
+    const baseUrl = isUserRecipe
+      ? `http://127.0.0.1:8000/api/users/recipes/${id}?increment_view=${incrementView}&user_id=${userId}`
+      : `http://127.0.0.1:8000/api/recipes/${id}?increment_view=${incrementView}&user_id=${userId}`;
+
     fetch(baseUrl)
       .then(async (res) => {
         if (!res.ok) {
@@ -192,9 +180,12 @@ const RecipeDetailContainer = () => {
         return res.json();
       })
       .then((data) => {
-        setRecipe(normalizeRecipeFields(data));
+        console.log("서버 응답:", data);
+        const normalized = normalizeRecipeFields(data);
+        setRecipe(normalized);
+        setUserRating(normalized.user_rating || 0);
+        setAuthorName(normalized.author_name || "");
         setLoading(false);
-        setUserRating(data.user_rating || 0);
       })
       .catch((err) => {
         setError(err.message || "레시피를 불러오는 데 실패했습니다.");
@@ -202,39 +193,41 @@ const RecipeDetailContainer = () => {
       });
   };
 
-  // lang, id, userId 변할 때마다 fetch 호출 (조회수 증가 제어 추가하지 않으셨기에 기본 유지)
   useEffect(() => {
-    fetchRecipeDetail(lang, true);
-  }, [id, userId, lang]);
+    fetchRecipeDetail(true);
+    // eslint-disable-next-line
+  }, [id, userId, isUserRecipe]);
 
   useEffect(() => {
-    if (relatedList && Array.isArray(relatedList) && relatedList.length > 0) {
-      setAllRecipes(relatedList.map(normalizeRecipeFields));
-    } else {
-      fetch("http://127.0.0.1:8000/api/recipelist")
+    if (recipe && recipe.user_id) {
+      fetch(`http://127.0.0.1:8000/api/users/${recipe.user_id}/recipes`)
         .then((res) => res.json())
         .then((data) => {
-          setAllRecipes(Array.isArray(data) ? data.map(normalizeRecipeFields) : []);
+          console.log("API response data:", data);
+          if (Array.isArray(data)) {
+            const filtered = data
+              .map(normalizeRecipeFields)
+              .filter((item) => String(item.id) !== id);
+            setUserRecipes(filtered);
+            if (filtered.length > 0) {
+              setAuthorName(filtered[0].author_name || "");
+            } else {
+              setAuthorName("");
+            }
+          } else {
+            setUserRecipes([]);
+            setAuthorName("");
+          }
         })
-        .catch(() => setAllRecipes([]));
+        .catch(() => {
+          setUserRecipes([]);
+          setAuthorName("");
+        });
+    } else {
+      setUserRecipes([]);
+      setAuthorName("");
     }
-  }, [relatedList]);
-
-  const relatedRecipes = useMemo(() => {
-    if (!recipe || !recipe.category || allRecipes.length === 0) return [];
-    return allRecipes
-      .filter(
-        (r) => (r.id || r.RCP_SEQ) !== (recipe.id || recipe.RCP_SEQ) && r.category === recipe.category
-      )
-      .slice(0, 10)
-      .map((r) => ({
-        img: r.image_url || r.ATT_FILE_NO_MAIN,
-        name: r.name || r.RCP_NM,
-        rating: r.avg_rating ? Math.round(r.avg_rating) : 5,
-        views: r.view_count || 0,
-        RCP_SEQ: r.id || r.RCP_SEQ,
-      }));
-  }, [recipe, allRecipes]);
+  }, [recipe, id]);
 
   const submitUserRating = (rating) => {
     if (!id) return;
@@ -242,8 +235,16 @@ const RecipeDetailContainer = () => {
       alert("별점 등록은 로그인 후 가능합니다.");
       return;
     }
-    const requestBody = { user_id: userId, rating };
-    fetch(`http://127.0.0.1:8000/api/recipes/${id}/rating`, {
+
+    const requestBody = isUserRecipe
+      ? { user_id: userId, rating, user_recipe_id: id }
+      : { user_id: userId, rating, recipe_id: id };
+
+    const url = isUserRecipe
+      ? `http://127.0.0.1:8000/api/users/recipes/${id}/rating`
+      : `http://127.0.0.1:8000/api/recipes/${id}/rating`;
+
+    fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
@@ -251,36 +252,27 @@ const RecipeDetailContainer = () => {
       .then(async (res) => {
         if (!res.ok) {
           const text = await res.text();
-          throw new Error(`서버 오류: ${res.status} - ${res.statusText} - ${text}`);
+          throw new Error(text);
         }
         return res.json();
       })
       .then(() => {
         setUserRating(rating);
-        fetchRecipeDetail(lang, false);
+        fetchRecipeDetail(false);
         setIsModalOpen(false);
       })
-      .catch(() => {
-        alert("별점 등록에 실패했습니다. 다시 시도해주세요.");
-      });
+      .catch(() => alert("별점 등록에 실패했습니다. 다시 시도해주세요."));
   };
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
 
   useEffect(() => {
     if (userId && id) {
       setFavoriteLoading(true);
-      fetch(`http://localhost:8000/api/favorites/${userId}`)
+      const url = `http://localhost:8000/api/favorites/${userId}`;
+      fetch(url)
         .then((res) => res.json())
         .then((data) => {
-          if (Array.isArray(data.favorites)) {
-            setFavorite(!!data.favorites.find((r) => String(r.id) === String(id)));
-          } else if (Array.isArray(data)) {
-            setFavorite(!!data.find((r) => String(r.id) === String(id)));
-          } else {
-            setFavorite(false);
-          }
+          const favoritesList = data.favorites || data;
+          setFavorite(!!favoritesList.find((r) => String(r.id) === id));
         })
         .catch(() => setFavorite(false))
         .finally(() => setFavoriteLoading(false));
@@ -295,22 +287,33 @@ const RecipeDetailContainer = () => {
       return;
     }
     setFavoriteLoading(true);
+
     const url = `http://127.0.0.1:8000/api/favorites`;
     const method = favorite ? "DELETE" : "POST";
+    const body = isUserRecipe
+      ? { user_id: userId, user_recipe_id: id }
+      : { user_id: userId, recipe_id: Number(id) };
+
     fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: userId, recipe_id: Number(id) }),
+      body: JSON.stringify(body),
     })
       .then(async (res) => {
         if (!res.ok) {
           const txt = await res.text();
           throw new Error(txt);
         }
-        setFavorite(!favorite);
+        const fetchFavoritesUrl = `http://localhost:8000/api/favorites/${userId}`;
+        const res2 = await fetch(fetchFavoritesUrl);
+        if (!res2.ok) throw new Error("찜 목록 재조회 실패");
+        const data = await res2.json();
+        const favoritesList = data.favorites || data;
+        const newFavorite = !!favoritesList.find((r) => String(r.id) === id);
+        setFavorite(newFavorite);
 
-        // 직접 구현한 알림 상태 세팅
-        if (!favorite) {
+        // 알림 메시지 설정
+        if (newFavorite) {
           setAlertMessage("찜목록에 추가되었습니다");
         } else {
           setAlertMessage("찜목록이 취소되었습니다");
@@ -318,52 +321,40 @@ const RecipeDetailContainer = () => {
         setShowAlert(true);
         setTimeout(() => setShowAlert(false), 2000);
       })
-      .catch(() => {
-        alert("찜 기능 처리에 실패했습니다.");
-      })
+      .catch(() => alert("찜 기능 처리에 실패했습니다."))
       .finally(() => setFavoriteLoading(false));
   };
 
-  const handleToggleLanguage = () => {
-    setLang((prev) => (prev === "ko" ? "en" : "ko"));
-  };
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <>
-
-      <RecipeDetailPresenter
+      <UserRecipeDetailPresenter
         recipe={recipe}
         loading={loading}
         error={error}
-        relatedRecipes={relatedRecipes}
         userRating={userRating}
         onRate={submitUserRating}
         onOpenModal={openModal}
         favorite={favorite}
         onToggleFavorite={handleToggleFavorite}
         favoriteLoading={favoriteLoading}
-        isEnglish={lang === "en"}
-        onOpenMap={openMap}
-        lang={lang}
-        onChangeLang={setLang}
-        alertMessage={alertMessage}   // 추가
-        showAlert={showAlert}   
+        isEnglish={false}
+        userRecipes={userRecipes}
+        user={user}
+        authorName={authorName}
+        alertMessage={alertMessage}
+        showAlert={showAlert}
       />
-
       <StarRatingModal
         visible={isModalOpen}
         rating={userRating}
         onClose={closeModal}
         onSubmit={submitUserRating}
       />
-      {/* ★ 지도 모달 */}
-      <MapModalContainer
-        open={mapOpen}
-        onClose={closeMap}
-        defaultKeyword={recipe?.name || recipe?.RCP_NM || ""}
-      />
     </>
   );
 };
 
-export default RecipeDetailContainer;
+export default UserRecipeDetailContainer;

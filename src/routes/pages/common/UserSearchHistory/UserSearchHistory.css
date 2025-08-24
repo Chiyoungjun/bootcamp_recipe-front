@@ -47,75 +47,19 @@ body, .history-bg {
 }
 
 /* 카드 폭 넉넉하게, 세로 확대 */
-.history-card {
-  background: transparent;
-  box-shadow: none;
-  border-radius: 16px;
-  border: none;
-  padding: 0 0 10px 0;
-  min-width: 0;
-  max-width: 380px;           /* ★ 살짝 키움 */
-  width: 100%;
-  box-sizing: border-box;
-  transition: box-shadow 0.2s;
-}
-.history-card:hover {
-  box-shadow: 0 4px 24px #eee;
-}
 
-.history-image {
-  width: 100%;
-  height: 330px;              /* ★ 200px → 330px (1.5~2배 확장!) */
-  border-radius: 14px;
-  object-fit: cover;
-  margin-bottom: 14px;
-  margin-top: 8px;
-  background: #e8e8e8;
-  box-shadow: none;
-}
+
 /* 이미지 세로로 길~게 확장! */
 
-.history-info {
-  width: 100%;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5px;
-}
 
-.history-name {
-  font-size: 1.15rem;
-  font-weight: 400;
-  margin-bottom: 1px;
-  color: #222;
-}
 
-.history-date {
-  font-size: 1.01rem;
-  color: #343434;
-  margin-bottom: 2px;
-  font-weight: 400;
-}
 
-.history-starrow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 2px;
-}
 
-.history-stars {
-  color: #111;
-  font-size: 1.05rem;
-  font-weight: 400;
-  letter-spacing: 1px;
-}
 
-.history-view {
-  color: #444;
-  font-size: 0.98rem;
-  font-weight: 400;
-}
+
+
+
+
 
 .history-pagination {
   display: flex;
@@ -155,25 +99,3 @@ body, .history-bg {
   user-select: none;
 }
 
-@media (max-width: 1200px) {
-  .history-widebox {
-    width: 98vw;
-  }
-  .history-list-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .history-card, .history-image {
-    max-width: 98vw;
-  }
-  .history-image {
-    height: 280px;      /* 화면 좁아질 때 이미지 살짝 축소 */
-  }
-}
-@media (max-width: 800px) {
-  .history-list-grid {
-    grid-template-columns: 1fr;
-  }
-  .history-image {
-    height: 200px;
-  }
-}

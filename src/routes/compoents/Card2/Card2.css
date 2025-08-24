@@ -1,33 +1,94 @@
 .user-recipe-card {
-  cursor: pointer;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  width: 100%;
+  max-width: 220px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px #eee;
   overflow: hidden;
-  box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
-  background-color: #fff;
-  transition: box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  width: 260px;
-  margin: 12px;
-  position: relative;
+  cursor: pointer;
+  margin: 0 auto;
+  position: relative;    /* 랭킹뱃지 위치용 */
+  transition: box-shadow 0.2s, transform 0.15s;
 }
 
 .user-recipe-card:hover {
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 24px #e6e6e6;
+  transform: translateY(-2px) scale(1.02);
 }
 
-.card-rank {
+.user-recipe-card img {
+  width: 100%;
+  height: 140px; /* 기본 카드 이미지 높이와 동일 */
+  object-fit: cover;
+  background: #f6f6f6;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+
+.user-recipe-card .card-content {
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.user-recipe-card .card-title {
+  font-weight: bold;
+  font-size: 1.07rem;
+  margin-bottom: 6px;
+  word-break: keep-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #222;
+}
+
+.user-recipe-card .card-info-row {
+  margin-top: 4px;
+  font-size: 0.96rem;
+  color: #ffb600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+}
+
+
+.card__rank-badge {
   position: absolute;
-  top: 8px;
-  left: 8px;
-  background-color: #ffbb00;
-  padding: 2px 6px;
-  border-radius: 12px;
-  font-weight: 700;
-  color: #fff;
-  font-size: 14px;
-  z-index: 2;
+  top: 14px;
+  left: 14px;
+  padding: 4px 14px;
+  font-size: 1.12rem;
+  background: #FFD700;
+  color: #222;
+  font-weight: bold;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  min-width: 54px;
+  justify-content: center;
+  letter-spacing: 0;
+}
+.card__rank-badge--1 {
+  background: #FFD700;   /* Gold */
+  color: #9b7700;
+  font-size: 1.22rem;
+  font-weight: bold;
+}
+.card__rank-badge--2 {
+  background: #E5E5E5;   /* Silver */
+  color: #666;
+}
+.card__rank-badge--3 {
+  background: #FFD7AF;   /* Bronze */
+  color: #ae772d;
 }
 
 .card-image img {

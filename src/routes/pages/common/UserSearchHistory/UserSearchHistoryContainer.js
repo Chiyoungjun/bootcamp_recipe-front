@@ -11,11 +11,12 @@ function UserSearchHistoryContainer() {
 
   const [page, setPage] = useState(1);
   const [historyList, setHistoryList] = useState([]);
-  const [totalCount, setTotalCount] = useState(0); // 총 검색 기록 개수
+  const [totalCount, setTotalCount] = useState(0);
   const [allRecipes, setAllRecipes] = useState([]);
+  const [userRecipes, setUserRecipes] = useState([]); // 회원 레시피 추가!
   const [totalPages, setTotalPages] = useState(1);
 
-  // 검색 기록 불러오기 (조건에 맞는 페이지만 요청)
+  // 검색 기록 페이징 불러오기
   useEffect(() => {
     if (!userId) {
       setHistoryList([]);
@@ -26,9 +27,8 @@ function UserSearchHistoryContainer() {
       try {
         const url = `http://localhost:8000/api/search-history/${userId}?page=${page}&items_per_page=${ITEMS_PER_PAGE}`;
         const res = await axios.get(url);
-        // 여기서 totalCount도 받아온다고 가정
         setHistoryList(res.data.histories);
-        setTotalCount(res.data.totalCount);     // 서버에서 총 개수 받아야 함
+        setTotalCount(res.data.totalCount);
       } catch (error) {
         setHistoryList([]);
         setTotalCount(0);
@@ -37,7 +37,7 @@ function UserSearchHistoryContainer() {
     fetchSearchHistory();
   }, [userId, page]);
 
-  // 전체 레시피 불러오기
+  // 전체 기본 레시피 불러오기
   useEffect(() => {
     async function fetchRecipes() {
       try {
@@ -50,36 +50,48 @@ function UserSearchHistoryContainer() {
     fetchRecipes();
   }, []);
 
-  // 중복 제거: 같은 recipe_id 한 번만
-  const uniqueHistoryList = Array.isArray(historyList)
-    ? historyList.filter(
-        (h, idx, arr) =>
-          arr.findIndex(v => String(v.recipe_id) === String(h.recipe_id)) === idx
-      )
-    : [];
+  // 회원(사용자) 레시피 불러오기
+  useEffect(() => {
+    if (!userId) return;
+    async function fetchUserRecipes() {
+      try {
+        const res = await axios.get(`http://localhost:8000/api/users/${userId}/recipes`);
+        setUserRecipes(Array.isArray(res.data) ? res.data : res.data.recipes || []);
+      } catch (error) {
+        setUserRecipes([]);
+      }
+    }
+    fetchUserRecipes();
+  }, [userId]);
 
-  // 카드용 레시피 리스트 표준화
-  const recipeList = uniqueHistoryList
-    .map(h => {
-      const r = allRecipes.find(r => String(r.id) === String(h.recipe_id));
-      if (!r) return null;
-      return {
-        id: r.id,
-        RCP_SEQ: r.id,
-        name: r.name,
-        RCP_NM: r.name,
-        image_url: r.image_url || r.ATT_FILE_NO_MAIN,
-        ATT_FILE_NO_MAIN: r.image_url || r.ATT_FILE_NO_MAIN,
-        avg_rating: r.avg_rating ?? r.AVG_RATING ?? 0,
-        AVG_RATING: r.avg_rating ?? r.AVG_RATING ?? 0,
-        rating_count: r.rating_count ?? r.RATING_COUNT ?? 0,
-        RATING_COUNT: r.rating_count ?? r.RATING_COUNT ?? 0,
-        view_count: r.view_count ?? r.VIEW_COUNT ?? 0,
-        VIEW_COUNT: r.view_count ?? r.VIEW_COUNT ?? 0,
-        history_id: h.id,
-      };
-    })
-    .filter(Boolean);
+  // 중복 제거: 같은 recipe_id나 user_recipe_id 한 번만
+const uniqueHistoryList = Array.isArray(historyList)
+  ? historyList.filter(
+      (h, idx, arr) =>
+        (h.recipe_id && arr.findIndex(v => String(v.recipe_id) === String(h.recipe_id)) === idx) ||
+        (h.user_recipe_id && arr.findIndex(v => String(v.user_recipe_id) === String(h.user_recipe_id)) === idx)
+    )
+  : [];
+
+  // 카드용 레시피 리스트 표준화 (기본+회원 레시피 모두)
+const recipeList = historyList
+  .map(h => {
+    const r = h.recipe_info;
+    if (!r) return null;
+    return {
+      id: r.id ?? h.recipe_id ?? h.user_recipe_id,
+      name: r.name,
+      image_url: r.image_url || r.ATT_FILE_NO_MAIN,
+      avg_rating: r.avg_rating ?? r.AVG_RATING ?? 0,
+      rating_count: r.rating_count ?? r.RATING_COUNT ?? 0,
+      view_count: r.view_count ?? r.VIEW_COUNT ?? 0,
+      user_id: r.user_id,
+      user_recipe_id: h.user_recipe_id,
+      history_id: h.id,
+    };
+  })
+  .filter(Boolean);
+
 
   // 총 페이지 계산 (totalCount 기반)
   useEffect(() => {

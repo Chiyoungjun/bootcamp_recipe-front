@@ -11,6 +11,13 @@ const nutritionUnit = {
 
 const itemsPerPage = 3;
 
+const LANG_OPTIONS = [
+  { value: "ko", label: "한국어" },
+  { value: "en", label: "영어" },
+  { value: "ja", label: "일어" },
+  { value: "zh-cn", label: "중국어" },
+];
+
 const StarRating = ({ rating }) => {
   const [hover, setHover] = useState(0);
   return (
@@ -46,12 +53,11 @@ const RecipeDetailPresenter = ({
   onToggleFavorite,
   favoriteLoading,
   isEnglish,
-  shopList = [],
-  showShopList = false,
-  mapLoading = false,
-  mapError = "",
-  handleFindNearShops,
-  onOpenMap
+  onOpenMap,
+  lang,
+  onChangeLang,
+  alertMessage,    // 추가
+  showAlert,       // 추가
 }) => {
   const [slideIndex, setSlideIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,8 +66,11 @@ const RecipeDetailPresenter = ({
 
   const manual = useMemo(() => {
     if (!recipe) return [];
-    if (isEnglish && Array.isArray(recipe.manual_en) && recipe.manual_en.length > 0) {
-      return recipe.manual_en;
+    if (Array.isArray(recipe.steps) && Array.isArray(recipe.step_images)) {
+      return recipe.steps.map((step, idx) => ({
+        step,
+        img: recipe.step_images[idx],
+      }));
     }
     const arr = [];
     for (let i = 1; i <= 20; i++) {
@@ -72,7 +81,7 @@ const RecipeDetailPresenter = ({
       }
     }
     return arr;
-  }, [recipe, isEnglish]);
+  }, [recipe]);
 
   const maxSlides = relatedRecipes ? Math.ceil(relatedRecipes.length / itemsPerPage) : 0;
   const visibleCards = relatedRecipes
@@ -115,22 +124,87 @@ const RecipeDetailPresenter = ({
 
   return (
     <>
+      {/* 알림창 UI - 상단 중앙 */}
+      {showAlert && (
+        <div
+          role="alert"
+          aria-live="assertive"
+          style={{
+            position: "fixed",
+            top: "250px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            backgroundColor: "rgba(0,0,0,0.7)",
+            color: "white",
+            padding: "12px 24px",
+            borderRadius: "8px",
+            zIndex: 1100,
+            userSelect: "none",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.4)",
+            fontSize: "15px",
+            fontWeight: "500",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {alertMessage}
+        </div>
+      )}
+
       <div className="recipe-detail-wrapper">
-        <div className="recipe-detail-title-row">
-          <h2 className="recipe-detail-title">{displayedName || recipe.RCP_NM}</h2>
+        <div
+          className="recipe-detail-title-row"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            marginBottom: "12px",
+          }}
+        >
+          <h2 className="recipe-detail-title" style={{ margin: 0 }}>
+            {displayedName || recipe.RCP_NM}
+          </h2>
           <button
             className={`favorite-btn${favorite ? " on" : ""}`}
             aria-label={favorite ? "즐겨찾기 취소" : "즐겨찾기 추가"}
             onClick={favoriteLoading ? undefined : onToggleFavorite}
             disabled={favoriteLoading}
+            style={{
+              marginLeft: "12px",
+              fontSize: "32px",
+              color: "#f5a623",
+              background: "none",
+              border: "none",
+              verticalAlign: "middle",
+            }}
           >
             {favorite ? "★" : "☆"}
           </button>
+          <select
+            value={lang}
+            onChange={(e) => onChangeLang(e.target.value)}
+            style={{
+              fontSize: "16px",
+              padding: "4px 8px",
+              borderRadius: "4px",
+              cursor: "pointer",
+              border: "1px solid #ddd",
+              outline: "none",
+              marginLeft: "6px",
+              verticalAlign: "middle",
+            }}
+          >
+            {LANG_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="recipe-rating-info" style={{ marginBottom: 16 }}>
           <div>
-            <strong>평균 별점:</strong> {recipe.avg_rating?.toFixed(1) ?? "0.0"} ({recipe.rating_count ?? 0}명)
+            <strong>평균 별점:</strong> {recipe.avg_rating?.toFixed(1) ?? "0.0"} (
+            {recipe.rating_count ?? 0}명)
           </div>
           <div>
             <strong>조회수:</strong> {recipe.view_count ?? 0}
@@ -216,13 +290,8 @@ const RecipeDetailPresenter = ({
           </section>
         )}
 
-        {/* ★ 유사한 레시피 위: 주변 가게 지도 열기 버튼 */}
         <div className="nearby-map-open-row">
-          <button
-            className="nearby-map-open-btn"
-            type="button"
-            onClick={onOpenMap}
-          >
+          <button className="nearby-map-open-btn" type="button" onClick={onOpenMap}>
             주변 가게 지도 열기
           </button>
         </div>
@@ -261,40 +330,6 @@ const RecipeDetailPresenter = ({
             </div>
           )}
         </section>
-
-        {/* ▷▷↓↓ 음식점 찾기 UI 추가 ↓↓▷▷ */}
-        <section style={{ margin: "32px 0" }}>
-          <button
-            onClick={handleFindNearShops}
-            style={{ padding: "12px 24px", fontSize: "15px", fontWeight: "bold" }}
-          >
-            근처에서 "{recipe?.name}" 파는 음식점 찾기
-          </button>
-          {mapLoading && <div style={{ margin: "10px 0" }}>근처 음식점 검색 중...</div>}
-          {mapError && <div style={{ color: "red", margin: "10px 0" }}>{mapError}</div>}
-          {showShopList && shopList.length > 0 && (
-            <div style={{ margin: "16px 0" }}>
-              <h3>근처 음식점 ({shopList.length})</h3>
-              <ul>
-                {shopList.map((shop, idx) => (
-                  <li key={shop.id || shop.name || idx} style={{ marginBottom: 12 }}>
-                    <strong>{shop.name}</strong> <br />
-                    <span>{shop.road_address || shop.address}</span><br />
-                    <span>{shop.phone}</span><br />
-                    <a href={shop.url} target="_blank" rel="noopener noreferrer">
-                      카카오맵 상세보기
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {showShopList && shopList.length === 0 && !mapLoading && (
-            <div style={{ margin: "10px 0" }}>
-              주변에 해당 음식점을 찾을 수 없습니다.
-            </div>
-          )}
-        </section>
       </div>
 
       {/* 별점 입력용 모달 */}
@@ -302,7 +337,10 @@ const RecipeDetailPresenter = ({
         <div
           style={{
             position: "fixed",
-            top: 0, left: 0, right: 0, bottom: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             backgroundColor: "rgba(0,0,0,0.5)",
             display: "flex",
             justifyContent: "center",

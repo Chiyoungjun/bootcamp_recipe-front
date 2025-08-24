@@ -1,5 +1,6 @@
 import React from 'react';
 import Card1Container from '../../../compoents/Card1';
+import Card2Container from '../../../compoents/Card2';
 import './Category.css';
 
 const ALL_CATEGORIES = [
@@ -73,18 +74,33 @@ const CategoryPresenter = ({
         )}
 
         {!loading && recipeList.length > 0 && recipeList.map(recipe => (
-          <Card1Container
-            key={recipe.id || recipe.RCP_SEQ}
-            recipe={{
-              id: recipe.id || recipe.RCP_SEQ,
-              name: recipe.name || recipe.RCP_NM,
-              image_url: recipe.image_url || recipe.ATT_FILE_NO_MAIN,
-              avg_rating: recipe.avg_rating ?? recipe.AVG_RATING ?? 0,
-              rating_count: recipe.rating_count ?? recipe.RATING_COUNT ?? 0,
-              view_count: recipe.view_count ?? recipe.VIEW_COUNT ?? 0,
-            }}
-            userId={userId}  // ✅ 여기서 사용
-          />
+          recipe.is_user_recipe ? (
+            <Card2Container
+              key={recipe.id || recipe.RCP_SEQ}
+              recipe={{
+                id: recipe.id || recipe.RCP_SEQ,
+                name: recipe.name || recipe.RCP_NM,
+                image_url: recipe.image_url || recipe.ATT_FILE_NO_MAIN,
+                avg_rating: recipe.avg_rating ?? recipe.AVG_RATING ?? 0,
+                rating_count: recipe.rating_count ?? recipe.RATING_COUNT ?? 0,
+                view_count: recipe.view_count ?? recipe.VIEW_COUNT ?? 0,
+              }}
+              userId={userId} // userId 전달
+            />
+          ) : (
+            <Card1Container
+              key={recipe.id || recipe.RCP_SEQ}
+              recipe={{
+                id: recipe.id || recipe.RCP_SEQ,
+                name: recipe.name || recipe.RCP_NM,
+                image_url: recipe.image_url || recipe.ATT_FILE_NO_MAIN,
+                avg_rating: recipe.avg_rating ?? recipe.AVG_RATING ?? 0,
+                rating_count: recipe.rating_count ?? recipe.RATING_COUNT ?? 0,
+                view_count: recipe.view_count ?? recipe.VIEW_COUNT ?? 0,
+              }}
+              userId={userId} // userId 전달
+            />
+          )
         ))}
       </div>
 

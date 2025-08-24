@@ -53,3 +53,6 @@ export { default as Banner } from './common/Banner';
 
 // 맵 화면
 export { default as MapModal } from './common/MapModal';
+
+// 유저 상세 레시피 화면
+export { default as UserRecipeDetail} from './common/UserRecipeDetail'
