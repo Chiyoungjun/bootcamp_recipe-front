@@ -56,3 +56,6 @@ export { default as MapModal } from './common/MapModal';
 
 // 유저 상세 레시피 화면
 export { default as UserRecipeDetail} from './common/UserRecipeDetail'
+
+// 유저 레시피 상세 수정 화면
+export { default as UserRecipeEdit } from './common/UserRecipeEdit'

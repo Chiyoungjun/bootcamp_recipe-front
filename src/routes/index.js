@@ -8,7 +8,7 @@
 import { Route, Routes } from "react-router-dom";
 
 // pages
-import { Main, SignIn, SignUp, Rank, Recommend, MyPage, RecipeDetail, UserEdit, Category, UserSearchHistory, UserFavorites, UserRecipe, UserRecipeCreate, UserRecipeDetail, MapModal } from './pages';
+import { Main, SignIn, SignUp, Rank, Recommend, MyPage, RecipeDetail, UserEdit, Category, UserSearchHistory, UserFavorites, UserRecipe, UserRecipeCreate, UserRecipeDetail, MapModal , UserRecipeEdit} from './pages';
 import { MainLayout } from "../layouts";
 import { LoginProvider } from "./pages/common/SignIn/LoginContext";
 
@@ -102,6 +102,11 @@ const Router = () => {
                 <Route
                     path="mapModal"
                     element={<MapModal/>}/>
+
+                {/** 유저 레시피 상세 수정 화면 */}
+                <Route
+                    path="userrecipeedit"
+                    element={<UserRecipeEdit/>} />
             </Route>
             </Routes>
         </LoginProvider>

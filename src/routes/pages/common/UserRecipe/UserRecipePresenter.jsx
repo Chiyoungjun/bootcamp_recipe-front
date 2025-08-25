@@ -9,6 +9,8 @@ export default function UserRecipePresenter({
   recipes,
   onClickCreate,
   onReload,
+  setSelectedMenu,      // 마이페이지 상태 전환용 함수 (추가)
+  setEditTarget,        // 레시피 수정 데이터 설정용 함수 (추가)
 }) {
   return (
     <div className="user-recipe-root">
@@ -58,7 +60,10 @@ export default function UserRecipePresenter({
               {recipes.map((r) => (
                 <Card2Container
                   key={r.id}
-                  recipe={r}  // 전체 객체 통째로 전달
+                  recipe={r}
+                  fromMyPage={true}
+                  setSelectedMenu={setSelectedMenu}   // 추가
+                  setEditTarget={setEditTarget}       // 추가
                 />
               ))}
             </div>

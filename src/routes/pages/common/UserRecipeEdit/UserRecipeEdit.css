@@ -1,0 +1,317 @@
+/* ========== 타이포 & 공통 레이아웃 ========== */
+:root{
+  --ure-body:20px;
+  --ure-small:15px;
+  --ure-label:25px;
+  --ure-title:40px
+}
+*,*::before,*::after{box-sizing:border-box}
+
+.ure-root{
+  width:100%;
+  max-width:1800px;
+  margin:0 auto;
+  padding:28px 28px 96px;
+  background:#f4f5f7;
+  font-size:var(--ure-body);
+  line-height:1.6;
+  color:#111
+}
+
+.ure-page-title{
+    font-size:var(--ure-title);
+    font-weight:800;
+    margin:10px 0 18px
+}
+
+.ure-section{margin-top:22px}
+
+.ure-section-title{
+    font-size:20px;
+    font-weight:800;
+    margin-bottom:12px
+}
+
+.ure-card{
+  background:#fff;
+  border-radius:14px;
+  padding:24px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.05);
+  overflow:visible
+}
+
+.ure-section+.ure-section{margin-top:28px}
+
+/* ===== 폼 레이아웃 ===== */
+.ure-grid{
+    display:grid;
+    grid-template-columns:1fr 360px;
+    gap:26px
+}
+
+.ure-grid.as-card{
+  background:#fff;
+  border-radius:14px;
+  padding:24px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.05)
+}
+
+@media(max-width:1024px){.ure-grid{grid-template-columns:1fr}}
+
+.ure-left{
+    display:flex;
+    flex-direction:column;
+    gap:14px
+}
+
+.ure-label{
+    font-size:var(--ure-label);
+    font-weight:800;
+    margin-bottom:3px;
+    color:#111
+}
+
+.ure-help{
+    font-size:var(--ure-small);
+    color:#6b7280;
+    margin:0 0 4px
+}
+
+/* ===== 입력 컴포넌트 ===== */
+.ure-input,.ure-select,.ure-textarea{
+  width:100%;
+  border:1px solid #dfe3ea;
+  border-radius:12px;
+  background:#f8f9fb;
+  padding:13px 16px;
+  font-size:var(--ure-body);
+  line-height:1.55;
+  outline:none;
+  transition:border-color .15s ease,background .15s ease
+}
+
+.ure-input:focus,.ure-select:focus,.ure-textarea:focus{border-color:#9aa9ff;background:#fff}
+
+/* ===== 영양 정보 ===== */
+.ure-nutrition-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:16px;
+  margin-top:10px
+}
+
+.ure-nutri-item .ure-label{
+    display:block;
+    margin-bottom:3px;
+    font-size:20px;
+    font-weight:600;
+    color:#111
+}
+
+.ure-nutri-input-wrap{
+    position:relative;
+    display:flex;
+    align-items:center
+}
+
+.ure-input.with-unit{
+    width:100%;
+    padding-right:44px;
+    box-sizing:border-box
+}
+
+.ure-unit{
+    position:absolute;
+    right:12px;
+    font-weight:700;
+    color:#333
+}
+
+/* ===== 대표 이미지 ===== */
+.ure-right{
+    display:flex;
+    flex-direction:column
+}
+
+.ure-image-uploader{
+  width:100%;
+  aspect-ratio:1/1;
+  border:1.5px dashed #d1d5db;
+  border-radius:14px;
+  background:#f3f4f6;
+  overflow:hidden;
+  cursor:pointer
+}
+
+.ure-image-placeholder{
+    width:100%;
+    height:100%;
+    display:grid;
+    place-items:center
+}
+
+.ure-plus{
+  width:68px;
+  height:68px;
+  border-radius:999px;
+  border:2px solid #cbd5e1;
+  color:#94a3b8;
+  font-size:38px;
+  line-height:64px;
+  text-align:center
+}
+
+.ure-plus.step{
+  width:56px;
+  height:56px;
+  line-height:52px;
+  font-size:30px;
+  border-color:#d1d9e6;
+  color:#a6b0bf
+}
+
+.ure-image-preview{
+    width:100%;
+    height:100%;
+    object-fit:cover
+}
+
+.ure-image-help{
+    margin-top:8px;
+    font-size:var(--ure-small);
+    color:#6b7280
+}
+
+/* ===== 스텝 ===== */
+.ure-steps-card{padding:22px}
+.ure-steps{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:16px
+}
+
+/* 등록 화면과 동일한 인상으로 조정 */
+.ure-step{
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:18px;
+  align-items:stretch
+}
+
+@media(max-width:980px){.ure-step{grid-template-columns:1fr}}
+
+.ure-step-thumb{
+  display:block;
+  background:#f8fafc;
+  border:1.5px dashed #d1d5db;
+  border-radius:14px;
+  height:180px;
+  overflow:hidden;
+  cursor:pointer
+}
+
+.ure-step-preview{
+    width:100%;
+    height:100%;
+    object-fit:cover
+}
+
+.ure-step-placeholder{
+    width:100%;
+    height:100%;
+    display:grid;
+    place-items:center
+}
+
+.ure-step-textbox{position:relative}
+.ure-step-number{
+  position:absolute;
+  top:10px;
+  left:12px;
+  width:26px;
+  height:26px;
+  border-radius:6px;
+  background:#ffffff;
+  border:1px solid #e5e7eb;
+  color:#111;
+  font-weight:700;
+  font-size:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center
+}
+
+.ure-step-textarea{
+  width:100%;
+  min-height:180px;
+  border:1px solid #dfe3ea;
+  border-radius:12px;
+  background:#fff;
+  padding:16px 16px 16px 44px;
+  font-size:var(--ure-body);
+  line-height:1.6;
+  resize:vertical
+}
+
+/* 하단 공용 액션바(좌: 삭제 / 우: 추가) */
+.ure-steps-actions-bar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:12px;
+  padding:0 6px
+}
+
+.ure-step-remove,.ure-step-add{
+  border:none;
+  border-radius:10px;
+  padding:12px 18px;
+  font-size:15px;
+  cursor:pointer
+}
+
+.ure-step-remove{background:#ff8a80;color:#fff}
+.ure-step-add{background:#59c972;color:#fff}
+.ure-step-remove:hover,.ure-step-add:hover{opacity:.92}
+
+/* ===== 하단 액션 ===== */
+.ure-actions.two{
+    display:flex;
+    justify-content:center;
+    gap:28px;
+    margin-top:28px
+}
+
+.ure-save,.ure-cancel{
+    border:none;
+    border-radius:12px;
+    padding:14px 28px;
+    font-size:16px;
+    cursor:pointer
+}
+
+.ure-save{
+    background:#111827;
+    color:#fff
+}
+
+.ure-cancel{
+    background:#ff7b7b;
+    color:#fff
+}
+
+.ure-save:hover,.ure-cancel:hover{opacity:.92}
+
+/* ===== 보조 ===== */
+.ure-file-input-hidden{display:none}
+.ure-error{
+  border:1px solid #fecaca;
+  background:#fef2f2;
+  color:#991b1b;
+  padding:12px 16px;
+  border-radius:10px;
+  margin:8px 0 12px
+}

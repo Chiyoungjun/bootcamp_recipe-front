@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import UserRecipePresenter from "./UserRecipePresenter";
 import UserRecipeCreateContainer from "../UserRecipeCreate/UserRecipeCreateContainer";
-import { LoginContext } from "../SignIn/LoginContext";// 로그인 컨텍스트 import 경로는 상황에 맞게 조정하세요
+import { LoginContext } from "../SignIn/LoginContext";
 
-export default function UserRecipeContainer() {
+// setSelectedMenu, setEditTarget를 props로 받는다!
+export default function UserRecipeContainer({ setSelectedMenu, setEditTarget }) {
   const { user, isLogin } = useContext(LoginContext);
   const userId = user?.user_id;
 
@@ -73,14 +74,14 @@ export default function UserRecipeContainer() {
     // 작성 화면
     return (
       <UserRecipeCreateContainer
-        userId={userId}               // userId 전달 추가
+        userId={userId}
         onCancel={handleCancelCreate}
-        onSaved={handleSaved}         // 저장 성공 시 호출
+        onSaved={handleSaved}
       />
     );
   }
 
-  // 목록 화면
+  // 목록 화면: props로 setSelectedMenu, setEditTarget을 전달
   return (
     <UserRecipePresenter
       loading={loading}
@@ -88,6 +89,8 @@ export default function UserRecipeContainer() {
       recipes={recipes}
       onClickCreate={handleClickCreate}
       onReload={fetchMyRecipes}
+      setSelectedMenu={setSelectedMenu}
+      setEditTarget={setEditTarget}
     />
   );
 }
