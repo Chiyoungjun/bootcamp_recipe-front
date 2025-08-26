@@ -113,12 +113,12 @@ export default function UserRecipeEditPresenter({
   };
 
   /** 취소 */
-    const handleCancel = (e) => {
+  const handleCancel = (e) => {
     e?.preventDefault?.();
     e?.stopPropagation?.();
     navigate(-1);  // 뒤로 가기
     onCancel?.();
-    };
+  };
 
   return (
     <div className="ure-root">
@@ -142,7 +142,6 @@ export default function UserRecipeEditPresenter({
                 value={vRecipe.name}
                 onChange={(e) => {
                   const v = e.target.value;
-                  // 컨테이너가 어떤 키를 쓰든 대응
                   onChangeField?.("name", v);
                   onChangeField?.("title", v);
                   onChangeField?.("RCP_NM", v);
@@ -151,18 +150,27 @@ export default function UserRecipeEditPresenter({
               />
             </div>
 
+            {/* <div>
+              <label className="ure-label" htmlFor="ure-description">소개</label>
+              <textarea
+                id="ure-description"
+                className="ure-textarea"
+                value={vRecipe.description}
+                onChange={(e) => onChangeField?.("description", e.target.value)}
+                placeholder="요리 소개를 입력하세요."
+              />
+            </div> */}
+
+            {/* 요리 Tip 입력 필드 추가 */}
             <div>
               <label className="ure-label" htmlFor="ure-tip">요리 Tip</label>
               <p className="ure-help">요리 특징이나 Tip을 적어주세요.</p>
               <input
                 id="ure-tip"
                 className="ure-input"
-                value={vRecipe.description}
+                value={recipe?.RCP_NA_TIP || ""}
                 onChange={(e) => {
                   const v = e.target.value;
-                  onChangeField?.("description", v);
-                  onChangeField?.("tip", v);
-                  onChangeField?.("desc", v);
                   onChangeField?.("RCP_NA_TIP", v);
                 }}
                 placeholder="예) 미리 삶아두면 편해요, 국물은 진하게"
@@ -281,7 +289,7 @@ export default function UserRecipeEditPresenter({
         </div>
       </section>
 
-      {/* ===== 요리 재료 ===== */}
+      {/* 요리 재료 */}
       <section className="ure-section">
         <div className="ure-section-title">요리 재료</div>
         <div className="ure-card">
@@ -296,7 +304,7 @@ export default function UserRecipeEditPresenter({
         </div>
       </section>
 
-      {/* ===== 요리 순서 ===== */}
+      {/* 요리 순서 */}
       <section className="ure-section">
         <div className="ure-card ure-steps-card">
           <h2 className="ure-section-title">요리 순서</h2>

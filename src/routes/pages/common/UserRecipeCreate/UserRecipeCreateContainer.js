@@ -14,7 +14,7 @@ export default function UserRecipeCreateContainer({ onCancel, onSaved }) {
   // -----------------------------
   const [form, setForm] = useState({
     title: "",        // 요리 이름
-    tags: "",         // 태그 문자열(쉼표/공백 구분)
+    tip: "",         // 태그 문자열(쉼표/공백 구분)
     ingredients: "",  // 요리 재료
     imageFile: null,  // 대표 이미지 파일
     imageUrl: "",     // 대표 이미지 미리보기
@@ -39,6 +39,7 @@ export default function UserRecipeCreateContainer({ onCancel, onSaved }) {
   // -----------------------------
   const onChangeInput = (e) => {
     const { name, value } = e.target;
+    console.log(`Input changed: ${name} = ${value}`);
 
     // 영양 정보 하위 필드 처리 (name="nutrition.xxx")
     if (name.startsWith("nutrition.")) {
@@ -120,7 +121,7 @@ export default function UserRecipeCreateContainer({ onCancel, onSaved }) {
     // FormData 구성
     const fd = new FormData();
     fd.append("name", form.title);
-    fd.append("category", form.tags);
+    fd.append("RCP_NA_TIP", form.tip);
     fd.append("ingredients", form.ingredients);
     if (form.imageFile) fd.append("image_url", form.imageFile);
 
@@ -137,6 +138,10 @@ export default function UserRecipeCreateContainer({ onCancel, onSaved }) {
       fd.append(`MANUAL${String(i + 1).padStart(2, "0")}`, s.text ?? "");
       if (s.imageFile) fd.append(`MANUAL_IMG${String(i + 1).padStart(2, "0")}`, s.imageFile);
     });
+      for (let pair of fd.entries()) {
+    console.log(`${pair[0]}: ${pair[1]}`);
+    }
+
 
     try {
       const response = await fetch(`${BACKEND_BASE_URL}/api/users/${userId}/recipes`, {

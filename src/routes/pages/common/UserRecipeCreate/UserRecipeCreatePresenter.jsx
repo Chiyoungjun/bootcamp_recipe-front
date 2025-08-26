@@ -37,16 +37,16 @@ export default function UserRecipeCreatePresenter({
               />
 
               {/* 소개/태그 */}
-              <label className="ur-label mt-16">요리 소개</label>
+              <label className="ur-label mt-16">Tip</label>
               <p className="ur-help">
-                요리에 해당하는 태그를 적어주세요 (최대 5개)
+                요리와 관련된 팁이나 정보를 적어주세요
               </p>
               <input
                 className="ur-input"
                 type="text"
-                name="tags"
-                placeholder="예) 다이어트, 한식, 소고기"
-                value={form.tags}
+                name="tip"
+                placeholder=""
+                value={form.tip}
                 onChange={onChangeInput}
               />
 

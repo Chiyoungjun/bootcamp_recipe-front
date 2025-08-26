@@ -11,7 +11,6 @@ async function fetchDetail({ userId, id }) {
   return res.json();
 }
 
-// 안전한 URL 경로 변환 (중복 슬래시 처리 포함)
 function fixUrl(url) {
   if (!url) return "";
   let path = url.replace(/\\/g, "/");
@@ -79,6 +78,7 @@ export default function UserRecipeEditContainer({ recipe }) {
             sodium: data.INFO_NA || "",
           },
           mainImageUrl: data.main_image_url || data.image_url || "",
+          RCP_NA_TIP: data.RCP_NA_TIP || "",    // 요리 팁 추가
           ...data,
         });
 
@@ -112,7 +112,7 @@ export default function UserRecipeEditContainer({ recipe }) {
     };
   }, [id, userId, isLogin, navigate]);
 
-  // 서버 이미지 + 새로 업로드한 Blob URL 병합(순서 이미지용)
+  // 서버 이미지 + 새로 업로드한 Blob URL 병합
   const mergedStepImagePreviews = steps.map((_, i) => {
     if (stepImagePreviews[i]) return stepImagePreviews[i];
     if (
@@ -194,6 +194,9 @@ export default function UserRecipeEditContainer({ recipe }) {
       formData.append("INFO_PRO", editRecipe.nutrition.protein || "");
       formData.append("INFO_FAT", editRecipe.nutrition.fat || "");
       formData.append("INFO_NA", editRecipe.nutrition.sodium || "");
+
+      // 요리 팁 추가
+      formData.append("RCP_NA_TIP", editRecipe.RCP_NA_TIP || "");
 
       for (let i = 0; i < steps.length; i++) {
         formData.append(`MANUAL${String(i + 1).padStart(2, "0")}`, steps[i] || "");
