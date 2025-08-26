@@ -4,9 +4,18 @@ import Card2Container from '../../../compoents/Card2';
 import './Category.css';
 
 const ALL_CATEGORIES = [
-  '한식', '샐러드', '일식', '양식', '밥',
-  '국, 찌개', '면', '반찬', '구이,찜', '기타'
-]
+  '간식·후식·음료·빵',
+  '구이·찜·오븐',
+  '국·찌개·탕',
+  '김치·절임·장아찌',
+  '면·파스타',
+  '무침·샐러드·나물',
+  '밥·죽',
+  '볶음·조림',
+  '튀김·전·부침',
+  '기타'
+];
+
 
 const PAGE_GROUP_SIZE = 5;
 

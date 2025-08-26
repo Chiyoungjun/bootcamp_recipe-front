@@ -51,6 +51,7 @@ function SignUpContainer({ onClose = () => {}, openLogin = () => {} }) {
       ko_name: inputs.name,
       email: inputs.email,
       birth_date: form.birth,
+      gender: form.gender,
       height: form.height,
       weight: form.weight,
       preferred_food: form.favoriteFood,

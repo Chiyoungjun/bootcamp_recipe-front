@@ -52,8 +52,8 @@ function SignUpSubPresenter({ form, onChange, onSubmit, openLogin }) {
             aria-label="성별"
           >
             <option value="" disabled>성별</option>
-            <option value="남성">남성</option>
-            <option value="여성">여성</option>
+            <option value="Male">남성</option>
+            <option value="Female">여성</option>
           </select>
         </div>
 

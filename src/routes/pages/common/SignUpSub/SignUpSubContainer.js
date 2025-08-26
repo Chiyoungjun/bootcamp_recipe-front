@@ -22,6 +22,7 @@ function SignUpSubContainer({ onSubmit, openLogin, onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting form data:", form)
     try {
       await Promise.resolve(onSubmit(form));
       if (typeof onClose === "function") onClose();

@@ -9,8 +9,8 @@ function CategoryContainer() {
   const { user } = useContext(LoginContext);
   const userId = user?.user_id;
 
-  const [category, setCategory] = useState('한식');
-  const [subCategory, setSubCategory] = useState('밥');
+  const [category, setCategory] = useState('밥·죽');
+  const [subCategory, setSubCategory] = useState('볶음·조림');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [recipeList, setRecipeList] = useState([]);
